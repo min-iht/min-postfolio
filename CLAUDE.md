@@ -10,7 +10,7 @@
 - 페이지 5개:
   - `index.html` — 언어 선택 랜딩 (한/영/일 봉투)
   - `min.postfolio-ko.html` — 본편 원페이지 (hero → works → workshop → cv → info). **정본(원문).**
-  - `min.postfolio-en.html` / `min.postfolio-jp.html` — ko의 번역 파생본 (2026-07-12 생성). **구조는 ko와 글자 하나까지 동일**하고 텍스트만 각 언어. `<html lang>`이 각각 `en` / `ja`.
+  - `min.postfolio-en.html` / `min.postfolio-jp.html` — ko의 번역 파생본 (2026-07-12 생성). **구조는 ko와 동일**하고 텍스트만 각 언어. `<html lang>`이 각각 `en` / `ja`. 예외: 조판용 `<br>`은 언어별로 위치·개수가 달라도 된다 (2026-07-12 A안 — 검사 도구도 `<br>`을 지문에서 제외).
   - `pdf_brand.html` — PDF 이미지 나열 뷰어
 - **다국어 동기화 규칙**: ko를 고치면 같은 세션에서 en/jp에도 반영한다 (스타일·동작은 CSS/JS 공유라 자동, HTML 텍스트·구조만 3벌). 번역은 사용자가 따로 주지 않으면 Claude가 자연스럽게 생성한다 (2026-07-12 사용자 합의). 구조를 바꿨으면 `python .claude/tools/check_lang_sync.py <리포트경로>`로 세 파일 구조 지문 PASS 확인.
 - 개발 서버: `.claude/launch.json`의 `portfolio` (python http.server, 기본 8123 + autoPort — 포트가 점유 중이면 자동 배정되니 preview_start가 알려주는 포트를 쓴다). 검증은 항상 이 서버 + 브라우저 미리보기로 한다.
@@ -23,6 +23,7 @@
 | 워크숍 목록 카드 (제목/날짜/장소/태그/썸네일) | `js/workshop.js`의 `WORKSHOPS` 배열 (최신순, 맨 앞이 최신). 텍스트 필드는 `{ ko, en, jp }` 다국어 객체 — 한 파일에서 세 언어를 관리하고, 페이지의 `<html lang>`에 따라 `WS_LANG`이 자동 선택 |
 | 섹션별 스타일 | 섹션당 CSS 1파일: hero / works / workshop / cv / info / popup / lang. 어디를 고칠지는 `css/style.css` 상단의 "스타일 수정 위치 가이드" 주석이 원장이다 |
 | 태블릿(≤1024) / 모바일(≤767) | `css/responsive.css` + `js/responsive.js` 세트 |
+| 언어별(en/jp 전용) 여백·자간·줄바꿈 조정 | `css/lang_tune.css` — `html[lang="en"]` / `html[lang="ja"]` 스코프 규칙. 사용자 직접 편집 허용 구역. 사용법은 루트의 `lang_edit.md` |
 | 전역 z-index | `css/style.css` 상단 주석의 스케일이 원장: 1030+ 팝업·슬라이드, 900 고정 UI, 700 히어로 인트로, 10 봉투 무대, 섹션 내부는 1~99 로컬 |
 | 스크롤 (관성/잠금/스파이) | `js/scroll.js` (Lenis 초기화, `window.lenis` 전역 공유) |
 
@@ -30,8 +31,8 @@ JS는 관심사별 1파일이고 모듈 시스템이 없다. 파일 간 공유�
 `is_locked`(히어로 재생 중) / `slide_locked`(노트·워크숍 슬라이드 열림) / `menu_open`(햄버거) / `page_fadein_loaded`.
 
 **CSS 로드 순서는 기능이다** (min.postfolio-ko.html `<head>`):
-style → hero → popup → **Swiper CDN CSS** → works → workshop → cv → info → **responsive(반드시 마지막)**.
-Swiper CSS는 섹션 CSS보다 먼저(페이지네이션을 섹션 CSS가 덮어쓰기 위해), responsive.css는 같은 선택자를 나중에 로드해서 덮어쓰는 설계다.
+style → hero → popup → **Swiper CDN CSS** → works → workshop → cv → info → **lang_tune** → **responsive(반드시 마지막)**.
+Swiper CSS는 섹션 CSS보다 먼저(페이지네이션을 섹션 CSS가 덮어쓰기 위해), responsive.css는 같은 선택자를 나중에 로드해서 덮어쓰는 설계다. lang_tune.css는 섹션 CSS를 언어별로 덮어쓰되 responsive 직전에 로드한다 (단 `html[lang]` 선택자는 구체성이 높아 responsive의 일반 규칙을 이길 수 있음 — 모바일 언어별 값은 lang_tune 안의 미디어쿼리로).
 
 ## 2. 이 저장소의 관례
 
@@ -50,12 +51,12 @@ Swiper CSS는 섹션 CSS보다 먼저(페이지네이션을 섹션 CSS가 덮어
 8. 문서 높이를 바꾸는 DOM 변경(요소 이동/추가/표시 전환) 뒤에는 `ScrollTrigger.refresh()`.
 9. 데스크톱용 CSS에 `!important` 금지. responsive.css가 나중에 덮어써야 하기 때문이다 (`!important`는 responsive.css 안에서만 허용).
 10. `.leftUI`와 fixed 요소의 조상에 `filter` / `backdrop-filter` / `transform` 금지 — fixed 자손의 위치 기준이 되어 레이아웃이 깨진다 (responsive.css 주석 참고).
-11. **다국어 동기화** (2026-07-12): ko HTML의 텍스트·구조를 고쳤으면 같은 세션에서 en/jp에 동일 변경(텍스트는 번역)을 반영한다. 공유 JS에 사용자 가시 문구를 넣을 때는 하드코딩 금지 — `workshop.js`의 `WS_LANG`/`popup.js`의 `SUBS_MSG`처럼 `{ ko, en, jp }` 객체 + `<html lang>` 감지 패턴을 따른다. placeholder(`.`)는 세 파일 모두 `.` 그대로.
+11. **다국어 동기화** (2026-07-12): ko HTML의 텍스트·구조를 고쳤으면 같은 세션에서 en/jp에 동일 변경(텍스트는 번역)을 반영한다. 공유 JS에 사용자 가시 문구를 넣을 때는 하드코딩 금지 — `workshop.js`의 `WS_LANG`/`popup.js`의 `SUBS_MSG`처럼 `{ ko, en, jp }` 객체 + `<html lang>` 감지 패턴을 따른다. placeholder(`.`)는 세 파일 모두 `.` 그대로. 예외 2건: ① 조판용 `<br>`은 언어별로 자유 (동기화·검사 대상 아님), ② 언어별 여백·자간 차이는 HTML이 아니라 `css/lang_tune.css`에서. en/jp의 번역 문구·`<br>`·lang_tune.css는 **사용자가 직접 편집하는 구역**이다 — 다른 작업 중 발견해도 ko와 다르다고 "고치지" 마라.
 
 ## 3. 실수 도감 — 이름 붙인 함정과 막는 규칙
 
 1. **JS에서 글 고치기** — 노트/워크숍 상세 내용을 works.js·workshop.js에서 찾으려 든다. 그 파일들은 복사·개폐 동작만 담당한다. → 상세 내용은 `slide_data`의 HTML 블록에서만, 목록 카드만 `WORKSHOPS` 배열에서.
-2. **로드 순서 파괴** — 새 CSS `<link>`를 responsive.css 뒤나 Swiper CSS 앞에 끼운다. → 새 섹션 CSS는 info.css와 responsive.css 사이. responsive.css는 영원히 마지막.
+2. **로드 순서 파괴** — 새 CSS `<link>`를 responsive.css 뒤나 Swiper CSS 앞에 끼운다. → 새 섹션 CSS는 info.css와 lang_tune.css 사이. lang_tune.css → responsive.css 순서는 고정, responsive.css는 영원히 마지막.
 3. **z-index 즉흥 발급** — 안 보인다고 `z-index: 9999`를 박는다. → style.css 스케일 주석을 먼저 읽고, 새 층이 필요하면 값과 함께 그 주석에 등록하라.
 4. **잠금 고아** — 오버레이를 열며 `lenis.stop()`만 하고 닫는 경로(ESC/바깥 클릭/버튼) 어딘가에서 `start()`를 빠뜨리거나, 다른 잠금이 살아있는데 무조건 `start()`한다. → 관례 7.
 5. **refresh 생략** — DOM을 옮기고 ScrollTrigger가 옛 좌표로 발화한다. → 관례 8.
@@ -125,4 +126,6 @@ Swiper CSS는 섹션 CSS보다 먼저(페이지네이션을 섹션 CSS가 덮어
 - **/optimize-images** — 새 이미지를 이미지 정책(2400px WebP q85 + 예외)대로 변환 (Pillow 사용, magick/cwebp는 이 기기에 없음).
 - **/smoke-test** — 변경 후 전체 스모크 테스트: 3개 폭 스크린샷 + 히어로/노트/워크숍/팝업/햄버거 인터랙션 + console 검사 (+ en/jp 로드·언어 표시 확인).
 
-도구: `.claude/tools/check_lang_sync.py` — 세 언어 파일의 구조 지문(태그·class·id·data-* 순서) 비교. 사용법: `python .claude/tools/check_lang_sync.py <리포트파일>` → RESULT: PASS 확인.
+도구: `.claude/tools/check_lang_sync.py` — 세 언어 파일의 구조 지문(태그·class·id·data-* 순서) 비교. 조판용 `<br>`은 지문에서 제외 (2026-07-12 A안). 사용법: `python .claude/tools/check_lang_sync.py <리포트파일>` → RESULT: PASS 확인.
+
+사용자용 가이드: 루트의 `lang_edit.md` — en/jp 텍스트·`<br>`·언어별 여백을 사용자가 직접 편집하는 step-by-step 절차.
