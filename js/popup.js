@@ -253,6 +253,24 @@ if (missInfo) {
 
 const SUBSCRIBE_ENDPOINT = "https://formspree.io/f/mykqvndk"; // ← Formspree 엔드포인트 URL (비워두면 localStorage에만 저장)
 
+// 페이지 언어 감지: <html lang="ko|en|ja"> 값을 문구 키(ko|en|jp)로 변환
+// (이 파일은 ko/en/jp 세 페이지가 공유하므로, 안내 문구는 아래에서 언어별로 관리)
+const SUBS_LANG = ({ ko: "ko", en: "en", ja: "jp" })[document.documentElement.lang] || "ko";
+
+// 구독 입력칸에 표시되는 안내 문구 (★ 문구 수정은 여기서 — 세 언어 모두)
+const SUBS_MSG = {
+    invalid: {
+        ko: "이메일 형식을 확인해주세요",
+        en: "Please check your email address",
+        jp: "メールアドレスをご確認ください"
+    },
+    thanks: {
+        ko: "구독해주셔서 감사합니다 ♥",
+        en: "Thank you for subscribing ♥",
+        jp: "ご購読ありがとうございます ♥"
+    }
+};
+
 const subsInput = document.querySelector(".pp_subs_box .email_input");
 const subsBtn = document.querySelector(".pp_subs_box .enter_btn");
 
@@ -263,7 +281,7 @@ function submitSubscribe() {
     // 간단한 이메일 형식 검사
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         subsInput.value = "";
-        subsInput.placeholder = "이메일 형식을 확인해주세요";
+        subsInput.placeholder = SUBS_MSG.invalid[SUBS_LANG];
         return;
     }
 
@@ -284,7 +302,7 @@ function submitSubscribe() {
 
     // 입력칸 비우고 감사 문구로
     subsInput.value = "";
-    subsInput.placeholder = "구독해주셔서 감사합니다 ♥";
+    subsInput.placeholder = SUBS_MSG.thanks[SUBS_LANG];
 
 }
 

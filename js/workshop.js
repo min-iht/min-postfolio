@@ -6,9 +6,10 @@
 //
 // ★★ 역할 구분 (어디서 무엇을 수정하나) ★★
 //  ● 워크숍 "목록 카드"(#workshop 스와이퍼의 제목/날짜/장소/태그/썸네일)
-//    → 이 파일의 WORKSHOPS 배열에서 수정 (기존과 동일)
+//    → 이 파일의 WORKSHOPS 배열에서 수정 (ko/en/jp 세 언어를 이 한 곳에서!)
 //  ● 워크숍 "상세 슬라이드"(VIEW DETAIL로 열리는 화면의 탭/사진/글/메타)
-//    → min.postfolio-ko.html 아래쪽 <div class="slide_data"> 안의
+//    → 각 언어 페이지(min.postfolio-ko/-en/-jp.html) 아래쪽
+//      <div class="slide_data"> 안의
 //      <div class="ws_data" data-ws="번호"> 블록(HTML)에서 수정
 //      (data-ws 번호 = 아래 배열의 순서: 0 = 첫 번째(최신) 워크숍)
 //
@@ -19,85 +20,195 @@
 // -------------------------------------
 // 워크숍 "목록 카드" 데이터 — 배열은 "최신순" (첫 번째 = 가장 최근 워크숍)
 //
+// ★ 다국어: 이 배열 하나로 ko/en/jp 세 페이지의 카드가 모두 만들어진다.
+//   페이지의 <html lang="ko|en|ja"> 값에 따라 아래 필드에서
+//   해당 언어의 글자가 자동으로 선택된다 (배열 아래 WS_LANG 참고).
+//
 // 카드(목록)에 보이는 것만 여기서 수정:
-//   title : 카드 제목
-//   sub   : 제목 옆 작은 글자 (없으면 "")
-//   date  : 날짜
-//   venue : 장소 (@로 시작)
-//   desc  : 지원사업/주최 설명 한 줄
-//   tags  : 해시태그 목록
-//   img   : 썸네일 이미지 경로
+//   title : 카드 제목        — { ko, en, jp } 세 언어 모두 작성
+//   sub   : 제목 옆 작은 글자 — { ko, en, jp } (없으면 "")
+//   date  : 날짜 (언어 공통 — 하나만)
+//   venue : 장소 (@로 시작)   — { ko, en, jp }
+//   desc  : 지원사업/주최 설명 한 줄 — { ko, en, jp }
+//   tags  : 해시태그 목록     — { ko: [...], en: [...], jp: [...] }
+//   img   : 썸네일 이미지 경로 (언어 공통 — 하나만)
 //
 // ★ 새 워크숍을 추가하는 방법 (최신순 유지):
-//   1) 아래 배열 "맨 앞"에 카드 데이터를 추가
-//   2) min.postfolio-ko.html의 slide_data 안에 ws_data 블록을 하나 복사해
-//      상세 내용을 만들고, data-ws 번호를 전체적으로 다시 매긴다
+//   1) 아래 배열 "맨 앞"에 카드 데이터를 추가 (세 언어 텍스트 모두!)
+//   2) min.postfolio-ko/-en/-jp.html "세 파일 각각"의 slide_data 안에
+//      ws_data 블록을 하나 복사해 상세 내용을 만들고,
+//      data-ws 번호를 전체적으로 다시 매긴다
 //      (배열 맨 앞에 추가했으면 새 워크숍이 data-ws="0",
-//       기존 것들은 번호가 1씩 밀린다)
+//       기존 것들은 번호가 1씩 밀린다 — 세 파일 모두 동일하게)
 // -------------------------------------
 const WORKSHOPS = [
 
     {
-        title: "끼리끼리 사진 놀이",
-        sub: "",
+        title: {
+            ko: "끼리끼리 사진 놀이",
+            en: "Kindred Photo Play",
+            jp: "似た者同士の写真あそび"
+        },
+        sub: { ko: "", en: "", jp: "" },
         date: "2024.09.04 - 2024.10.30",
-        venue: "@청년아트스테이션",
-        desc: "부산 북구청 · 그루북 협동조합",
-        tags: ["출사", "짝활동", "사진놀이"],
+        venue: {
+            ko: "@청년아트스테이션",
+            en: "@Youth Art Station",
+            jp: "@青年アートステーション"
+        },
+        desc: {
+            ko: "부산 북구청 · 그루북 협동조합",
+            en: "Busan Buk-gu Office · Geurubook Co-op",
+            jp: "釜山北区庁・グルブック協同組合"
+        },
+        tags: {
+            ko: ["출사", "짝활동", "사진놀이"],
+            en: ["photo walk", "pair play", "photo play"],
+            jp: ["撮影さんぽ", "ペア活動", "写真あそび"]
+        },
         img: "./img/workshop/6.webp"
     },
 
     {
-        title: "책 정리 워크숍",
-        sub: "",
+        title: {
+            ko: "책 정리 워크숍",
+            en: "Bookshelf Decluttering Workshop",
+            jp: "本の整理ワークショップ"
+        },
+        sub: { ko: "", en: "", jp: "" },
         date: "2024.09.03 - 2024.10.15",
-        venue: "@복합문화공간 무사이",
-        desc: "부산도서관 지역서점 독서문화프로그램",
-        tags: ["책 정리", "수다스러운 방"],
+        venue: {
+            ko: "@복합문화공간 무사이",
+            en: "@Cultural Space Musai",
+            jp: "@複合文化空間ムサイ"
+        },
+        desc: {
+            ko: "부산도서관 지역서점 독서문화프로그램",
+            en: "Busan Library local-bookshop reading program",
+            jp: "釜山図書館 地域書店読書文化プログラム"
+        },
+        tags: {
+            ko: ["책 정리", "수다스러운 방"],
+            en: ["book decluttering", "a chatty room"],
+            jp: ["本の整理", "おしゃべりな部屋"]
+        },
         img: "./img/workshop/5.webp"
     },
 
     {
-        title: "사진에 깃든 나",
-        sub: ": 내가 찍은 사진 속에서 찾는 나다움",
+        title: {
+            ko: "사진에 깃든 나",
+            en: "The Me Within My Photos",
+            jp: "写真に宿る私"
+        },
+        sub: {
+            ko: ": 내가 찍은 사진 속에서 찾는 나다움",
+            en: ": finding what makes me me in my own photos",
+            jp: "：自分で撮った写真の中に見つける私らしさ"
+        },
         date: "2023.12.09",
-        venue: "@KT&G 상상마당 부산",
-        desc: "제1회 마우스 북페어 @부산",
-        tags: ["사진", "발견", "영감"],
+        venue: {
+            ko: "@KT&G 상상마당 부산",
+            en: "@KT&G Sangsangmadang Busan",
+            jp: "@KT&G サンサンマダン釜山"
+        },
+        desc: {
+            ko: "제1회 마우스 북페어 @부산",
+            en: "The 1st Mouse Book Fair @Busan",
+            jp: "第1回マウスブックフェア@釜山"
+        },
+        tags: {
+            ko: ["사진", "발견", "영감"],
+            en: ["photography", "discovery", "inspiration"],
+            jp: ["写真", "発見", "インスピレーション"]
+        },
         img: "./img/workshop/4.webp"
     },
 
     {
-        title: "희타, 미지의 여름 이야기",
-        sub: "",
+        title: {
+            ko: "희타, 미지의 여름 이야기",
+            en: "Hyita, Tales of an Unknown Summer",
+            jp: "ヒタ、未知の夏の物語"
+        },
+        sub: { ko: "", en: "", jp: "" },
         date: "2023.07.08 - 2023.08.19",
-        venue: "@책방 미지의 세계",
-        desc: "작가와 함께하는 작은서점 지원사업",
-        tags: ["글쓰기", "여름", "산책"],
+        venue: {
+            ko: "@책방 미지의 세계",
+            en: "@Bookshop Unknown World",
+            jp: "@本屋 未知の世界"
+        },
+        desc: {
+            ko: "작가와 함께하는 작은서점 지원사업",
+            en: "'Small Bookshops with Writers' grant program",
+            jp: "作家と共にする小さな書店 支援事業"
+        },
+        tags: {
+            ko: ["글쓰기", "여름", "산책"],
+            en: ["writing", "summer", "strolls"],
+            jp: ["書くこと", "夏", "散歩"]
+        },
         img: "./img/workshop/3.webp"
     },
 
     {
-        title: "이희타의 겨울 상상",
-        sub: "",
+        title: {
+            ko: "이희타의 겨울 상상",
+            en: "Hyita's Winter Imaginings",
+            jp: "イ・ヒタの冬の想像"
+        },
+        sub: { ko: "", en: "", jp: "" },
         date: "2022.11.14",
-        venue: "@동주책방",
-        desc: "부산도서관 독서문화 프로그램 지원사업",
-        tags: ["글쓰기", "겨울", "편지"],
+        venue: {
+            ko: "@동주책방",
+            en: "@Dongju Bookshop",
+            jp: "@ドンジュ書店"
+        },
+        desc: {
+            ko: "부산도서관 독서문화 프로그램 지원사업",
+            en: "Busan Library reading-culture grant program",
+            jp: "釜山図書館 読書文化プログラム支援事業"
+        },
+        tags: {
+            ko: ["글쓰기", "겨울", "편지"],
+            en: ["writing", "winter", "letters"],
+            jp: ["書くこと", "冬", "手紙"]
+        },
         img: "./img/workshop/2.webp"
     },
 
     {
-        title: "영혼의 포토 부스",
-        sub: "",
+        title: {
+            ko: "영혼의 포토 부스",
+            en: "Photo Booth for the Soul",
+            jp: "魂のフォトブース"
+        },
+        sub: { ko: "", en: "", jp: "" },
         date: "2022.10.20 - 2022.11.17",
-        venue: "@청년작당소",
-        desc: "청년작당소 청년 프로그래머 시즌4",
-        tags: ["사진놀이", "명상", "자기이해"],
+        venue: {
+            ko: "@청년작당소",
+            en: "@Youth Studio Jakdangso",
+            jp: "@青年ジャクタンソ"
+        },
+        desc: {
+            ko: "청년작당소 청년 프로그래머 시즌4",
+            en: "Jakdangso Young Programmer, Season 4",
+            jp: "青年ジャクタンソ 青年プログラマー シーズン4"
+        },
+        tags: {
+            ko: ["사진놀이", "명상", "자기이해"],
+            en: ["photo play", "meditation", "self-understanding"],
+            jp: ["写真あそび", "瞑想", "自己理解"]
+        },
         img: "./img/workshop/1.webp"
     }
 
 ];
+
+
+// 페이지 언어 감지: <html lang="ko|en|ja"> 값을 WORKSHOPS의 언어 키(ko|en|jp)로 변환
+// (알 수 없는 값이면 ko로 안전하게 되돌아간다)
+const WS_LANG = ({ ko: "ko", en: "en", ja: "jp" })[document.documentElement.lang] || "ko";
 
 
 // -------------------------------------
@@ -109,16 +220,21 @@ const wsWrapper = document.querySelector(".ws_swiper .swiper-wrapper");
 
 function wsCardHTML(w, index) {
 
-    const tags = w.tags.map(t => `<li class="tag">${t}</li>`).join("");
+    // 다국어 필드에서 현재 페이지 언어(WS_LANG)의 글자를 꺼낸다
+    const title = w.title[WS_LANG];
 
-    const sub = w.sub ? ` <small>${w.sub}</small>` : "";
+    const subText = w.sub[WS_LANG];
+
+    const tags = w.tags[WS_LANG].map(t => `<li class="tag">${t}</li>`).join("");
+
+    const sub = subText ? ` <small>${subText}</small>` : "";
 
     return `
         <div class="swiper-slide ws_card">
 
             <div class="ws_media ws_open" data-index="${index}">
 
-                <img loading="lazy" decoding="async" src="${w.img}" alt="${w.title}">
+                <img loading="lazy" decoding="async" src="${w.img}" alt="${title}">
 
                 <span class="ws_view">
                     <span class="ws_view_glass">⌕</span> VIEW DETAIL
@@ -127,14 +243,14 @@ function wsCardHTML(w, index) {
             </div>
 
             <h3 class="ws_title">
-                <a href="#" class="ws_open" data-index="${index}">${w.title}${sub}</a>
+                <a href="#" class="ws_open" data-index="${index}">${title}${sub}</a>
             </h3>
 
             <p class="ws_date">${w.date}</p>
 
-            <p class="ws_venue">${w.venue}</p>
+            <p class="ws_venue">${w.venue[WS_LANG]}</p>
 
-            <p class="ws_desc">${w.desc}</p>
+            <p class="ws_desc">${w.desc[WS_LANG]}</p>
 
             <ul class="ws_tags">${tags}</ul>
 
