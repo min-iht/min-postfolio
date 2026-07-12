@@ -7,19 +7,20 @@
 
 - 강민경(디자이너·워크숍 기획자)의 개인 포트폴리오. **정적 사이트, 빌드 도구 없음, 프레임워크 없음.** GitHub Pages 배포를 전제로 한다.
 - 라이브러리는 전부 CDN: Swiper 11, GSAP 3 + ScrollTrigger, Lenis 1(관성 스크롤). npm/패키지 설치를 시도하지 마라.
-- 페이지 3개:
+- 페이지 5개:
   - `index.html` — 언어 선택 랜딩 (한/영/일 봉투)
-  - `min.postfolio-ko.html` — 본편 원페이지 (hero → works → workshop → cv → info). **거의 모든 작업이 여기서 일어난다.**
+  - `min.postfolio-ko.html` — 본편 원페이지 (hero → works → workshop → cv → info). **정본(원문).**
+  - `min.postfolio-en.html` / `min.postfolio-jp.html` — ko의 번역 파생본 (2026-07-12 생성). **구조는 ko와 글자 하나까지 동일**하고 텍스트만 각 언어. `<html lang>`이 각각 `en` / `ja`.
   - `pdf_brand.html` — PDF 이미지 나열 뷰어
-- `min.postfolio-en.html` / `min.postfolio-jp.html`은 **아직 존재하지 않는다.** index.html의 링크는 의도된 미래 작업이지 깨진 링크가 아니다. 있다고 가정하고 수정하지도, 없다고 "고치지"도 마라.
-- 개발 서버: `.claude/launch.json`의 `portfolio` (python http.server 8123). 검증은 항상 이 서버 + 브라우저 미리보기로 한다.
+- **다국어 동기화 규칙**: ko를 고치면 같은 세션에서 en/jp에도 반영한다 (스타일·동작은 CSS/JS 공유라 자동, HTML 텍스트·구조만 3벌). 번역은 사용자가 따로 주지 않으면 Claude가 자연스럽게 생성한다 (2026-07-12 사용자 합의). 구조를 바꿨으면 `python .claude/tools/check_lang_sync.py <리포트경로>`로 세 파일 구조 지문 PASS 확인.
+- 개발 서버: `.claude/launch.json`의 `portfolio` (python http.server, 기본 8123 + autoPort — 포트가 점유 중이면 자동 배정되니 preview_start가 알려주는 포트를 쓴다). 검증은 항상 이 서버 + 브라우저 미리보기로 한다.
 
 ## 1. 아키텍처 — 무엇이 어디에 사는가
 
 | 바꾸려는 것 | 고치는 곳 |
 |---|---|
-| 노트/워크숍 상세 슬라이드의 탭·사진·글 | `min.postfolio-ko.html` 맨 아래 `<div class="slide_data">` 안의 `note_data` / `ws_data` 블록 (HTML) |
-| 워크숍 목록 카드 (제목/날짜/장소/태그/썸네일) | `js/workshop.js`의 `WORKSHOPS` 배열 (최신순, 맨 앞이 최신) |
+| 노트/워크숍 상세 슬라이드의 탭·사진·글 | 각 언어 파일(`min.postfolio-ko/-en/-jp.html`) 맨 아래 `<div class="slide_data">` 안의 `note_data` / `ws_data` 블록 (HTML) — **세 파일 각각** |
+| 워크숍 목록 카드 (제목/날짜/장소/태그/썸네일) | `js/workshop.js`의 `WORKSHOPS` 배열 (최신순, 맨 앞이 최신). 텍스트 필드는 `{ ko, en, jp }` 다국어 객체 — 한 파일에서 세 언어를 관리하고, 페이지의 `<html lang>`에 따라 `WS_LANG`이 자동 선택 |
 | 섹션별 스타일 | 섹션당 CSS 1파일: hero / works / workshop / cv / info / popup / lang. 어디를 고칠지는 `css/style.css` 상단의 "스타일 수정 위치 가이드" 주석이 원장이다 |
 | 태블릿(≤1024) / 모바일(≤767) | `css/responsive.css` + `js/responsive.js` 세트 |
 | 전역 z-index | `css/style.css` 상단 주석의 스케일이 원장: 1030+ 팝업·슬라이드, 900 고정 UI, 700 히어로 인트로, 10 봉투 무대, 섹션 내부는 1~99 로컬 |
@@ -49,6 +50,7 @@ Swiper CSS는 섹션 CSS보다 먼저(페이지네이션을 섹션 CSS가 덮어
 8. 문서 높이를 바꾸는 DOM 변경(요소 이동/추가/표시 전환) 뒤에는 `ScrollTrigger.refresh()`.
 9. 데스크톱용 CSS에 `!important` 금지. responsive.css가 나중에 덮어써야 하기 때문이다 (`!important`는 responsive.css 안에서만 허용).
 10. `.leftUI`와 fixed 요소의 조상에 `filter` / `backdrop-filter` / `transform` 금지 — fixed 자손의 위치 기준이 되어 레이아웃이 깨진다 (responsive.css 주석 참고).
+11. **다국어 동기화** (2026-07-12): ko HTML의 텍스트·구조를 고쳤으면 같은 세션에서 en/jp에 동일 변경(텍스트는 번역)을 반영한다. 공유 JS에 사용자 가시 문구를 넣을 때는 하드코딩 금지 — `workshop.js`의 `WS_LANG`/`popup.js`의 `SUBS_MSG`처럼 `{ ko, en, jp }` 객체 + `<html lang>` 감지 패턴을 따른다. placeholder(`.`)는 세 파일 모두 `.` 그대로.
 
 ## 3. 실수 도감 — 이름 붙인 함정과 막는 규칙
 
@@ -64,7 +66,8 @@ Swiper CSS는 섹션 CSS보다 먼저(페이지네이션을 섹션 CSS가 덮어
 10. **히어로 오판** — 새로고침했더니 인트로가 안 나온다고 버그로 착각한다. `sessionStorage.heroDone`이 있으면 인트로를 건너뛰는 게 정상이다. → 히어로 테스트는 시크릿 창 또는 `sessionStorage.clear()` 후. hero.js를 만졌으면 3경로(이름 입력 / Skip / 새로고침 복원)를 모두 확인.
 11. **깨진 참조 청소** — 알려진 missing 이미지 5건(`img/cv/skill_figma.png`, `img/info/ongoing.png`, `img/info/upcoming1~3.png`)을 지우거나 임의 이미지로 "고친다". 이건 사용자가 아직 안 만든 자산이다. → 건드리지 말고, 관련 작업 시 언급만.
 12. **!important 응급처치** — 반응형에서 안 먹는다고 데스크톱 CSS에 `!important`를 넣어 캐스케이드 설계를 부순다. → 관례 9. 원인은 대부분 로드 순서나 선택자 구체성이다.
-13. **file:// 검증** — 서버 없이 파일을 직접 열어 "확인했다"고 한다. → 항상 `portfolio` 서버(8123)로.
+13. **file:// 검증** — 서버 없이 파일을 직접 열어 "확인했다"고 한다. → 항상 `portfolio` 서버로 (기본 8123, 점유 시 autoPort 배정).
+14. **언어 파일 반쪽 수정** — ko만 고치고 완료 선언하거나, en/jp 구조를 ko와 다르게 만든다 (공유 JS가 세 파일의 동일한 `slide_data` 구조·`data-ws` 번호에 의존한다). → 관례 11 + `.claude/tools/check_lang_sync.py` PASS 확인. 반영 못 한 파일이 있으면 보고에 명시.
 
 ## 4. 품질 기준 — 산출물별 체크 조건
 
@@ -85,11 +88,12 @@ Swiper CSS는 섹션 CSS보다 먼저(페이지네이션을 섹션 CSS가 덮어
 - [ ] hero.js를 만졌으면: 이름 입력 / Skip / heroDone 새로고침 복원 3경로 통과
 
 **콘텐츠 추가 (노트/워크숍) — `/add-work` 사용:**
-- [ ] data-* 짝 전수 일치 (버튼 `data-note` == 블록 `data-note`; `data-ws`는 0부터 연속이고 WORKSHOPS 배열 순서와 일치)
+- [ ] data-* 짝 전수 일치 (버튼 `data-note` == 블록 `data-note`; `data-ws`는 0부터 연속이고 WORKSHOPS 배열 순서와 일치 — **세 언어 파일 모두**)
 - [ ] 탭 버튼의 `data-tab`이 0부터 연속, 갤러리 슬라이드의 `data-tab` 집합과 일치
 - [ ] 새 이미지 전부 이미지 정책 통과
 - [ ] 실제로 열어서: 탭 전환, 스와이프, 자동재생, 닫기(3경로) 확인
-- [ ] 본문 글은 사용자가 준 문구 그대로 (창작 0자)
+- [ ] 본문 글은 사용자가 준 문구 그대로 (창작 0자 — 한국어 원문 기준. en/jp는 그 원문의 번역만 허용)
+- [ ] ko/en/jp 세 파일에 모두 반영 + `check_lang_sync.py` 구조 지문 PASS
 
 **이미지 추가 — `/optimize-images` 사용:**
 - [ ] 정책 표 준수 (기본 2400px WebP q85 / 예외 3종)
@@ -116,6 +120,8 @@ Swiper CSS는 섹션 CSS보다 먼저(페이지네이션을 섹션 CSS가 덮어
 
 `.claude/skills/`에 3개가 있다 (gitignore 대상이라 이 기기에만 존재):
 
-- **/add-work** — 새 프로젝트 노트 또는 워크숍 추가. slide_data 블록 복사, data-* 재번호, 이미지 처리, 검증까지의 전체 절차.
+- **/add-work** — 새 프로젝트 노트 또는 워크숍 추가 (ko/en/jp 세 파일 모두). slide_data 블록 복사, data-* 재번호, 이미지 처리, 검증까지의 전체 절차.
 - **/optimize-images** — 새 이미지를 이미지 정책(2400px WebP q85 + 예외)대로 변환 (Pillow 사용, magick/cwebp는 이 기기에 없음).
-- **/smoke-test** — 변경 후 전체 스모크 테스트: 3개 폭 스크린샷 + 히어로/노트/워크숍/팝업/햄버거 인터랙션 + console 검사.
+- **/smoke-test** — 변경 후 전체 스모크 테스트: 3개 폭 스크린샷 + 히어로/노트/워크숍/팝업/햄버거 인터랙션 + console 검사 (+ en/jp 로드·언어 표시 확인).
+
+도구: `.claude/tools/check_lang_sync.py` — 세 언어 파일의 구조 지문(태그·class·id·data-* 순서) 비교. 사용법: `python .claude/tools/check_lang_sync.py <리포트파일>` → RESULT: PASS 확인.

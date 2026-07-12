@@ -9,8 +9,9 @@ description: 포트폴리오 변경 후 전체 스모크 테스트. "확인해�
 
 ## 준비
 
-1. `preview_start`로 `portfolio` 서버(8123) 시작, `http://localhost:8123/min.postfolio-ko.html` 열기.
+1. `preview_start`로 `portfolio` 서버 시작 (기본 8123, 점유 시 autoPort 배정 — 결과가 알려주는 포트 사용), `min.postfolio-ko.html` 열기.
 2. **히어로 인트로를 보려면** javascript_tool로 `sessionStorage.clear()` 후 새로고침. (heroDone이 있으면 인트로를 건너뛰는 게 정상 — 버그 아님.)
+3. 브라우저 패널 탭이 `document.visibilityState === "hidden"`이면 rAF가 멈춰 GSAP 애니메이션·스크린샷이 진행되지 않는다. 이때는 `sessionStorage.setItem('heroDone','1')` 후 새로고침(동기 복원 경로)으로 잠금 해제하고, 애니메이션 의존 검증은 "미확인"으로 보고한다.
 
 ## 데스크톱 (1280×800)
 
