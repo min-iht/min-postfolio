@@ -50,10 +50,30 @@ function deltaToIcon(axis) {
 }
 
 
+/* ---------- 편지지 화면 맞춤 배율 ----------
+   봉투·엽서 장면은 모든 폭에서 데스크톱 크기 그대로지만(2026-07-12 통일),
+   마지막 편지지(720px)는 좁은 화면에서 좌우가 잘린다.
+   그래서 편지지 장면만 화면 폭에 맞춰 축소한다.
+   ★ 좌우 여백 20px — 상단 고정 바 텍스트의 시작선/끝선
+     (responsive.css 모바일 --rsp_pad: 20px)과 맞춘 값 ★
+   편지지 720px + 여백 40px이 다 들어가는 화면(760px 이상)에서는
+   Math.min이 1을 골라 원본 크기 그대로 — 데스크톱·태블릿엔 영향 없음 */
+
+const POSTCARD_SIDE_MARGIN = 20;
+
+function postcardScale() {
+    return Math.min(1, (window.innerWidth - POSTCARD_SIDE_MARGIN * 2) / 720);
+}
+
+
 /* ---------- 초기 상태 ---------- */
 
 gsap.set(".env_bel", { transformOrigin: "50% 100%", scaleY: 0.1 }); // 뚜껑: 접힌 상태에서 시작
 gsap.set(".postcard_text", { y: 14 });                              // 텍스트: 살짝 아래에서 올라오며 fadeIn
+
+gsap.set(".hero_postcard, .shadow", { scale: postcardScale() });
+// 편지지·그림자를 화면 맞춤 크기로 (기준점이 중앙이라 축소해도 가로 정중앙 유지.
+// 편지 글은 편지지의 자식이라 같이 줄어든다)
 
 
 /* ---------- 마스터 타임라인 ---------- */
@@ -111,9 +131,12 @@ tl
     .to(".env_closed", { autoAlpha: 0, duration: 0.35 }, "ui+=0.1")
 
     // ── scene3-1 : 엽서 확대 ──
-    // scale 2.769(=720/260)에서 hero_postcard(720x463)와 정확히 겹친다
+    // scale 2.769(=720/260)에서 hero_postcard(720x463)와 정확히 겹친다.
+    // 편지지가 화면 맞춤(postcardScale)으로 줄어 있으면 같은 배율을 곱해 맞춘다.
+    // x/y는 그대로 — 축소 기준점이 편지지 중앙이라 도착 중심은 변하지 않는다
     .to(".env_card", {
-        x: 4, y: 63, scale: 720 / 260,
+        x: 4, y: 63,
+        scale: () => (720 / 260) * postcardScale(),
         duration: 1.1,
         ease: "power3.inOut"
     }, "ui")
@@ -122,10 +145,11 @@ tl
     .to(".env_card", { autoAlpha: 0, duration: 0.3 }, "ui+=0.85")
 
     // ── scene3-2 : 편지지 ↑ / 그림자 ↘ (떠오르는 입체 효과) ──
-    // 편지지가 페이지 가로 정중앙에 오도록 x는 0. 그림자와의 간격 16px
+    // 편지지가 페이지 가로 정중앙에 오도록 x는 0. 그림자와의 간격 16px.
+    // 이동량에 화면 맞춤 배율을 곱해 좁은 화면에서도 "뜨는" 비율을 유지한다
     .to(".shadow", { autoAlpha: 1, duration: 0.4 }, "lift")
-    .to(".hero_postcard", { x: 0, y: -10, duration: 0.6, ease: "power2.out" }, "lift")
-    .to(".shadow", { x: 16, y: 6, duration: 0.6, ease: "power2.out" }, "lift")
+    .to(".hero_postcard", { x: 0, y: () => -10 * postcardScale(), duration: 0.6, ease: "power2.out" }, "lift")
+    .to(".shadow", { x: () => 16 * postcardScale(), y: () => 6 * postcardScale(), duration: 0.6, ease: "power2.out" }, "lift")
 
     // ── scene3-3 : 편지 내용 fadeIn (분리 중간부터 겹쳐서 일찍 시작) ──
     .to(".postcard_text", { autoAlpha: 1, y: 0, duration: 0.7, ease: "power2.out" }, "lift+=0.25");

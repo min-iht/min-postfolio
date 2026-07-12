@@ -302,16 +302,14 @@ body.slide_locked .leftUI button {
         animation: none;
     }
 
-    /* ---------- Hero ---------- */
-
-    /* 봉투/편지지 무대 전체 축소 (내부 좌표는 그대로 유지된다) */
-    .envelope_stage {
-        transform: translate(-50%, -50%) scale(0.9);
-    }
-
-    .hello {
-        margin-bottom: 170px;
-    }
+    /* ---------- Hero ----------
+       히어로(봉투·엽서·편지지·인트로 글)는 모든 폭에서 데스크톱과
+       완전히 동일하게 유지한다 (2026-07-12 통일 결정).
+       반응형으로 바뀌는 것은 leftUI/rightUI뿐.
+       유일한 예외 — 마지막 편지지 장면의 화면 맞춤 축소는
+       hero.js의 postcardScale()이 담당한다 (760px 미만에서만 작동).
+       ★ 여기에 .envelope_stage 등의 scale을 다시 넣으면
+         hero.js가 화면 픽셀로 계산하는 봉투 비행 좌표와 어긋난다 — 넣지 말 것 */
 
     /* ---------- Works ---------- */
 
@@ -843,45 +841,16 @@ body.slide_locked .leftUI button {
         font-size: 28px;
     }
 
-    /* ---------- Hero ---------- */
-
-    /* 무대(720px)를 화면 폭에 맞게 축소하고,
-       글자는 축소율만큼 미리 키워서 읽기 크기를 유지한다 */
-    .envelope_stage {
-        transform: translate(-50%, -50%) scale(0.46);
-    }
-
-    .hello {
-        margin-bottom: 104px;
-    }
-
-    .postcard_text {
-        top: 56px;
-        left: 46px;
-        right: 46px;
-    }
-
-    .dear {
-        font-size: 34px;
-        margin-bottom: 56px;
-    }
-
-    .contents {
-        font-size: 24px;
-        line-height: 38px;
-        margin-bottom: 34px;
-    }
-
-    .send {
-        font-size: 22px;
-    }
-
-    .letter_arrow {
-        width: 44px;
-        height: 44px;
-        background-size: 30px;
-        background-position: center;
-    }
+    /* ---------- Hero ----------
+       히어로(봉투·엽서·편지지·편지 글·인트로 UI)는 모바일에서도
+       데스크톱과 완전히 동일하게 유지한다 (2026-07-12 통일 결정).
+       반응형으로 바뀌는 것은 leftUI/rightUI뿐.
+       유일한 예외 — 마지막 편지지 장면은 hero.js의 postcardScale()이
+       화면 폭에 맞춰 축소한다 (좌우 여백 20px = 상단 바 --rsp_pad).
+       편지 글(.dear/.contents/.send)은 편지지(.hero_postcard)의 자식이라
+       hero.css의 데스크톱 값 그대로 두면 편지지와 함께 줄어 크기가 맞는다.
+       ★ 여기에 scale이나 글자 크기 보정을 다시 넣으면
+         hero.js의 화면 픽셀 좌표 계산과 어긋난다 — 넣지 말 것 */
 
     /* ---------- Works ---------- */
 

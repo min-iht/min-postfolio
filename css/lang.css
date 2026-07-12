@@ -42,6 +42,14 @@ body {
 
 }
 
+/* 모바일 전용 짧은 제목 — 데스크톱에선 숨김
+   (index.html의 lang_full / lang_short 짝, 모바일 규칙은 이 파일 맨 아래) */
+.lang .lang_short {
+
+    display: none;
+
+}
+
 .lang_bottom {
 
     position: absolute;
@@ -320,4 +328,147 @@ body {
 
     transform: translateY(-100px) scale(0.98);
 
+}
+
+
+/* =====================================================
+   ★ 모바일 (max-width: 767px) — index.html 반응형
+   상단은 데스크톱처럼 한 줄: EN(좌) / 한국어 제목(중앙) / JP(우).
+   긴 인사말 대신 짧은 제목(lang_short)을 쓰고,
+   연도(2022 - 2026)는 문서 맨 아래 중앙으로 내린다.
+   우편함 3개는 세로 스택 — 크기는 키우고(0.78 → 0.94) 간격은 좁힌다
+===================================================== */
+@media (max-width: 767px) {
+
+    /* 우편함 3개를 쌓으면 한 화면에 안 들어가므로 세로 스크롤 허용 */
+    html,
+    body {
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: auto;
+    }
+
+    .hero_lang {
+        height: auto;
+        overflow: visible;
+
+        position: relative;
+        /* ★ .tag_bottom / .lang_bottom의 absolute 기준을 문서 전체 높이로 —
+           bottom: 0이 "첫 화면 아래"가 아니라 스크롤 끝(문서 맨 아래)에 붙는다 */
+    }
+
+    /* 상단 한 줄: 긴 인사말을 숨기고 짧은 제목으로 교체
+       (EN → MIN'S POSTFOLIO / JP → ミンのポートフォリオ) */
+    .lang_top {
+        padding: 18px 16px 0;
+    }
+
+    .lang_top li {
+        white-space: nowrap;
+        /* 좁은 화면에서 제목이 두 줄로 꺾이지 않게 */
+    }
+
+    .lang_top .lang_full {
+        display: none;
+    }
+
+    .lang_top .lang_short {
+        display: inline;
+    }
+
+    /* "강민경의 포트폴리오"(.tag_up)는 데스크톱과 동일 —
+       중앙 상단 absolute 유지라서 모바일 override가 없다 */
+
+    /* "2022 - 2026": 제목 바로 아래 → 문서 맨 아래 중앙으로
+       (position/left/transform은 데스크톱 규칙 그대로, 기준만 hero_lang) */
+    .tag_bottom {
+        bottom: 24px;
+    }
+
+    /* 우편함 3개: 세로 스택 */
+    .postbox_wrap {
+        width: 100%;
+        height: auto;
+        box-sizing: border-box;
+
+        padding-top: 64px;
+        /* ★ 제목과 첫 우편함 사이 간격 — 첫 봉투가 위로 솟는 자리 포함 */
+        padding-bottom: 80px;
+        /* ★ 마지막 우편함과 하단 연도 사이 간격 */
+    }
+
+    .postboxes {
+        width: 100%;
+        height: auto;
+    }
+
+    .postbox123 {
+        flex-direction: column;
+        align-items: center;
+
+        gap: 56px;
+        /* ★ 우편함 사이 간격 — 봉투가 우편함 위로 솟는 높이
+           (약 52px = 55px × 배율)보다 크게 유지해야 위 우편함에 안 닿는다 */
+    }
+
+    .postbox123 li {
+        zoom: 0.94;
+        /* ★ 우편함 크기 — 430px짜리 원본 구성을 통째로 조절하는 배율
+           (0.78 → 0.94, 약 1.2배 확대) */
+    }
+
+    /* ★ 우편함 순서: 한국어 → 영어 → 일본어
+       (HTML 순서는 데스크톱용 EN-KO-JP 그대로 두고 flex order로만 바꾼다) */
+    .postbox123 li:nth-child(1) {
+        order: 2;
+        /* 영어 */
+    }
+
+    .postbox123 li:nth-child(2) {
+        order: 1;
+        /* 한국어 */
+    }
+
+    .postbox123 li:nth-child(3) {
+        order: 3;
+        /* 일본어 */
+    }
+
+    /* 터치 화면에선 hover 상승(-50px)이 좁힌 간격에서
+       위 우편함을 가리므로 모바일에서만 끈다 */
+    .postbox123 li:hover .envelope_lang img {
+        transform: none;
+    }
+
+    /* 하단 연도 표기: 데스크톱과 동일하게 문서 맨 아래 좌/우 고정 */
+    .lang_bottom {
+        padding: 0 16px 22px;
+    }
+}
+
+/* 좁은 화면 보정: 430px 원본이 가로로 넘치지 않는 최대 배율 */
+@media (max-width: 429px) {
+
+    .postbox123 li {
+        zoom: 0.87;
+        /* ★ 375px 화면 기준 (430 × 0.87 ≈ 374px) — 0.94를 쓰면
+           우편함 폭이 404px이 되어 좌우가 잘린다 */
+    }
+
+    /* 좌/중앙/우 텍스트 3개가 한 줄이라 13px이면 서로 겹친다
+       (375px에서 세 텍스트 합 387px > 가용 344px,
+        11px도 360px 화면에선 겹침 — 10px이 안전) */
+    .lang,
+    .tag_center {
+        font-size: 10px;
+    }
+}
+
+/* 더 좁은 화면(갤럭시 360px 등) 보정 */
+@media (max-width: 374px) {
+
+    .postbox123 li {
+        zoom: 0.83;
+        /* ★ 360px 화면 기준 (430 × 0.83 ≈ 357px) */
+    }
 }

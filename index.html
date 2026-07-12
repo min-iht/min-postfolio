@@ -4,6 +4,8 @@
 <head>
 
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 모바일에서 실제 기기 폭으로 렌더링 (이게 없으면 미디어쿼리가 안 먹는다) -->
 
     <title>Min's Postfolio</title>
 
@@ -32,8 +34,15 @@
     <section id="hero-language" class="hero_lang">
         <!-- tag s -->
         <ul class="lang_top lang">
-            <li>Welcome to MIN'S POSTFOLIO !</li>
-            <li>ミンのポートフォリオへようこそ</li>
+            <!-- ★ 데스크톱은 긴 인사말(lang_full), 모바일(767px 이하)은 짧은 제목(lang_short)이 보인다 — css/lang.css 참고 -->
+            <li>
+                <span class="lang_full">Welcome to MIN'S POSTFOLIO !</span>
+                <span class="lang_short">MIN'S POSTFOLIO</span>
+            </li>
+            <li>
+                <span class="lang_full">ミンのポートフォリオへようこそ</span>
+                <span class="lang_short">ミンのポートフォリオ</span>
+            </li>
         </ul>
         <a href="javascript:return false;" class="tag_center tag_up">강민경의 포트폴리오</a>
         <p class="tag_center tag_bottom">2022 - 2026</p>
