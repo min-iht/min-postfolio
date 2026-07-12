@@ -261,11 +261,13 @@ body.slide_locked .leftUI button {
         /* CV 버튼 호버와 같은 연두 */
     }
 
-    /* MISSION: 왼쪽의 원형 fixed 버튼 (위치 유지: 화면 왼쪽 중간쯤) */
+    /* MISSION: 왼쪽 아래의 원형 fixed 버튼 (모바일과 같은 자리)
+       ★ left / bottom 값으로 위치 조절 ★ */
     .mission {
         position: fixed;
         left: 24px;
-        top: 46%;
+        top: auto;
+        bottom: 24px;
         width: auto;
     }
 
@@ -825,8 +827,11 @@ body.slide_locked .leftUI button {
         top: calc((var(--rsp_bar) - 36px) / 2);
     }
 
+    /* 미션 버튼: 태블릿과 같은 왼쪽 아래 — 화면이 좁은 만큼 여백만 줄인다
+       ★ left / bottom 값으로 위치 조절 */
     .mission {
         left: 14px;
+        bottom: 20px;
     }
 
     .mission a {
