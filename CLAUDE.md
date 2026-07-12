@@ -41,7 +41,7 @@ Swiper CSS는 섹션 CSS보다 먼저(페이지네이션을 섹션 CSS가 덮어
 2. **네이밍**: CSS 클래스는 snake_case(`note_panel`, `env_closed`), JS가 잡는 훅 클래스는 camelCase(`noteBtn`, `noteOverlay`, `leftUI`). data 속성으로 짝을 맺는다(`data-note`, `data-tab`, `data-ws`, `data-index`).
 3. **널널한 포맷.** JS는 문장 사이 빈 줄이 많다. 취향이 아니라 스타일이다 — 압축하지 마라.
 4. **이미지 정책** (2026-07-12 일괄 적용): 장축 2400px 캡 + WebP q85. 예외 — `img/favicon*.png`·`img/cursor/*.png`는 PNG 유지, `img/pdf/pdf_brand/*.jpg`는 JPEG 유지(폭 2000px, q85 progressive; 세로 16,383px 초과라 WebP 불가), `img/workshop/gallery1/review/*.PNG`는 원본 유지. 새 이미지는 `/optimize-images`로 처리.
-5. **커밋은 사용자가 요청할 때만.** 제목 1줄(기존 스타일: 영어 명사구) + `Co-Authored-By: Claude` 라인. `.claude/`와 `.omc/`는 gitignore 처리되어 있다.
+5. **커밋은 요청 처리가 끝날 때마다** (2026-07-12 규칙 변경 — 이전: 사용자가 요청할 때만). 요청을 처리하고 나면 그 요청에서 수정·추가·변경한 파일만 커밋한다 — 변경하지 않은 파일은 포함하지 않는다. 제목 1줄(기존 스타일: 영어 명사구) + `Co-Authored-By: Claude` 라인. push는 여전히 사용자가 요청할 때만. `.omc/`와 `.claude/*`는 gitignore 처리되어 있다 (예외: `.claude/skills/`는 커밋 대상).
 6. **학습 규칙(전역)**: 사소하지 않은 문제를 하나 풀 때마다 다음으로 넘어가기 전에 `extract-approach` 스킬을 실행한다. 학습 노트 없는 해결책은 미완성이다.
 
 **이 매뉴얼이 추가하는 관례:**
@@ -101,8 +101,9 @@ Swiper CSS는 섹션 CSS보다 먼저(페이지네이션을 섹션 CSS가 덮어
 - [ ] HTML의 `<img>`에 `loading="lazy" decoding="async"` (첫 화면 제외)
 
 **커밋:**
-- [ ] 사용자가 명시적으로 요청함
+- [ ] 요청 처리가 끝난 뒤 실행 — 그 요청에서 수정·추가·변경한 파일만 포함 (변경 없는 파일 0건)
 - [ ] 제목 1줄 + Co-Authored-By 라인, 작업 외 파일 미포함
+- [ ] push는 하지 않음 (사용자가 명시적으로 요청할 때만)
 
 ## 5. 불확실할 때 — 에스컬레이션 규칙
 
@@ -118,7 +119,7 @@ Swiper CSS는 섹션 CSS보다 먼저(페이지네이션을 섹션 CSS가 덮어
 
 ## 6. 프로젝트 스킬
 
-`.claude/skills/`에 3개가 있다 (gitignore 대상이라 이 기기에만 존재):
+`.claude/skills/`에 3개가 있다 (`.claude/*`는 gitignore지만 skills는 예외로 커밋된다 — `.claude/tools/`는 이 기기에만 존재):
 
 - **/add-work** — 새 프로젝트 노트 또는 워크숍 추가 (ko/en/jp 세 파일 모두). slide_data 블록 복사, data-* 재번호, 이미지 처리, 검증까지의 전체 절차.
 - **/optimize-images** — 새 이미지를 이미지 정책(2400px WebP q85 + 예외)대로 변환 (Pillow 사용, magick/cwebp는 이 기기에 없음).

@@ -56,4 +56,4 @@ description: 포트폴리오에 새 프로젝트 노트 또는 워크숍을 추�
 - [ ] 본문 문구는 사용자 제공분 그대로 (en/jp는 그 원문의 번역만), 없는 부분은 placeholder + 요청 목록 — placeholder는 세 파일 모두 `.`
 - [ ] `python .claude/tools/check_lang_sync.py <리포트>` → RESULT: PASS
 - [ ] en/jp 페이지도 실제로 열어 새 항목이 해당 언어로 표시되는지 확인
-- [ ] 커밋은 사용자가 요청할 때만
+- [ ] 요청 처리가 끝나면 이 작업에서 변경한 파일만 커밋 (변경 없는 파일 제외 — CLAUDE.md 관례 5)
