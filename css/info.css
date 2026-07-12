@@ -1,0 +1,271 @@
+/* =====================================================
+   Info 시안 (designdraft/info.png)
+   기준 캔버스 1920*1080 — 여백/좌표는 시안 측정값
+
+   ★ 병합 시: info.css
+   z-index: 섹션 내부 로컬 요소만 사용 (특수값 없음)
+===================================================== */
+
+/* style.css의 #info { display:flex; height:100vh } 재정의 */
+#info {
+    display: block;
+    position: relative;
+    height: 1080px;
+
+    zoom: 0.8;
+    /* 시안(1920 기준) 전체 -20% 축소 */
+
+    /* ★ 안쪽 여백(왼쪽) 조절은 여기 — 이 값만 바꾸면 됨 ★
+       (absolute 요소들이라 padding이 안 먹혀서 margin에 더하는 방식) */
+    --inset_left: 80px;
+
+    /* ★ 본문 시작선 — works와 통일 ★
+       시작선 공식: 내부 왼쪽좌표 + margin-left = 441
+       info는 타이틀/카드 내용물 내부좌표가 310이라 → 기본 131 (310+131=441)
+       여기에 위 --inset_left(안쪽 여백)가 더해진다 */
+    margin-left: calc(131px + var(--inset_left));
+
+    font-family: 'pretendard';
+}
+
+/* ---------- 그룹 타이틀 / 링크 ---------- */
+
+.if_title {
+    position: absolute;
+    top: 90px;
+    /* 원래 138 — 전체 48px 위로 당김 */
+
+    font-size: 26px;
+    font-weight: 700;
+    color: #555;
+}
+
+.if_t1 {
+    left: 310px;
+}
+
+.if_t2 {
+    left: 736px;
+}
+
+/* 밑줄 텍스트 (링크 아님 — 호버 효과 없음) */
+.if_link {
+    position: absolute;
+    top: 130px;
+    /* 원래 178 — 전체 48px 위로 당김 */
+
+    font-size: 15px;
+    color: #555;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.if_l1 {
+    left: 310px;
+}
+
+.if_l2 {
+    left: 736px;
+}
+
+.if_l4 {
+    left: 1461px;
+}
+
+/* ---------- 카드 ---------- */
+
+.if_card {
+    position: absolute;
+    width: 300px;
+}
+
+/* 테두리 박스 (시안: 348*524) — 카드 1~4 공통
+   테두리는 평소엔 숨김 — 이미지/타이틀 호버 시 은은하게 나타남 */
+.if_card_boxed {
+    width: 348px;
+    height: 524px;
+    box-sizing: border-box;
+    border: solid transparent 1px;
+    padding: 22px 23px;
+
+    transition: border-color 0.35s;
+}
+
+/* 카드 위 어디든(이미지/타이틀 포함) 호버하면 테두리가 나타난다 */
+.if_card_boxed:hover {
+    border-color: #d9d9d9;
+}
+
+.if_c1 {
+    left: 286px;
+    top: 165px;
+    /* 원래 213 — 전체 48px 위로 당김 */
+}
+
+/* 카드 2~4: 박스 패딩(23/22)만큼 좌표를 당겨서
+   내용물은 기존 위치 그대로, 테두리만 둘러지게 한다 */
+.if_c2 {
+    left: 713px;
+    top: 166px;
+    /* 원래 214 — 전체 48px 위로 당김 */
+}
+
+.if_c3 {
+    left: 1078px;
+    top: 166px;
+}
+
+.if_c4 {
+    left: 1438px;
+    top: 166px;
+}
+
+/* 썸네일 (300*300) — 이미지 준비 전까지 그라데이션 자리 표시
+   이미지 자체에는 호버 효과 없음 (테두리만 카드에 나타남) */
+.if_thumb {
+    display: block;
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+}
+
+.if_thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 임시 그라데이션 (시안 무드) */
+.if_g_mint {
+    background: radial-gradient(circle at 50% 48%,
+            #cff2c3 0%, #ddf5ec 55%, #e0f6f8 100%);
+}
+
+.if_g_yellow {
+    background: radial-gradient(circle at 50% 48%,
+            #d8f0bf 0%, #f3f8c8 60%, #fbfad1 100%);
+}
+
+.if_g_orange {
+    background: radial-gradient(circle at 50% 48%,
+            #fdf3c0 0%, #fbdfb5 65%, #fcd8b3 100%);
+}
+
+/* 카드 글 */
+.if_card_title {
+    margin-top: 28px;
+    font-size: 19px;
+    font-weight: 700;
+    color: #555;
+}
+
+
+.if_tags {
+    margin-top: 11px;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+    color: #999;
+}
+
+.if_route {
+    margin-top: 11px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: #999;
+}
+
+.if_lines {
+    margin-top: 16px;
+    font-size: 15px;
+    line-height: 21px;
+    color: #666;
+    letter-spacing: 0.02em;
+}
+
+.if_lines strong {
+    font-weight: 600;
+    color: #666;
+}
+
+.if_desc {
+    margin-top: 18px;
+    font-size: 16px;
+    color: #555;
+    font-weight: 600;
+}
+
+.if_foot {
+    margin-top: 26px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #555;
+}
+
+/* 카드 1만의 간격 조정 (카드 2~4는 기존 간격 유지) */
+.if_c1 .if_card_title {
+    margin-top: 26px;
+}
+
+.if_c1 .if_lines {
+    margin-top: 16px;
+}
+
+/* ---------- 아래 버튼 줄 ---------- */
+
+.if_bottom {
+    position: absolute;
+    top: 795px;
+    /* 원래 843 — 전체 48px 위로 당김 */
+
+    display: flex;
+    align-items: flex-start;
+    gap: 25px;
+}
+
+.if_b1 {
+    left: 310px;
+}
+
+.if_b2 {
+    left: 736px;
+}
+
+.if_b3 {
+    left: 1101px;
+}
+
+.if_bottom h3 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #555;
+}
+
+.if_btns {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+/* view / link / open / download 버튼 */
+.if_btn {
+    display: inline-block;
+    padding: 4px 10px 5px;
+    
+    text-align: center;
+    border: solid #ccc 0.1px;
+    border-radius: 2px;
+
+    font-family: 'Dosis', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: #555;
+
+    transition: background-color 0.25s;
+}
+
+.if_btn:hover {
+    background-color: #AEFFAE;
+}

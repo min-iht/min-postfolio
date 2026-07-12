@@ -1,0 +1,287 @@
+/* =====================================================
+   CV 시안 (designdraft/cv.png)
+   기준 캔버스 1920*1080 — 여백/좌표는 시안 측정값
+
+   ★ 병합 시: cv.css
+   z-index: 섹션 내부 로컬 요소만 사용 (특수값 없음)
+===================================================== */
+
+/* style.css의 #cv { display:flex; height:100vh } 재정의 */
+#cv {
+    display: block;
+    position: relative;
+    height: 1290px;
+    /* 본문 17px + 아래 박스가 길어져서 1080 → 1290으로 확장 */
+
+    zoom: 0.8;
+    /* 시안(1920 기준) 전체 -20% 축소 */
+
+    /* ★ 안쪽 여백(왼쪽) 조절은 여기 — 이 값만 바꾸면 됨 ★
+       (absolute 요소들이라 padding이 안 먹혀서 margin에 더하는 방식) */
+    --inset_left: 240px;
+
+    /* ★ 본문 시작선 — works와 통일 ★
+       시작선 공식: 내부 왼쪽좌표 + margin-left = 441
+       cv는 사진(cv_photo) 내부좌표가 397이라 → 기본 44 (397+44=441)
+       여기에 위 --inset_left(안쪽 여백)가 더해진다 */
+    margin-left: calc(44px + var(--inset_left));
+
+    /* ★ CV 위쪽 여백 조절은 여기 ★
+       마이너스를 키우면 위 워크숍 섹션과 가까워진다 (0 = 원래대로)
+       zoom 0.8이라 실제 이동량은 값×0.8px (-45px → 화면상 36px 위로
+       = 원래 여백 180px의 20% 감소) */
+    margin-top: -45px;
+
+    /* ★ CV와 Info 섹션 사이 여백 조절은 여기 ★
+       zoom 0.8이 걸려 있어 실제 화면 여백은 값×0.8px (100px → 80px) */
+    margin-bottom: 100px;
+
+    font-family: 'pretendard';
+}
+
+/* ---------- 왼쪽 사진 영역 ---------- */
+
+/* 프로필 사진 (img/cv_profile.webp 288*702 —
+   렌즈 모양과 세로 캡션이 이미지 안에 포함되어 있음)
+   ★ 위치/크기 조절은 여기: left/top = 위치, width = 크기 */
+.cv_photo {
+    position: absolute;
+    left: 397px;
+    top: 38px;
+
+    width: 288px;
+    /* 원본 크기. 줄이면 사진이 작아진다 */
+}
+
+.cv_photo img {
+    width: 100%;
+    display: block;
+}
+
+/* CV 로고 + 다운로드 버튼 (시안: 사진 아래 y745) */
+.cv_logo {
+    position: absolute;
+    left: 480px;
+    top: 705px;
+
+    font-family: 'pretendard';
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.06em;
+    color: #555;
+}
+
+.cv_download {
+    position: absolute;
+    left: 540px;
+    top: 710px;
+
+    display: inline-block;
+    width: 83px;
+    padding: 4px 0 5px;
+    box-sizing: border-box;
+
+    border: solid #ccc 0.1px;
+    border-radius: 2px;
+    text-align: center;
+
+    font-family: 'Dosis', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: #555;
+
+    transition: background-color 0.25s;
+}
+
+.cv_download:hover {
+    background-color: #AEFFAE;
+}
+
+/* ---------- 오른쪽 이력 ---------- */
+
+.cv_body {
+    position: absolute;
+    left: 820px;
+    top: 112px;
+    width: 900px;
+}
+
+.cv_name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #555;
+}
+
+.cv_rows {
+    margin-top: 70px;
+}
+
+/* 공통 행: 라벨 128px(시안 x820→948) + 값 */
+.cv_row {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+/* CV 본문 텍스트는 17px로 통일 (name/CV로고/버튼 제외) */
+.cv_row dt {
+    width: 148px;
+    flex: none;
+    font-size: 17px;
+    font-weight: 700;
+    color: #555;
+}
+
+.cv_row dd {
+    font-size: 17px;
+    line-height: 28px;
+    color: #555;
+}
+
+.cv_row dd p {
+    margin: 0;
+}
+
+/* 그룹 사이 간격 */
+.cv_row.cv_gap {
+    margin-top: 28px;
+}
+
+/* 연도 컬럼 정렬 (시안: 연도 뒤 본문 시작 위치 통일) */
+.cv_year {
+    display: inline-block;
+    width: 165px;
+    /* 17px 기준 날짜(0000.00 - 0000.00)가 줄바꿈 없이 들어가는 폭 */
+    color: #555;
+}
+
+/* 채널 아이콘 */
+.cv_channel {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.cv_channel img {
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+
+/* 스킬 아이콘 */
+.cv_skills {
+    display: flex;
+    gap: 3px;
+}
+
+.cv_skill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+}
+
+.cv_skill img{
+    width: 100%;
+}
+/* ---------- 아래 테두리 박스 (Hobby + Backstory) ---------- */
+
+.cv_box {
+    position: absolute;
+    left: 791px;
+
+    /* ★ Hobby/Backstory 상자 세로 위치 조절은 여기 ★
+       키우면 아래로 내려간다 (798 = 위 이력과 65px 간격) */
+    top: 798px;
+
+    width: 1100px;
+    height: auto;
+    /* 내용(스토리) 길이에 맞춰 자동으로 늘어난다 */
+    box-sizing: border-box;
+
+    border: solid #ccc 0.1px;
+    padding: 35px 0 60px 29px;
+    /* 아래 60px = 구독 버튼 자리 */
+}
+
+.cv_box .cv_row {
+    margin-bottom: 12px;
+}
+
+.cv_box .cv_row dt,
+.cv_story_row .cv_rainbow {
+    width: 148px;
+    /* 위 이력 라벨(dt)과 같은 폭 */
+    flex: none;
+}
+
+.cv_story_row {
+    display: flex;
+}
+
+/* Beyond The CV : A Backstory — 무지개 그라데이션이 은은하게 흐르는 글자 */
+.cv_rainbow {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 22px;
+
+    opacity: 0.55;
+    /* ★ 무지개 농도 조절 — 낮출수록 파스텔톤 (1 = 원색) */
+
+    /* 시안 컬러: 주황→노랑→초록→파랑→보라→분홍 */
+    background: linear-gradient(100deg,
+            #f5a623, #f8e71c, #7ed321,
+            #4a90d9, #9013fe, #e64980, #f5a623);
+    background-size: 300% 100%;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    animation: cv_rainbow_flow 7s linear infinite;
+}
+
+@keyframes cv_rainbow_flow {
+    to {
+        background-position: -300% 0;
+    }
+}
+
+.cv_story {
+    width: 800px;
+    font-size: 17px;
+    line-height: 27px;
+    color: #444;
+}
+
+.cv_story_small {
+    font-size: 11px;
+    color: #999;
+    /* 괄호 속 부가 문구 — 의도적으로 작게 유지 */
+}
+
+/* 박스 오른쪽 아래 구독 버튼 */
+.cv_subscribe {
+    position: absolute;
+    right: 43px;
+    bottom: 60px;
+
+    display: inline-block;
+    padding: 4px 12px 5px;
+
+    border: solid #ccc 0.1px;
+    border-radius: 2px;
+
+    font-family: 'Dosis', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: #555;
+
+    transition: background-color 0.25s;
+}
+
+.cv_subscribe:hover {
+    background-color: #AEFFAE;
+}

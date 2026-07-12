@@ -1,0 +1,806 @@
+/* =====================================================
+   Works 시안 (designdraft/project-exhibition.png
+              + project-exhibition-slide.png)
+   기준 캔버스 1920*1080 — 여백/좌표는 시안 측정값
+
+   ★ 병합 시: works.css(포스터/카드) + popup.css(노트 슬라이드)
+
+   z-index (전역 스케일은 style.css 주석 참고)
+   5     .info_sticky  — 포스터 위에 뜨는 정보 카드 (works 로컬)
+   860   .noteOverlay / .ws_overlay — 노트 슬라이드
+         시안에서 헤더·사이드 고정 UI가 슬라이드 위에 보이므로
+         Fixed UI(900)보다 아래, 본문 콘텐츠보다 위에 둔다
+===================================================== */
+
+/* 슬라이드 열려 있는 동안 뒤 페이지 스크롤 잠금
+   (html에도 거는 이유: 스크롤바 자리 유지 — hero.css 주석 참고) */
+html:has(body.slide_locked) {
+    overflow: hidden;
+}
+
+body.slide_locked {
+    overflow: hidden;
+}
+
+/* 슬라이드가 열려 있는 동안 고정 UI(leftUI)는 링크(a)만 클릭을 받고,
+   투명한 박스 영역은 클릭이 아래(오버레이)로 통과되게 한다.
+   → leftUI 박스(z-900)가 노트 클로즈 버튼(z-860)을 덮어
+     호버/클릭을 막고, "mission 위쪽은 바깥 클릭 닫기가 안 되던" 문제 해결 */
+body.slide_locked .leftUI {
+    pointer-events: none;
+}
+
+body.slide_locked .leftUI a {
+    pointer-events: auto;
+}
+
+/* 시안(1920px 기준) 전체 -20% 축소 — 100% 배율에서 잘리지 않게
+   섹션과 슬라이드 패널에만 적용, 고정 UI(.leftUI/.rightUI)는 원본 유지
+   (#cv, #info, .ws_panel의 zoom은 각 시안 CSS 파일에 있음) */
+#works {
+    /* ★ 본문 시작선(기준) ★
+       모든 섹션의 왼쪽 시작선 = "섹션 내부 왼쪽좌표 + margin-left = 441"
+       works는 포스터 내부좌표가 296이라 → margin 145 (296+145=441)
+       ※ 시작선을 옮기고 싶으면 세 파일의 margin을 같은 양만큼 증감:
+          works(145) / cv(44) / info(131) */
+    margin-left: 5px;
+}
+
+
+/* ---------- 왼쪽 포스터 ---------- */
+
+/* ★ 병합 주의: 기존 works.css의 .project { height:100vh; padding-left:286px },
+   .poster_area { height:930px }, .poster { margin-bottom:20px }와 충돌한다.
+   이 시안은 한 섹션 910px 고정 기준으로 좌표/스크롤트리거가 맞춰져 있으므로
+   병합 시 works.css의 옛 규칙을 삭제할 것.
+   (#works 스코프를 붙여 로드 순서와 무관하게 새 규칙이 이기게 해 둠) */
+
+/* 한 섹션 높이 910px */
+#works .project {
+    height: 910px;
+
+    /* ★ 프로젝트 섹션 사이 간격 조절은 여기 ★
+       (workshop 섹션은 workshop.css에서 따로 관리되어 영향 없음)
+       zoom 0.8이 걸려 있어 실제 화면 간격은 값×0.8px (40px → 32px) */
+    margin-bottom: 80px;
+
+    padding-left: 290px;
+    /* 시안: 포스터 왼쪽 여백 296 (기존 works.css는 286 — 병합 시 확인) */
+}
+
+#works .poster_area {
+    width: 730px;
+    height: 910px;
+}
+
+#works .poster_area img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin: 0;
+}
+
+
+/* ---------- 오른쪽 정보 카드 ---------- */
+
+.project_group {
+    position: relative;
+}
+
+/* 높이 0 sticky — .project_group 범위 안에서만 화면에 붙어 있다가
+   workshop 섹션이 올라오면 works.js가 카드를 숨긴다.
+   pointer-events: 컨테이너는 클릭을 통과시키고 active 카드만 받는다
+   (숨은 카드가 아래 콘텐츠의 클릭/드래그를 막지 않도록) */
+.info_sticky {
+    position: sticky;
+    top: 0;
+    height: 0;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.info.active {
+    pointer-events: auto;
+}
+
+/* 카드 한 장 (시안: x1123 y148, 폭 1123→1852) */
+.info {
+    position: absolute;
+    left: 1100px;
+    top: 80px;
+    width: 716px;
+
+    font-family: 'pretendard';
+
+    /* 초기 숨김 — 스크롤로 섹션이 바뀌면 JS가 fade in 교체 */
+    opacity: 0;
+    visibility: hidden;
+}
+
+.info.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.info_diamond {
+    font-size: 19px;
+    color: #666;
+}
+
+/* 왼쪽 글 컬럼 */
+.info_main {
+    width: 467px;
+}
+
+.info_category {
+    margin-top: 57px;
+    font-size: 12px;
+    color: #555;
+}
+
+.info_title {
+    margin-top: 8px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #555;
+}
+
+.info_desc {
+    margin-top: 18px;
+    font-size: 14px;
+    line-height: 22px;
+    color: #555;
+}
+
+.info_label {
+    margin-top: 32px;
+    font-weight: 400;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: #b4b4b4;
+}
+/* .note_label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #b4b4b4; */
+
+.info_question {
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.02%;
+    color: #444;
+}
+
+.info_answer {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 26px;
+    color: #444;
+    letter-spacing: -0.02%;
+}
+
+/* 태그 알약 (workshop 카드와 공유) */
+.info_tags {
+    margin-top: 46px;
+    display: flex;
+    gap: 6px;
+}
+
+/* 시안: 테두리 없는 연회색 채움 알약 */
+.tag {
+    border-radius: 999px;
+    padding: 16px 23px;
+    font-size: 13px;
+    font-weight: 300;
+    color: #acacac;
+    background: #f8f8f8;
+    /* border: solid 0.1px #ddd; */
+    white-space: nowrap;
+}
+
+/* Open the NOTE 버튼 (시안: 240*40) */
+.noteBtn {
+    margin-top: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 240px;
+    height: 50px;
+    padding: 10px 16px 10px 26px;
+    box-sizing: border-box;
+
+    background: #fafafa;
+    border: solid #ccc 0.1px;
+
+    font-family: 'Dosis', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    color: #555;
+
+    transition: background-color 0.25s;
+}
+
+.noteBtn:hover {
+    background-color: #ffffaf;
+    /* 팝업 close버튼과 같은 노랑 */
+}
+
+.noteBtn_arrow {
+    font-size: 12px;
+    letter-spacing: 0;
+}
+
+/* 오른쪽 메타 컬럼 (시안: x1630 → 카드 기준 507) */
+.info_meta {
+    position: absolute;
+    right: 0;
+    top: 104px;
+    width: 250px;
+    letter-spacing: 8%;
+}
+
+.info_meta div {
+    display: flex;
+    margin-bottom: 26px;
+}
+
+.info_meta dt {
+    width: 110px;
+    flex: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+
+}
+
+/* 100% Individual Project — 메타 라벨(dt)과 같은 스타일.
+   메타(dl) 안 마지막 줄이라 왼쪽 선이 메타와 자동으로 맞는다 */
+.info_meta .individual {
+
+    /* ★ 위 메타와의 간격 조절은 여기 ★ */
+    margin-top: 130px;
+
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+}
+
+.info_meta dd {
+    font-size: 12px;
+    color: #555;
+    margin-left: 0px;
+}
+
+/* Outcome 박스 (시안: 222폭, y480 → 카드 기준 332) */
+/* Outcome 상자 — Open the NOTE 버튼 "바로 아래" 왼쪽 정렬.
+   absolute가 아니라 흐름 배치라서, 카드마다 글 길이가 달라
+   버튼 위치가 달라져도 항상 버튼 밑에 왼쪽 선을 맞춰 따라온다 */
+.info_outcome {
+    margin-top: 42px;
+    /* ★ 버튼과의 간격 — 이 값으로 조절 */
+
+    width: 440px;
+    box-sizing: border-box;
+
+    border: solid #ccc 0.1px;
+    letter-spacing: 8%;
+    padding: 26px;
+}
+
+.info_outcome_head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 700;
+    color: #555;
+}
+
+.info_outcome ul {
+    margin-top: 24px;
+}
+
+.info_outcome li {
+    position: relative;
+    padding-left: 12px;
+    font-size: 14px;
+    line-height: 19px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.info_outcome li::before {
+    content: "·";
+    position: absolute;
+    left: 2px;
+}
+
+/* 오른쪽 아래 링크 2줄 (project-brand — Website / PDF Brand Portfolio)
+   왼쪽 선 = 메타·individual 컬럼과 동일(오른쪽 폭 250 컬럼) */
+.info_links {
+    position: absolute;
+    right: 0;
+    width: 250px;
+
+    /* ★ 세로 위치 조절은 여기 ★
+       bottom: 0 = Open the NOTE 버튼 바닥과 같은 선.
+       키우면 위로 올라간다 */
+    bottom: 0;
+}
+
+.info_link_row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    /* 두 줄 사이 간격 */
+}
+
+.info_link_row h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #333;
+}
+
+
+/* =====================================================
+   ★ 첫 번째 프로젝트만 노트 슬라이드 스타일 시험 적용 ★
+   (#project-exhibition 포스터 + .info[data-index="0"] 카드)
+
+   노트 슬라이드에서 확정한 값을 그대로 가져옴:
+   ◆ 22px / 카테고리 10px·500 / 제목 24px / 본문 16px·행간26·#444
+   라벨 #b4b4b4·500 / 블록 사이 간격 62px / 사진과 간격 약 90px
+
+   - 마음에 들면: 아래 각 줄의 [data-index="0"] 만 지우면
+     같은 스타일이 카드 2~6에도 적용된다 (포스터는 #works .poster_area로)
+   - 마음에 안 들면: 이 블록을 통째로 지우면 원래대로
+===================================================== */
+
+/* (포스터는 다른 섹션과 동일한 730×910 기본 크기 사용) */
+
+/* 카드 위치: 다른 카드(.info)와 같은 left/폭 사용
+   ★ left  = 사진과의 간격 조절 — 1100은 다른 섹션 카드와 같은 값
+             (포스터 끝 1020 + 간격 80). 키우면 사진과 멀어진다
+   ★ width = 716 — 기본 .info와 동일. 오른쪽 끝(right:0) 기준인
+             info_meta·태그 시작선이 카드 2~6과 일치한다
+   ★ top 24 = rightUI(CONTACT/SUBSCRIBE)의 시작 높이(top:24)와
+              카드 시작점(◆)을 맞춤. 내려간 만큼 카드 안 간격
+              3곳(상쇄분 ①②③)에서 10px씩 회수해서
+              Outcome 하단이 화면 밖으로 잘리지 않게 유지 */
+.info[data-index="0"] {
+    left: 1100px;
+    width: 716px;
+    top: 24px;
+}
+
+/* Outcome 간격 — 카드 전체 높이 상쇄분 ① (기본 42) */
+.info[data-index="0"] .info_outcome {
+    margin-top: 26px;
+}
+
+/* ◆ → 노트의 ★ 와 같은 크기/색 */
+.info[data-index="0"] .info_diamond {
+    font-size: 22px;
+    color: #555;
+}
+
+/* 카테고리 → note_case (간격은 상쇄분 ② — 기본 52) */
+.info[data-index="0"] .info_category {
+    margin-top: 42px;
+    font-size: 10px;
+    font-weight: 500;
+    color: #555;
+}
+
+/* 제목 → note_title */
+.info[data-index="0"] .info_title {
+    margin-top: 10px;
+    font-size: 24px;
+    color: #555;
+}
+
+/* 한 줄 소개 → note_text */
+.info[data-index="0"] .info_desc {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 26px;
+    color: #444;
+}
+
+/* Question/Answer 라벨 → note_label + 블록 간격 62 */
+.info[data-index="0"] .info_label {
+    margin-top: 62px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #b4b4b4;
+}
+
+/* 질문/답 → note_text (같은 크기·행간·색으로 통일) */
+.info[data-index="0"] .info_question {
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 26px;
+    color: #444;
+}
+
+.info[data-index="0"] .info_answer {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 26px;
+    color: #444;
+}
+
+/* 태그: 왼쪽 컬럼에서 빼내 오른쪽 메타(Visual Design 행) 아래로
+   오른쪽 끝(right:0) 기준 한 줄로 나열 — 줄바꿈 없음 */
+/* ===== 버튼 + 태그 한 줄 (.note_row) =====
+   exhibition/experiment/book/cd 카드에서
+   Open the NOTE 버튼(왼쪽)과 태그(오른쪽)가 같은 줄에 놓인다.
+   태그 상자 폭 = 오른쪽 메타 컬럼과 같은 250px
+   → 태그의 왼쪽 시작선이 .info_meta 시작선과 자동으로 맞는다 */
+.note_row {
+    display: flex;
+    align-items: center;
+    /* 버튼과 태그를 같은 줄에서 세로 중앙 정렬 */
+    justify-content: space-between;
+
+    /* ★ 위 내용(Answer)과의 간격 조절은 여기 ★ */
+    margin-top: 32px;
+}
+
+.info .note_row .noteBtn {
+    margin-top: 0;
+    /* 줄 안에서는 버튼 자체 여백 제거 (간격은 위 .note_row가 담당) */
+}
+
+.note_row .info_tags {
+    margin: 0;
+
+    width: 250px;
+    /* ★ 태그 시작선 조절은 여기 ★
+       250 = 메타 컬럼과 같은 폭 → 시작선 일치.
+       태그가 250보다 길면 카드 오른쪽 밖으로 삐져나간다 */
+
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+/* 버튼: Answer 아래 62px 리듬 (태그가 빠져서 바로 이어짐)
+   → 카드 높이 상쇄분 ③으로 10px 좁힘 (기본 62) */
+.info[data-index="0"] .note_row {
+    margin-top: 52px;
+    /* 첫 카드만 위 간격을 노트 리듬(52)으로 — 버튼이 아니라
+       줄(.note_row)에 줘야 태그와의 세로 정렬이 유지된다 */
+}
+
+/* (Outcome 상자 위치 규칙은 삭제 — 이제 흐름 배치라서
+   어떤 카드든 자동으로 버튼 바로 아래 왼쪽 선에 맞는다.
+   버튼과의 간격 조절은 위쪽 .info_outcome의 margin-top) */
+
+/* 첫 섹션 아래 여백: Outcome이 섹션 높이(910)를 빠져나오는 만큼(약 90px)
+   기본 간격(80)에 더해줌 → 다음 섹션과 겹쳐 보이지 않게 */
+#works #project-exhibition {
+    margin-bottom: 170px;
+}
+
+
+/* =====================================================
+   노트 슬라이드 (designdraft/project-exhibition-slide.png)
+===================================================== */
+
+.noteOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 860;
+
+    /* 패널 왼쪽(사이드 메뉴 영역)은 클릭이 통과되도록 */
+    pointer-events: none;
+
+    visibility: hidden;
+}
+
+/* 열려 있는 동안은 오버레이가 클릭을 받아서
+   패널 바깥(왼쪽 여백) 클릭 → 닫기가 동작한다
+   (고정 UI는 z-900이라 그 위에서 여전히 클릭 가능) */
+.noteOverlay.open {
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* 패널: 화면 오른쪽에서 x287 지점까지 덮는다 (시안 측정, zoom 0.8 적용) */
+.note_panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 287px;
+    right: 0;
+
+    background: #fff;
+    border-left: solid #ccc 0.1px;
+
+    pointer-events: auto;
+}
+
+/* 클로즈 버튼 — popup.css .close_vertical 스타일 공유, 위치만 변경
+   패널 왼쪽 모서리 바깥에 붙는다 (팝업의 right:-38 미러) */
+.note_close {
+    position: absolute;
+    top: 130px;
+    left: -38px;
+}
+
+/* 슬라이드 클로즈 버튼 맨 위 화살표 (▶) —
+   팝업의 X(.btn_x)와 같은 간격, 크기만 살짝 작게
+   (워크숍 슬라이드의 가로 버튼 화살표는 popup.css .close_horizontal 쪽) */
+.note_close .btn_arrow {
+    display: inline-block;
+    margin-bottom: 46px;
+    font-size: 8px;
+}
+
+
+/* ---------- 왼쪽 : 탭 스와이퍼 갤러리 ---------- */
+
+.note_left {
+    position: absolute;
+
+    /* ★ 노트 슬라이드 안 왼쪽 여백 조절은 여기 ★
+       값을 키우면 탭/갤러리/페이지네이션이 통째로 오른쪽으로 밀린다 */
+    left: 10px;
+
+    top: -40px;
+    width: 726px;
+    height: 100%;
+
+}
+
+/* 탭 (시안: x340 y118 → 패널 기준 53) */
+.note_tabs {
+    position: absolute;
+    left: 53px;
+    top: 112px;
+    display: flex;
+    gap: 56px;
+}
+
+.note_tab,
+.ws_slide_tab {
+    /* 탭 글자 꾸미기 */
+    font-size: 13px;
+    color: #999;
+    font-weight: 400;
+    letter-spacing: -5%;
+    text-decoration: underline;
+    text-underline-offset: 2.3px;
+    transition: color 0.25s;
+}
+
+.note_tab:hover,
+.ws_slide_tab:hover {
+    color: #333;
+}
+
+.note_tab.active,
+.ws_slide_tab.active {
+    color: #333;
+}
+
+/* 갤러리 (왼쪽 버튼이 탭 시작선(53)에 오도록 139→102로 당김) */
+.note_swiper {
+    position: absolute;
+    left: 102px;
+    top: 202px;
+    width: 500px;
+    height: 591px;
+}
+
+.note_swiper .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.note_swiper .swiper-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+/* 페이지네이션 점 (시안: y853, 중심은 갤러리와 동일 x676)
+   Swiper 기본 CSS(bottom:8px)를 덮어쓰도록 top/bottom 모두 지정 */
+.note_left .note_pagination {
+    position: absolute;
+    left: 102px;
+    /* 갤러리(.note_swiper)와 같은 left */
+    width: 500px;
+    top: 847px;
+    bottom: auto;
+    text-align: center;
+}
+
+.note_pagination .swiper-pagination-bullet,
+.ws_slide_pagination .swiper-pagination-bullet {
+    width: 5px;
+    height: 5px;
+    margin: 0 5px;
+    background: #c9c9c9;
+    opacity: 1;
+}
+
+.note_pagination .swiper-pagination-bullet-active,
+.ws_slide_pagination .swiper-pagination-bullet-active {
+    background: #777;
+}
+
+/* 갤러리 좌우 넘김 버튼 (노트/워크숍 슬라이드 공용)
+   — 갤러리 바깥 양옆, 연한 회색. 색/크기는 아래 변수로 조절 */
+.note_left .swiper-button-prev,
+.note_left .swiper-button-next,
+.ws_slide_left .swiper-button-prev,
+.ws_slide_left .swiper-button-next {
+    --swiper-navigation-color: #ccc;
+    --swiper-navigation-size: 26px;
+}
+
+.note_left .swiper-button-prev:hover,
+.note_left .swiper-button-next:hover,
+.ws_slide_left .swiper-button-prev:hover,
+.ws_slide_left .swiper-button-next:hover {
+    --swiper-navigation-color: #999;
+}
+
+/* ★ 노트 슬라이드 좌우 버튼 위치 조절은 여기 ★
+   (.note_left 기준 좌표 — 갤러리는 left 102~602, 세로 중심 497)
+   prev: left를 줄이면 더 바깥(왼쪽)으로 — 53 = 탭 첫 타이틀 왼쪽 라인
+   next: left를 키우면 더 바깥(오른쪽)으로 */
+.note_left .swiper-button-prev {
+    left: 53px;
+    right: auto;
+    top: 497px;
+}
+
+.note_left .swiper-button-next {
+    left: 628px;
+    right: auto;
+    top: 497px;
+}
+
+/* ---------- 오른쪽 : 스크롤 상자 ---------- */
+
+/* 시안: 내용 x1108(패널 기준 821) → 오른쪽 90 여백 */
+.note_right {
+    position: absolute;
+    left: 750px;
+    right: 90px;
+    top: 120px;
+    bottom: 0;
+
+    width: 580px;
+    height: 650px;
+
+    overflow-y: auto;
+    padding: 0px 24px 120px 0;
+    box-sizing: border-box;
+
+    font-family: 'pretendard';
+}
+
+/* 얇은 스크롤바 */
+.note_right::-webkit-scrollbar,
+.ws_detail_scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.note_right::-webkit-scrollbar-thumb,
+.ws_detail_scroll::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    border: #ccc solid 0.1px;
+}
+
+/* 스크롤 힌트(∨∨∨)가 떠 있는 동안은 스크롤바 숨김
+   — 스크롤을 시작하면 JS가 hint_on을 지워서 힌트 대신 스크롤바가 나타난다
+   (둘이 동시에 보이지 않게) */
+.note_right.hint_on,
+.ws_detail_scroll.hint_on {
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.note_right.hint_on::-webkit-scrollbar,
+.ws_detail_scroll.hint_on::-webkit-scrollbar {
+    display: none;
+}
+
+.note_star {
+    font-size: 22px;
+    color: #555;
+}
+
+.note_case {
+    margin-top: 52px;
+    font-size: 10px;
+    color: #555;
+    font-weight: 500;
+}
+
+.note_title {
+    margin-top: 10px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #555;
+}
+
+.note_block {
+    margin-top: 62px;
+}
+
+.note_label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #b4b4b4;
+}
+
+.note_text {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 26px;
+    color: #444;
+    letter-spacing: -0.02%;
+}
+
+/* Learning / Next Question — 흐리게 한 줄 처리 */
+.note_block.muted {
+    margin-top: 24px;
+}
+
+.note_block.muted .note_label,
+.note_block.muted .note_label span {
+    color: #bcbcbc;
+    font-weight: 500;
+}
+
+.note_link {
+    display: inline-block;
+    margin-top: 44px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #333;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* 스크롤 힌트 ∨∨∨ (시안: 오른쪽 하단) */
+.note_hint {
+    position: absolute;
+    right: 340px;
+    bottom: 200px;
+
+    font-family: 'Dosis', sans-serif;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    color: #999;
+
+    transition: opacity 0.4s;
+    animation: note_hint_bob 1.6s ease-in-out infinite;
+}
+
+@keyframes note_hint_bob {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(6px);
+    }
+
+}

@@ -1,0 +1,1171 @@
+/* =====================================================
+   반응형 (min.postfolio-ko.html)
+   - 태블릿: max-width 1024px / 모바일: max-width 767px (표준 브레이크포인트)
+   - 데스크톱(1025px~)은 이 파일이 아무것도 건드리지 않는다
+   - 반드시 다른 CSS보다 "나중에" 로드할 것 (같은 선택자를 덮어쓰는 방식)
+
+   함께 동작하는 JS: js/responsive.js
+   - 햄버거 메뉴 열고 닫기 (body.menu_open)
+   - ≤1024px에서 Works 정보 카드(.info)를 각 포스터 아래로 이동
+
+   ★ 여백 조절은 아래 --rsp_pad 하나만 바꾸면 된다 ★
+===================================================== */
+
+/* 햄버거 버튼: 데스크톱에서는 숨김 */
+.ham_btn {
+    display: none;
+}
+
+/* 메뉴가 열려 있는 동안 뒤 페이지 스크롤 잠금 (hero/slide 잠금과 같은 방식) */
+html:has(body.menu_open) {
+    overflow: hidden;
+}
+
+body.menu_open {
+    overflow: hidden;
+}
+
+/* 슬라이드 잠금 중에도 햄버거 버튼은 클릭 가능
+   (works.css가 .leftUI를 pointer-events:none으로 만들기 때문) */
+body.slide_locked .leftUI button {
+    pointer-events: auto;
+}
+
+
+/* =====================================================
+   ★ 태블릿 + 모바일 공통 (max-width: 1024px)
+   고정 좌표(1920 캔버스) 레이아웃 → 위에서 아래로 흐르는
+   에디토리얼 세로 플로우로 재배치
+===================================================== */
+@media (max-width: 1024px) {
+
+    :root {
+        --rsp_pad: 48px;
+        /* ★ 좌우 여백 — 태블릿 기준 (모바일은 아래 767 블록에서 재정의) */
+
+        --rsp_bar: 56px;
+        /* 상단 고정 헤더 바 높이 */
+    }
+
+    /* ---------- 고정 헤더 바 ---------- */
+
+    /* leftUI: 세로 사이드 메뉴 → 상단 고정 바 */
+    .leftUI {
+        left: 0;
+        top: 0;
+        right: 0;
+
+        display: flex;
+        align-items: center;
+
+        height: var(--rsp_bar);
+        padding: 0 var(--rsp_pad);
+
+        /* ※ backdrop-filter 금지 — 필터가 걸리면 .leftUI가 fixed 자손
+           (햄버거/메뉴 오버레이/미션 버튼)의 위치 기준이 되어 버린다 */
+        background: rgba(255, 255, 255, 0.96);
+        border-bottom: solid #ececec 1px;
+
+        font-size: 14px;
+    }
+
+    .header a {
+        padding: 6px 4px;
+        margin: -6px -4px;
+    }
+
+    .header span {
+        margin: 0 10px;
+    }
+
+    /* 섹션 아이콘: 바 안의 작은 아이콘으로 (hero 봉투가 여기로 날아온다) */
+    .sectionInfo {
+        display: flex;
+        align-items: center;
+    }
+
+    .iconBox {
+        width: 24px;
+        height: 24px;
+        margin: 0 0 0 14px;
+    }
+
+    .icon {
+        margin: 0;
+    }
+
+    .title {
+        display: none;
+    }
+
+    /* gnb: 평소엔 숨기고 햄버거로 연다 */
+    .leftUI nav {
+        display: none;
+    }
+
+    /* ---------- 햄버거 버튼 ---------- */
+
+    .ham_btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+
+        position: fixed;
+        right: calc(var(--rsp_pad) - 10px);
+        top: calc((var(--rsp_bar) - 40px) / 2);
+        z-index: 2;
+        /* 메뉴 오버레이(z:1)보다 위 — 열림 상태에서 X로 변신 */
+
+        width: 40px;
+        height: 40px;
+
+        background: transparent;
+        border: none;
+        padding: 0;
+    }
+
+    .ham_btn span {
+        display: block;
+        width: 22px;
+        height: 1.5px;
+        background: #555;
+        transition: transform 0.3s ease, opacity 0.3s;
+    }
+
+    /* 열림: 두 줄이 X로 */
+    body.menu_open .ham_btn span:nth-child(1) {
+        transform: translateY(4.25px) rotate(45deg);
+    }
+
+    body.menu_open .ham_btn span:nth-child(2) {
+        transform: translateY(-4.25px) rotate(-45deg);
+    }
+
+    /* ---------- 햄버거 메뉴 오버레이 ---------- */
+
+    /* 헤더 바 아래 전체를 덮는 흰 오버레이 (바/로고는 그대로 보인다) */
+    body.menu_open .leftUI nav {
+        display: block;
+
+        position: fixed;
+        top: var(--rsp_bar);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+
+        background: #fff;
+        padding: 56px var(--rsp_pad) 48px;
+        overflow-y: auto;
+    }
+
+    body.menu_open .gnb {
+        margin: 0;
+    }
+
+    body.menu_open .gnb>li {
+        margin-bottom: 30px;
+    }
+
+    body.menu_open .gnb>li>a {
+        font-size: 32px;
+        font-weight: 400;
+        opacity: 0.3;
+        padding: 4px 0;
+        margin: 0;
+    }
+
+    body.menu_open .gnb>li>a>span {
+        font-size: 15px;
+        margin-right: 14px;
+    }
+
+    body.menu_open .gnb>li.active>a {
+        opacity: 1;
+    }
+
+    /* 서브메뉴: 메뉴 안에서는 항상 펼침
+       (!important = ui.js의 gsap가 남긴 인라인 max-height 무시) */
+    body.menu_open .sub {
+        max-height: none !important;
+        overflow: visible;
+        margin: 16px 0 0 44px;
+    }
+
+    body.menu_open .sub li {
+        margin-bottom: 2px;
+    }
+
+    body.menu_open .sub li a {
+        font-size: 15px;
+        opacity: 0.45;
+    }
+
+    body.menu_open .sub li.active a,
+    body.menu_open .sub li a:hover {
+        opacity: 1;
+    }
+
+    /* 메뉴가 열리면 미션 버튼은 잠시 숨김 */
+    body.menu_open .mission {
+        display: none;
+    }
+
+    /* ---------- 팝업 트리거 → fixed 아이콘 버튼 ----------
+       ★ 아이콘 이미지가 준비되면 각 a 태그 안에 <img>만 넣으면 된다
+         (배경색/원형은 그대로 두고 img를 중앙 정렬해 얹는 구조) ★ */
+
+    /* CONTACT / SUBSCRIBE: 헤더 바 오른쪽의 원형 아이콘 버튼 (위치 유지: 우측 상단) */
+    .rightUI {
+        top: calc((var(--rsp_bar) - 38px) / 2);
+        right: calc(var(--rsp_pad) + 38px);
+        /* 햄버거 버튼 왼쪽 */
+
+        align-items: center;
+    }
+
+    .rightUI a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0;
+        margin: 0;
+
+        font-size: 0;
+        /* 글자 숨김 — 아이콘 이미지 자리 */
+
+        border-radius: 50%;
+        border: solid #ccc 0.1px;
+        opacity: 1;
+    }
+
+    .rightUI a:hover {
+        filter: brightness(0.97);
+    }
+
+    .contact {
+        width: 38px;
+        height: 38px;
+        margin-right: 10px;
+        background-color: #ffffaf;
+        /* 팝업 close 버튼과 같은 노랑 */
+    }
+
+    .subscribe {
+        width: 38px;
+        height: 38px;
+        background-color: #AEFFAE;
+        /* CV 버튼 호버와 같은 연두 */
+    }
+
+    /* MISSION: 왼쪽의 원형 fixed 버튼 (위치 유지: 화면 왼쪽 중간쯤) */
+    .mission {
+        position: fixed;
+        left: 24px;
+        top: 46%;
+        width: auto;
+    }
+
+    .mission a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 52px;
+        height: 52px;
+        padding: 0;
+        margin: 0;
+
+        font-size: 0;
+        /* 글자 숨김 — 아이콘 이미지 자리 */
+
+        border-radius: 50%;
+        background-color: #ffffaf;
+        border: solid #ccc 0.1px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+
+        opacity: 1;
+    }
+
+    /* 데스크톱의 무지개 글자 호버는 배경을 지워버리므로 원복 */
+    .mission a:hover {
+        opacity: 1;
+        background: #f6f68e;
+        -webkit-background-clip: border-box;
+        background-clip: border-box;
+        color: transparent;
+        animation: none;
+    }
+
+    /* ---------- Hero ---------- */
+
+    /* 봉투/편지지 무대 전체 축소 (내부 좌표는 그대로 유지된다) */
+    .envelope_stage {
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    .hello {
+        margin-bottom: 170px;
+    }
+
+    /* ---------- Works ---------- */
+
+    #works {
+        margin-left: 0;
+        padding: 48px var(--rsp_pad) 0;
+    }
+
+    #works .project {
+        height: auto;
+        padding-left: 0;
+        margin-bottom: 110px;
+    }
+
+    #works #project-exhibition {
+        margin-bottom: 110px;
+    }
+
+    /* 포스터: 컬럼 폭에 맞춤 */
+    #works .poster_area {
+        width: 100%;
+        max-width: 730px;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    #works .poster_area img {
+        height: auto;
+    }
+
+    /* 정보 카드: js/responsive.js가 각 포스터 아래로 옮긴 뒤의 스타일
+       (!important = works.js의 스크롤 fade가 남기는 인라인 스타일 무시) */
+    .info_sticky {
+        position: static;
+    }
+
+    #works .info {
+        position: static !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        pointer-events: auto;
+
+        left: auto;
+        top: auto;
+        width: auto;
+        max-width: 730px;
+        margin: 44px auto 0;
+        /* 포스터와 같은 폭/시작선 */
+    }
+
+    .info_main {
+        width: auto;
+    }
+
+    .info_meta {
+        position: static;
+        width: auto;
+        margin-top: 44px;
+    }
+
+    .info_meta .individual {
+        margin-top: 18px;
+    }
+
+    .note_row {
+        flex-wrap: wrap;
+        gap: 18px 24px;
+    }
+
+    .note_row .info_tags {
+        width: auto;
+        flex-wrap: wrap;
+    }
+
+    .info_outcome {
+        width: 100%;
+    }
+
+    .info_links {
+        position: static;
+        width: auto;
+        margin-top: 28px;
+    }
+
+    /* ---------- Workshop ---------- */
+
+    #works .project.ws_section {
+        height: auto;
+        margin-top: 40px;
+        margin-bottom: 60px;
+    }
+
+    .ws_head {
+        padding: 0;
+    }
+
+    .ws_head_row {
+        flex-wrap: wrap;
+        gap: 8px 24px;
+    }
+
+    .ws_band {
+        margin-left: 0;
+        width: 100%;
+        height: auto;
+    }
+
+    .ws_swiper {
+        height: auto;
+    }
+
+    .ws_swiper .swiper-slide.ws_card {
+        padding-bottom: 56px;
+    }
+
+    .ws_media {
+        margin-top: 48px;
+        height: 360px;
+    }
+
+    .ws_title {
+        margin-top: 44px;
+    }
+
+    /* ---------- 노트 슬라이드 (Open the NOTE) ---------- */
+
+    /* 패널이 아니라 "오버레이"가 스크롤되게 한다
+       (패널에 overflow를 주면 왼쪽 바깥의 CLOSE 버튼이 잘린다) */
+    .noteOverlay.open {
+        overflow-y: auto;
+    }
+
+    .note_panel {
+        left: 64px;
+        /* 클로즈 버튼(38px)이 패널 왼쪽 바깥에 붙을 자리 확보 */
+
+        top: 0;
+        bottom: auto;
+        min-height: 100%;
+        /* 내용만큼 늘어나고, 짧아도 바닥까지 채운다 */
+    }
+
+    .note_left {
+        position: static;
+        width: auto;
+        height: auto;
+        padding: 96px 28px 0;
+    }
+
+    .note_tabs {
+        position: static;
+        flex-wrap: wrap;
+        gap: 14px 32px;
+    }
+
+    .note_swiper {
+        position: static;
+        width: 100%;
+        height: 50vh;
+        margin-top: 28px;
+    }
+
+    .note_left .note_pagination {
+        position: static;
+        width: 100%;
+        margin-top: 14px;
+    }
+
+    /* 좌우 화살표는 숨김 — 터치 스와이프 + 페이지네이션으로 조작 */
+    .note_left .swiper-button-prev,
+    .note_left .swiper-button-next {
+        display: none;
+    }
+
+    .note_right {
+        position: static;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        /* 패널 전체가 스크롤되므로 내부 스크롤 해제 */
+        padding: 48px 28px 96px;
+    }
+
+    .note_hint {
+        display: none;
+    }
+
+    /* ---------- 워크숍 슬라이드 (VIEW DETAIL) ---------- */
+
+    /* 노트 슬라이드와 동일 — 오버레이가 스크롤 담당
+       (패널에 overflow를 주면 위 바깥의 CLOSE 버튼이 잘린다) */
+    .ws_overlay.open {
+        overflow-y: auto;
+    }
+
+    .ws_panel {
+        left: var(--rsp_pad);
+        right: var(--rsp_pad);
+
+        top: calc(var(--rsp_bar) + 44px);
+        /* 헤더 바(z:900)가 슬라이드(z:860)를 덮으므로,
+           바 아래로 내려야 위에 붙는 클로즈 버튼(38px)이 보인다 */
+
+        bottom: auto;
+        min-height: calc(100% - var(--rsp_bar) - 44px);
+    }
+
+    .ws_slide_left,
+    .ws_detail {
+        zoom: 1;
+    }
+
+    .ws_slide_left {
+        position: static;
+        width: auto;
+        height: auto;
+        padding: 40px 28px 0;
+    }
+
+    .ws_slide_tabs {
+        position: static;
+        flex-wrap: wrap;
+        gap: 14px 30px;
+    }
+
+    .ws_slide_swiper {
+        position: static;
+        width: 100%;
+        height: 46vh;
+        margin-top: 26px;
+    }
+
+    .ws_slide_left .ws_slide_pagination {
+        position: static;
+        width: 100%;
+        margin-top: 14px;
+    }
+
+    .ws_slide_left .swiper-button-prev,
+    .ws_slide_left .swiper-button-next {
+        display: none;
+    }
+
+    .ws_detail {
+        position: static;
+        display: block;
+        padding: 40px 28px 0;
+    }
+
+    .ws_detail_scroll {
+        overflow: visible;
+        padding: 0;
+    }
+
+    .ws_detail_meta {
+        height: auto;
+        margin: 44px 0 48px;
+        padding-top: 30px;
+    }
+
+    .ws_hint {
+        display: none;
+    }
+
+    /* ---------- CV ---------- */
+
+    #cv {
+        display: block;
+        height: auto;
+        zoom: 1;
+        margin: 0;
+        padding: 96px var(--rsp_pad) 0;
+    }
+
+    .cv_photo {
+        position: static;
+        width: 220px;
+    }
+
+    .cv_logo {
+        position: static;
+        margin: 28px 0 0;
+    }
+
+    .cv_download {
+        position: static;
+        margin: 10px 0 0;
+    }
+
+    .cv_body {
+        position: static;
+        width: auto;
+        margin-top: 56px;
+    }
+
+    .cv_box {
+        position: relative;
+        /* absolute 해제 + 구독 버튼의 기준 유지 */
+        left: auto;
+        top: auto;
+        width: auto;
+        margin-top: 56px;
+        padding: 30px 24px 76px;
+    }
+
+    .cv_story {
+        width: auto;
+    }
+
+    .cv_subscribe {
+        right: 20px;
+        bottom: 22px;
+    }
+
+    /* ---------- Info ---------- */
+
+    /* absolute 좌표 → 그리드 플로우. order로 읽기 순서 재구성:
+       Ongoing → 카드1 → Upcoming → 카드2·3 → Personal Project → 카드4 → 하단 버튼 */
+    #info {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 40px;
+        align-items: start;
+
+        height: auto;
+        zoom: 1;
+        margin: 0;
+        padding: 96px var(--rsp_pad) 110px;
+    }
+
+    #info .if_title,
+    #info .if_link,
+    #info .if_card,
+    #info .if_bottom {
+        position: static;
+        left: auto;
+        top: auto;
+    }
+
+    .if_title {
+        grid-column: 1 / -1;
+        margin-top: 72px;
+    }
+
+    .if_t1 {
+        order: 1;
+        margin-top: 0;
+    }
+
+    .if_l1 {
+        order: 2;
+    }
+
+    .if_c1 {
+        order: 3;
+    }
+
+    .if_t2 {
+        order: 4;
+    }
+
+    .if_l2 {
+        order: 5;
+    }
+
+    .if_c2 {
+        order: 6;
+    }
+
+    .if_c3 {
+        order: 7;
+    }
+
+    .if_l4 {
+        order: 8;
+    }
+
+    .if_c4 {
+        order: 9;
+    }
+
+    .if_b1 {
+        order: 10;
+    }
+
+    .if_b2 {
+        order: 11;
+    }
+
+    .if_b3 {
+        order: 12;
+    }
+
+    .if_link {
+        grid-column: 1 / -1;
+        margin-top: 10px;
+    }
+
+    .if_card {
+        width: auto;
+        margin-top: 28px;
+    }
+
+    .if_card_boxed {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+    }
+
+    .if_thumb {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+
+    .if_bottom {
+        margin-top: 72px;
+    }
+
+    /* ---------- 팝업 3종 ---------- */
+
+    /* 컨택트: 3단 가로 구성 → 세로 1단 (장식 gsap 아이콘은 숨김) */
+    .pop_overlay .pp_con_bg {
+        top: 32px;
+        left: 50%;
+        margin: 0 0 0 -300px;
+        /* 폭 560 절반 + 클로즈 버튼 보정 */
+    }
+
+    .pp_con_bg {
+        width: 560px;
+        height: auto;
+        padding-bottom: 44px;
+    }
+
+    .pp_con_box {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 44px 40px 0;
+    }
+
+    .pp_con_video {
+        margin: 0 auto;
+        max-width: 100%;
+    }
+
+    .pp_con_gsap {
+        display: none;
+    }
+
+    /* 구독: 화면 중앙으로 (원래 left:70%는 태블릿에서 화면 밖으로 나간다) */
+    .pop_overlay .pp_subs_bg {
+        top: 32px;
+        left: 50%;
+        margin: 0 0 0 -260px;
+    }
+
+    /* 미션: 왼쪽 여백 기준으로 */
+    .pop_overlay .pp_miss_bg {
+        top: 26%;
+        left: var(--rsp_pad);
+        margin: 0;
+    }
+}
+
+
+/* =====================================================
+   ★ 모바일 (max-width: 767px)
+===================================================== */
+@media (max-width: 767px) {
+
+    :root {
+        --rsp_pad: 20px;
+        /* ★ 좌우 여백 — 모바일 */
+    }
+
+    /* ---------- 고정 헤더 바 ---------- */
+
+    /* 좁은 화면: 로고만 남긴다
+       (.leftUI를 붙여 style.css의 .header a보다 우선순위를 높인다) */
+    .leftUI .header span,
+    .leftUI .header .currentPage {
+        display: none;
+    }
+
+    .leftUI {
+        font-size: 13px;
+    }
+
+    .iconBox {
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+    }
+
+    .rightUI a {
+        border-radius: 50%;
+    }
+
+    .contact,
+    .subscribe {
+        width: 36px;
+        height: 36px;
+    }
+
+    .contact {
+        margin-right: 8px;
+    }
+
+    .rightUI {
+        top: calc((var(--rsp_bar) - 36px) / 2);
+    }
+
+    .mission {
+        left: 14px;
+    }
+
+    .mission a {
+        width: 48px;
+        height: 48px;
+    }
+
+    body.menu_open .gnb>li>a {
+        font-size: 28px;
+    }
+
+    /* ---------- Hero ---------- */
+
+    /* 무대(720px)를 화면 폭에 맞게 축소하고,
+       글자는 축소율만큼 미리 키워서 읽기 크기를 유지한다 */
+    .envelope_stage {
+        transform: translate(-50%, -50%) scale(0.46);
+    }
+
+    .hello {
+        margin-bottom: 104px;
+    }
+
+    .postcard_text {
+        top: 56px;
+        left: 46px;
+        right: 46px;
+    }
+
+    .dear {
+        font-size: 34px;
+        margin-bottom: 56px;
+    }
+
+    .contents {
+        font-size: 24px;
+        line-height: 38px;
+        margin-bottom: 34px;
+    }
+
+    .send {
+        font-size: 22px;
+    }
+
+    .letter_arrow {
+        width: 44px;
+        height: 44px;
+        background-size: 30px;
+        background-position: center;
+    }
+
+    /* ---------- Works ---------- */
+
+    #works {
+        padding-top: 32px;
+    }
+
+    #works .project {
+        margin-bottom: 88px;
+    }
+
+    #works #project-exhibition {
+        margin-bottom: 88px;
+    }
+
+    #works .info {
+        margin-top: 36px;
+    }
+
+    .info_title {
+        font-size: 22px;
+    }
+
+    .info_desc,
+    .info_question,
+    .info_answer {
+        font-size: 15px;
+        line-height: 24px;
+    }
+
+    .info[data-index="0"] .info_desc,
+    .info[data-index="0"] .info_question,
+    .info[data-index="0"] .info_answer {
+        font-size: 15px;
+        line-height: 24px;
+    }
+
+    .info_label {
+        margin-top: 40px;
+    }
+
+    .info[data-index="0"] .info_label {
+        margin-top: 40px;
+    }
+
+    /* 버튼과 태그는 두 줄로 */
+    .note_row {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 40px;
+    }
+
+    .info[data-index="0"] .note_row {
+        margin-top: 40px;
+    }
+
+    .noteBtn {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .tag {
+        padding: 11px 16px;
+        font-size: 12px;
+    }
+
+    .info_outcome {
+        padding: 22px 20px;
+    }
+
+    /* ---------- Workshop ---------- */
+
+    .ws_media {
+        margin-top: 40px;
+        height: 300px;
+    }
+
+    .ws_swiper .swiper-slide.ws_card {
+        width: 280px;
+        padding-bottom: 48px;
+    }
+
+    .ws_title {
+        margin-top: 36px;
+    }
+
+    .ws_tags .tag {
+        padding: 11px 16px;
+        font-size: 12px;
+    }
+
+    /* ---------- 노트 / 워크숍 슬라이드 ---------- */
+
+    .note_panel {
+        left: 44px;
+    }
+
+    .note_left {
+        padding: 84px 20px 0;
+    }
+
+    .note_close {
+        top: 96px;
+    }
+
+    .note_swiper {
+        height: 38vh;
+    }
+
+    .note_right {
+        padding: 40px 20px 80px;
+    }
+
+    .ws_panel {
+        left: 16px;
+        right: 16px;
+    }
+
+    .ws_slide_left {
+        padding: 32px 20px 0;
+    }
+
+    .ws_slide_swiper {
+        height: 36vh;
+    }
+
+    .ws_detail {
+        padding: 32px 20px 0;
+    }
+
+    /* ---------- CV ---------- */
+
+    #cv {
+        padding-top: 80px;
+    }
+
+    .cv_photo {
+        width: 180px;
+    }
+
+    .cv_row dt {
+        width: 104px;
+        font-size: 15px;
+    }
+
+    .cv_row dd {
+        font-size: 15px;
+        line-height: 24px;
+    }
+
+    .cv_row dd p {
+        margin-bottom: 10px;
+    }
+
+    /* 연도는 한 줄 위로 분리 */
+    .cv_year {
+        display: block;
+        width: auto;
+        font-size: 13px;
+        color: #999;
+        margin-bottom: 2px;
+    }
+
+    .cv_box {
+        padding: 26px 18px 72px;
+    }
+
+    .cv_box .cv_row dt,
+    .cv_story_row .cv_rainbow {
+        width: auto;
+    }
+
+    /* 백스토리: 세로로 쌓고, 데스크톱용 강제 줄바꿈은 해제 */
+    .cv_story_row {
+        display: block;
+        margin-top: 20px;
+    }
+
+    .cv_rainbow {
+        margin-bottom: 14px;
+    }
+
+    .cv_story {
+        font-size: 15px;
+        line-height: 26px;
+    }
+
+    .cv_story br {
+        display: none;
+    }
+
+    /* ---------- Info ---------- */
+
+    #info {
+        grid-template-columns: 1fr;
+        padding-top: 80px;
+        padding-bottom: 90px;
+    }
+
+    .if_title {
+        margin-top: 64px;
+    }
+
+    .if_card_boxed {
+        max-width: none;
+        padding: 18px;
+    }
+
+    .if_bottom {
+        margin-top: 56px;
+    }
+
+    .if_bottom h3 {
+        font-size: 22px;
+    }
+
+    /* ---------- 팝업 3종 ---------- */
+
+    .pop_overlay .pp_con_bg {
+        left: 16px;
+        margin: 0;
+        top: 24px;
+    }
+
+    .pp_con_bg {
+        width: calc(100vw - 70px);
+        /* 오른쪽 클로즈 버튼(38px) + 여백 자리 */
+    }
+
+    .pp_con_box {
+        padding: 36px 20px 0;
+    }
+
+    .pp_con_video {
+        width: 100%;
+        height: auto;
+    }
+
+    /* 비디오 말풍선 버튼이 화면 밖으로 나가지 않게 */
+    .pp_con_btn.zero {
+        left: 2px;
+    }
+
+    .pp_con_btn.first {
+        right: 2px;
+    }
+
+    .pp_con_btn.second {
+        right: 4px;
+    }
+
+    .pop_overlay .pp_subs_bg {
+        left: 16px;
+        margin: 0;
+        top: 24px;
+    }
+
+    .pp_subs_bg {
+        width: calc(100vw - 70px);
+        height: auto;
+        padding: 32px 16px 40px;
+    }
+
+    .pp_subs_box {
+        width: 100%;
+        max-width: 312px;
+        height: auto;
+    }
+
+    .pp_subs_img {
+        width: 100%;
+    }
+
+    .pp_subs_txt {
+        width: 100%;
+        height: auto;
+    }
+
+    .pp_subs_box .input_area {
+        width: 100%;
+    }
+
+    .pp_subs_box .search_box {
+        flex: 1;
+        width: auto;
+    }
+
+    .pop_overlay .pp_miss_bg {
+        left: 16px;
+        top: 22%;
+    }
+}

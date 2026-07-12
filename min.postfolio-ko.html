@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Min's Postfolio</title>
+
+    <!-- 내가 꾸민 CSS 시작-->
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/hero.css">
+    <link rel="stylesheet" href="./css/popup.css">
+
+    <!-- Swiper (works 노트 갤러리 / 워크숍 무한 드래그)
+         ★ 섹션 CSS보다 먼저 로드해야 페이지네이션 위치를 덮어쓸 수 있음 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- 섹션 CSS (works / workshop / cv / info + 슬라이드 2종) -->
+    <link rel="stylesheet" href="./css/works.css">
+    <link rel="stylesheet" href="./css/workshop.css">
+    <link rel="stylesheet" href="./css/cv.css">
+    <link rel="stylesheet" href="./css/info.css">
+
+    <!-- 반응형 (태블릿 1024 / 모바일 767) — 반드시 맨 마지막에 로드 -->
+    <link rel="stylesheet" href="./css/responsive.css">
+    <!-- 내가 꾸민 CSS 끝 -->
+    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <!-- gsap -->
+    <script defer src="https://unpkg.com/lenis@1/dist/lenis.min.js"></script>
+    <!-- Lenis: 관성(수웅) 스크롤 — 초기화는 js/scroll.js -->
+
+    <style>
+        /* Lenis 권장 설정: CSS smooth와 충돌 방지 */
+        html.lenis,
+        html.lenis body {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/rift" rel="stylesheet">
+    <!-- 폰트 -->
+    <link rel="icon" type="image/png" sizes="32x32" href="./img/favicon.png">
+    <!-- 파비콘 -->
+
+    <script>
+        // 이미지 로드를 기다리지 않고 DOM(+defer 스크립트) 준비 후 바로 페이드인
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.classList.add("page_fadein_loaded");
+        });
+    </script>
+</head>
+
+<body class="page_fadein is_locked">
+    <!-- ★ Hero s -->
+    <div id="hero" class="hero">
+
+        <section class="hero-intro">
+            <div class="intro_ui">
+                <!-- 1. 인트로 텍스트 -->
+                <div class="intro_text">
+                    <p class="hello">안녕하세요!</p>
+
+                    <p>당신을 뭐라고 불러드리면 좋을까요?</p>
+                </div>
+
+                <!-- 2. input 영역 -->
+                <div class="input_area">
+                    <div class="search_box">
+
+                        <input type="text" class="name_input" placeholder="(이름)">
+
+                    </div>
+
+                    <a class="enter_btn">
+                        →
+                    </a>
+                </div>
+
+                <!-- 3. skip -->
+                <a href="#" class="skip_btn">
+                    <span>Skip</span> →
+                </a>
+            </div>
+
+            <!-- 2. Envelope Stage (항상 존재) -->
+            <div class="envelope_stage">
+
+                <div class="env_closed">
+                    <img src="./img/hero/name_envelope1.webp" alt="envelope">
+                </div>
+
+                <div class="env_open">
+                    <img src="./img/hero/hero-envelope-bellow.webp" alt="envelope" class="env_bel">
+                    <img src="./img/hero/hero-envelope-over.webp" alt="envelope" class="env_over">
+                </div>
+
+                <!-- 엽서: 봉투 개폐와 독립적으로 움직여야 해서 env_open 밖에 둔다 -->
+                <img src="./img/hero/hero-postcard.webp" alt="postcard" class="env_card">
+
+                <div class="hero_postcard">
+                    <!-- 확대된 편지지 (배경이미지) -->
+                    <div class="postcard_text">
+                        <!-- 텍스트 -->
+                        <p class="dear">
+                            Dear <span class="visitor_name">Future Colleague</span>,
+                        </p>
+                        <p class="contents">
+                            당신은 요즘, 어떤 질문을 품고 있나요?
+                            <br>그 질문을 함께 풀어갈 동료가 필요하신가요?
+                        </p>
+                        <p class="contents">저는 질문에서 시작해 실험을 만들고,
+                            <br>사람과 사람이 연결되는 방식을 탐구해왔습니다.
+                        </p>
+
+                        <p class="contents">지금부터 제가 해온 실험들을 소개할게요.</p>
+
+                        <p class="letter_arrow"></p>
+
+                        <p class="send">
+                            From　　　　　　　　　　　　　　<span>강민경</span>
+                        </p>
+
+                    </div>
+                </div>
+                <div class="shadow"></div>
+            </div>
+            <!-- envelope_stage끝 -->
+
+        </section>
+        <!-- hero-intro섹션 끝 -->
+    </div>
+    <!-- #hero 끝 -->
+
+    <!-- ☆ Hero e / fixedUI s ★ -->
+    <div class="leftUI">
+
+        <div class="header">
+
+            <a href="#hero" class="logo">
+                MIN'S POSTFOLIO
+            </a>
+
+            <span>/</span>
+
+            <a href="#" class="currentPage">
+                Hello, World!
+            </a>
+
+        </div>
+
+        <!-- 모바일/태블릿 햄버거 버튼 (≤1024px에서만 표시 — css/responsive.css) -->
+        <button class="ham_btn" type="button" aria-label="메뉴" aria-expanded="false">
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="sectionInfo">
+
+            <div class="iconBox">
+
+                <img src="./img/envelope_closed.webp" alt="icon" class="icon">
+
+            </div>
+
+            <p class="title">
+                Nice To Meet You
+            </p>
+
+        </div>
+
+        <nav>
+
+            <ul class="gnb">
+
+                <li data-page="hero">
+                    <a href="#hero">
+                        <span>0 1</span>Main
+                    </a>
+                </li>
+
+                <li data-page="works">
+
+                    <a href="#works">
+                        <span>02</span>Works
+                    </a>
+
+                    <ul class="sub">
+
+                        <li>
+                            <a href="#project-exhibition">
+                                Project - Exhibition
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#project-brand">
+                                Project - Brand
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#project-webapp">
+                                Project - Web App
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#project-experiment">
+                                Project - Experiment
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#publication-book">
+                                Publication - Book
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#publication-cd">
+                                Publication - CD
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#workshop">
+                                Workshop
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </li>
+
+                <li data-page="cv">
+                    <a href="#cv">
+                        <span>03</span>CV
+                    </a>
+                </li>
+
+                <li data-page="info">
+                    <a href="#info">
+                        <span>04</span>Info
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+        <div class="mission">
+            <a href="#mission">
+                Give Me
+                <br>
+
+                A Mission
+                <br>
+
+                @Seoul
+            </a>
+        </div>
+    </div>
+    <div class="rightUI">
+        <a href="#" class="contact">CONTACT</a>
+        <a href="#" class="subscribe">SUBSCRIBE MY JOURNEY +</a>
+    </div>
+    <!-- ☆ fixedUI e / Works s ★ -->
+
+    <section id="works">
+        <!-- 프로젝트 6종: 왼쪽 포스터 스크롤 + 오른쪽 고정 정보 카드
+                 .info_sticky는 .project_group 안에서만 붙어 있다가
+                 workshop 섹션이 오면 works.js가 카드를 숨긴다 -->
+        <div class="project_group">
+
+            <!-- 오른쪽 고정 정보 카드 (스크롤 시 fade 교체 — works.js) -->
+            <div class="info_sticky">
+
+                <!-- 1. Project - Exhibition -->
+                <div class="info active" data-index="0">
+
+                    <p class="info_diamond">◆</p>
+
+                    <div class="info_main">
+
+                        <p class="info_category">관객 주도형 전시</p>
+
+                        <h2 class="info_title">대화의 몸집 프로젝트</h2>
+
+                        <p class="info_desc">
+                            책, 사진, 글, 영상, 음악
+                            <br>— 다양한 예술 매체로 4회에 걸쳐 진행한 대화 실험
+                        </p>
+
+                        <p class="info_label">Question</p>
+                        <p class="info_question">
+                            우리의 대화는 어떻게 이어지고, 얼마나 커질 수 있을까?
+                        </p>
+
+                        <p class="info_label">Answer</p>
+                        <p class="info_answer">
+                            작가가 메시지를 전달하고 관객이 감상하는 기존 전시 구조에서 벗어나
+                            <br>관객이 남긴 응답이 다음 관객의 응답으로 이어지는 대화 구조를 설계
+                        </p>
+
+                    </div>
+
+                    <!-- 버튼 + 태그 한 줄 (태그 시작선 = 오른쪽 메타 시작선) -->
+                    <div class="note_row">
+                        <button class="noteBtn" data-note="project-exhibition">
+                            <span class="noteBtn_txt">Open the NOTE</span>
+                            <span class="noteBtn_arrow">▶</span>
+                        </button>
+                        <ul class="info_tags">
+                            <li class="tag">참여</li>
+                            <li class="tag">온오프라인</li>
+                            <li class="tag">릴레이</li>
+                        </ul>
+                    </div>
+
+                    <dl class="info_meta">
+                        <div>
+                            <dt>Type</dt>
+                            <dd>프로젝트형 전시</dd>
+                        </div>
+                        <div>
+                            <dt>Supported by</dt>
+                            <dd>부산문화재단(자율기획)</dd>
+                        </div>
+                        <div>
+                            <dt>Duration</dt>
+                            <dd>2024.05 - 2024.11</dd>
+                        </div>
+                        <div>
+                            <dt>Role</dt>
+                            <dd>기획 · 총괄</dd>
+                        </div>
+                        <div>
+                            <dt>Visual Design</dt>
+                            <dd>김아카</dd>
+                        </div>
+                    </dl>
+
+                    <div class="info_outcome">
+                        <p class="info_outcome_head">Outcome <span>*</span></p>
+                        <ul>
+                            <li>　부산문화재단 청년예술가 자율기획 선정 · 우수사례 발표</li>
+                            <li>　1달 간 95권의 책, 13편의 대화</li>
+                            <li>　2달 간 495장의 사진, 23명의 참가자, 총 10편의 대화</li>
+                            <li>　2달 간 60개의 문장, 20명의 참가자, 총 10개의 몸집</li>
+                            <li>　1달 간 n편의 영상, n명의 참가자</li>
+                            <li>　번외) 음악으로 대화하기 - 10명의 참가자, 총 75곡</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <!-- 2. Project - Brand (내용 교체용 자리 — 구성은 1번과 동일) -->
+                <div class="info" data-index="1">
+
+                    <p class="info_diamond">◆</p>
+
+                    <div class="info_main">
+
+                        <p class="info_category">브랜드</p>
+
+                        <h2 class="info_title">TOIL</h2>
+
+                        <p class="info_desc">
+                            여행자가 타인의 기준이 아닌 자신의 기준과 리듬으로
+                            <br>여행을 설계하도록 돕는 섬 여행 브랜드
+                        </p>
+
+                        <p class="info_label">Question</p>
+                        <p class="info_question">
+                            우리는 어떻게 타인의 기준이 아닌, 나만의 기준으로 여행할 수 있을까?
+                        </p>
+
+                        <p class="info_label">Answer</p>
+                        <p class="info_answer">
+                            여행자가 자신의 감각을 따라 탐색하고, 스스로 선택하며,
+                            <br>자신만의 여행을 만들어갈 수 있는 구조를 설계
+
+                        <ul class="info_tags">
+                            <li class="tag">섬</li>
+                            <li class="tag">항로</li>
+                            <li class="tag">나만의 기준</li>
+                        </ul>
+
+                        <button class="noteBtn" data-note="project-brand">
+                            <span class="noteBtn_txt">Open the NOTE</span>
+                            <span class="noteBtn_arrow">▶</span>
+                        </button>
+
+                    </div>
+
+                    <dl class="info_meta">
+                        <div>
+                            <dt>Type</dt>
+                            <dd>브랜드</dd>
+                        </div>
+                        <div>
+                            <dt>Duration</dt>
+                            <dd>2026.03 - 2026.06</dd>
+                        </div>
+                        <div>
+                            <dt>Role</dt>
+                            <dd>기획 · 디자인</dd>
+                        </div>
+                        <div class="individual">100% Individual Project</div>
+                    </dl>
+
+                    <!-- 오른쪽 아래 링크 2줄 (시안: project-brand-bottom.png)
+                         위치/스타일: works.css의 .info_links ★ 주석
+                         href에 실제 주소 입력 -->
+                    <div class="info_links">
+                        <div class="info_link_row">
+                            <h3>Website</h3>
+                            <a href="https://min-iht.github.io/toil/" rel="noopener noreferrer" target="_blank" class="if_btn">LINK</a>
+                            <!-- 토일 깃허브 주소 -->
+                        </div>
+                        <div class="info_link_row">
+                            <h3>PDF Brand Portfolio</h3>
+                            <a href="./pdf_brand.html" class="if_btn">VIEW</a>
+                        </div>
+                    </div>
+
+                    <!-- <div class="info_outcome">
+                            <p class="info_outcome_head">Outcome <span>✱</span></p>
+                            <ul>
+                                <li>(성과가 들어갑니다)</li>
+                            </ul>
+                        </div> -->
+
+                </div>
+
+                <!-- 3. Project - Web App -->
+                <div class="info" data-index="2">
+
+                    <p class="info_diamond">◆</p>
+
+                    <div class="info_main">
+
+                        <p class="info_category">웹 앱</p>
+
+                        <h2 class="info_title">보따리(Bottari)</h2>
+
+                        <p class="info_desc">
+                            “돌아올 수 없는 긴 여행을 떠난다면 무엇을 챙겨 갈 것인가?”
+                            <br>— 디지털 시대의 가장 작은 유산
+                            <br>
+                            <br>디지털 기록을 선별하면서
+                            <br>자신에게 중요한 기억과 기준을 발견한다.
+                        </p>
+
+                        <p class="info_label">Question</p>
+                        <p class="info_question">
+                            디지털 시대의 유산은 무엇인가?
+                        </p>
+
+                        <p class="info_label">Answer</p>
+                        <p class="info_answer">
+                            디지털 시대의 유산은 물건뿐 아니라<br>
+                            기억, 사람, 장소, 문장, 경험까지 확장될 수 있다.
+                        </p>
+
+                        <ul class="info_tags">
+                            <li class="tag">디지털 데이터</li>
+                            <li class="tag">선택</li>
+                            <li class="tag">비움</li>
+                        </ul>
+
+                        <button class="noteBtn" data-note="project-webapp">
+                            <span class="noteBtn_txt">Open the NOTE</span>
+                            <span class="noteBtn_arrow">▶</span>
+                        </button>
+
+                    </div>
+
+                    <dl class="info_meta">
+                        <div>
+                            <dt>Type</dt>
+                            <dd>웹 앱</dd>
+                        </div>
+                        <div>
+                            <dt>Role</dt>
+                            <dd>기획 · 개발</dd>
+                        </div>
+                        <div>
+                            <dt>Duration</dt>
+                            <dd>2026.06 - 2026.07</dd>
+                        </div>
+                        <div>
+                            <dt>Tool</dt>
+                            <dd>Claude Code · Figma</dd>
+                        </div>
+                        <div class="individual">100% Individual Project</div>
+                    </dl>
+                    <!-- <div class="info_outcome">
+                        <p class="info_outcome_head">Outcome <span>✱</span></p>
+                        <ul>
+                            <li>(성과가 들어갑니다)</li>
+                        </ul>
+                    </div> -->
+                    <div class="info_links">
+                        <div class="info_link_row">
+                            <h3>Web App</h3>
+                            <a href="https://min-iht.github.io/toil/" rel="noopener noreferrer" target="_blank" class="if_btn">LINK</a>
+                            <!-- 토일 깃허브 주소 -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 4. Project - Experiment -->
+                <div class="info" data-index="3">
+
+                    <p class="info_diamond">◆</p>
+
+                    <div class="info_main">
+
+                        <p class="info_category">실험 프로젝트</p>
+
+                        <h2 class="info_title">The Mission For You Is : ___</h2>
+
+                        <p class="info_desc">
+                            여행 전 받은 미션과 여행 중 만난 사람들의 릴레이 미션을 수행하며,
+                            <br>하나의 이야기망을 공동 창작하는 참여형 프로젝트
+                        </p>
+
+                        <p class="info_label">Question</p>
+                        <p class="info_question">
+                            타인은 어떻게 여행 서사에 참여할 수 있을까?
+                        </p>
+
+                        <p class="info_label">Answer</p>
+                        <p class="info_answer">
+                            여행 이야기를 전달하는 새로운 방식을 탐구하고,
+                            <br>타인의 개입을 통해 공동으로 서사를 만들어가는 경험 설계
+                        </p>
+
+                    </div>
+
+                    <!-- 버튼 + 태그 한 줄 (태그 시작선 = 오른쪽 메타 시작선) -->
+                    <div class="note_row">
+                        <button class="noteBtn" data-note="project-experiment">
+                            <span class="noteBtn_txt">Open the NOTE</span>
+                            <span class="noteBtn_arrow">▶</span>
+                        </button>
+                        <ul class="info_tags">
+                            <li class="tag">미션</li>
+                            <li class="tag">엽서</li>
+                            <li class="tag">연결</li>
+                        </ul>
+                    </div>
+
+                    <dl class="info_meta">
+                        <div>
+                            <dt>Type</dt>
+                            <dd>창작 실험</dd>
+                        </div>
+                        <div>
+                            <dt>Role</dt>
+                            <dd>기획 · 실행</dd>
+                        </div>
+                        <div>
+                            <dt>Duration</dt>
+                            <dd>2023 · 2025</dd>
+                        </div>
+                        <div class="individual">100% Individual Project</div>
+                    </dl>
+                    <div class="info_outcome">
+                        <p class="info_outcome_head">Outcome <span>✱</span></p>
+                        <ul>
+                            <li>(성과가 들어갑니다)</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <!-- 5. Publication - Book -->
+                <div class="info" data-index="4">
+
+                    <p class="info_diamond">◆</p>
+
+                    <div class="info_main">
+
+                        <p class="info_category">독립출판 시절집</p>
+
+                        <h2 class="info_title">어린 밤을 지나고 있어</h2>
+
+                        <p class="info_desc">
+                            오랜 상처와 우울을 지나, 사랑과 연결이 기다리는 문턱까지 나아가는
+                            <br>한 사람의 여린 시절을 담은 혼합 장르 독립출판물
+                        </p>
+
+                        <p class="info_label">Question</p>
+                        <p class="info_question">
+                            창작자는 왜 말을 걸기만 하고, 독자는 왜 듣기만 해야 할까?
+                        </p>
+
+                        <p class="info_label">Answer</p>
+                        <p class="info_answer">
+                            기존 출판의 전달 구조와 장르 중심 출판 방식에 질문을 던지고,
+                            <br>책을 읽는 경험과 작가와 독자가 소통하는 방식을 새롭게 설계
+                        </p>
+
+                    </div>
+
+                    <!-- 버튼 + 태그 한 줄 (태그 시작선 = 오른쪽 메타 시작선) -->
+                    <div class="note_row">
+                        <button class="noteBtn" data-note="publication-book">
+                            <span class="noteBtn_txt">Open the NOTE</span>
+                            <span class="noteBtn_arrow">▶</span>
+                        </button>
+                        <ul class="info_tags">
+                            <li class="tag">암호</li>
+                            <li class="tag">엽서</li>
+                            <li class="tag">우표</li>
+                        </ul>
+                    </div>
+
+                    <dl class="info_meta">
+                        <div>
+                            <dt>Type</dt>
+                            <dd>책 / 독립출판물</dd>
+                        </div>
+                        <div>
+                            <dt>Duration</dt>
+                            <dd>2022.01 - 2022.05</dd>
+                        </div>
+                        <div>
+                            <dt>Role</dt>
+                            <dd>글 · 기획 · 디자인 · 유통</dd>
+                        </div>
+                        <div>
+                            <dt>Tool</dt>
+                            <dd>Id · Ps</dd>
+                        </div>
+                        <div class="individual">100% Individual Project</div>
+                    </dl>
+                    <div class="info_outcome">
+                        <p class="info_outcome_head">Outcome <span>✱</span></p>
+                        <ul>
+                            <li>100부 한정 제작</li>
+                            <li>북토크 진행 @나락서점</li>
+                            <li>북페어 준비 수량 완판</li>
+                            <li>독립서점 온라인 판매 채널에서 높은 초기 반응 확보</li>
+                            <li>제작 3개월 만에 전량 소진</li>
+
+                        </ul>
+                    </div>
+
+                </div>
+
+                <!-- 6. Publication - CD -->
+                <div class="info" data-index="5">
+
+                    <p class="info_diamond">◆</p>
+
+                    <div class="info_main">
+
+                        <p class="info_category">음반 & 굿즈</p>
+
+                        <h2 class="info_title">눈을 덮고 푸른 꿈을 꿔 & 필름 책갈피</h2>
+
+                        <p class="info_desc">
+                            세상과 다시 연결되는 순간을 담은 감각 기반 독립출판물
+                            <br>
+                            <br>문을 열고 나가 바깥에서 만난 사람들과 나눈 웃음, 여행 중 들었던 소리, 
+                            <br>그리고 내가 만들어낸 소리까지 ‘움직이며 살아있는 순간’을
+                            <br>글이 아닌 소리와 사진으로 기록했다.
+                        </p>
+
+                        <p class="info_label">Question 01</p>
+                        <p class="info_question">
+                            말하지 않고 말하는 방법은 없을까?
+                        </p>
+
+                        <p class="info_label">Answer</p>
+                        <p class="info_answer">
+                            이전 작업이 내면의 이야기를 기록하고 독자와 연결하는 장치를 통해 확장 가능성을 실험했다면, 이번 작업에서는 여행 중 마주한 장면과 감정을 언어가 아닌 감각 경험으로 전달하며 ‘서사를 경험하는 방식’을 탐구했다.
+                        </p>
+                        <p class="info_label">Question 02</p>
+                        <p class="info_question">
+                            굿즈 구매 과정은 어떻게 특별한 기억이 될 수 있을까?
+                        </p>
+
+                        <p class="info_label">Answer</p>
+                        <p class="info_answer">
+                            단순한 상품 판매가 아닌, 한 사람을 위한 편지를 건네는 경험을 설계
+                        </p>
+
+                    </div>
+
+                    <!-- 버튼 + 태그 한 줄 (태그 시작선 = 오른쪽 메타 시작선) -->
+                    <div class="note_row">
+                        <button class="noteBtn" data-note="publication-cd">
+                            <span class="noteBtn_txt">Open the NOTE</span>
+                            <span class="noteBtn_arrow">▶</span>
+                        </button>
+                        <ul class="info_tags">
+                            <li class="tag">소리 채집</li>
+                            <li class="tag">감각 경험</li>
+                            <li class="tag">굿즈</li>
+                        </ul>
+                    </div>
+
+                    <dl class="info_meta">
+                        <div>
+                            <dt>Type</dt>
+                            <dd>CD · 슬라이드 필름</dd>
+                        </div>
+                        <div>
+                            <dt>Duration</dt>
+                            <dd>2023.09 - 2023.11</dd>
+                        </div>
+                        <div>
+                            <dt>Role</dt>
+                            <dd>기획 · 디자인 · 마케팅</dd>
+                        </div>
+                        <div class="individual">100% Individual Project</div>
+                    </dl>
+
+                    <div class="info_outcome">
+                        <p class="info_outcome_head">Outcome <span>✱</span></p>
+                        <ul>
+                            <li>(성과가 들어갑니다)</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- .info_sticky 끝 -->
+
+            <!-- 왼쪽 포스터 (한 섹션 910px, 사이 여백 20px) -->
+            <section class="project" id="project-exhibition">
+                <div class="poster_area">
+                    <!-- 포스터 이미지 교체 -->
+                    <img loading="lazy" decoding="async" src="./img/w_conversation/conversation_poster.webp" alt="poster" class="poster">
+                </div>
+            </section>
+
+            <section class="project" id="project-brand">
+                <div class="poster_area">
+                    <!-- 포스터 이미지 경로 입력 -->
+                    <img loading="lazy" decoding="async" src="./img/w_toil/toil_poster.webp" alt="poster" class="poster">
+                </div>
+            </section>
+
+            <section class="project" id="project-webapp">
+                <div class="poster_area">
+                    <!-- 포스터 이미지 경로 입력 -->
+                    <img loading="lazy" decoding="async" src="./img/w_bottari/bottari_poster.webp" alt="poster" class="poster">
+                </div>
+            </section>
+
+            <section class="project" id="project-experiment">
+                <div class="poster_area">
+                    <!-- 포스터 이미지 경로 입력 -->
+                    <img loading="lazy" decoding="async" src="./img/w_mission/mission_poster.webp" alt="poster" class="poster">
+                </div>
+            </section>
+
+            <section class="project" id="publication-book">
+                <div class="poster_area">
+                    <!-- 포스터 이미지 경로 입력 -->
+                    <img loading="lazy" decoding="async" src="./img/w_book/book_poster.webp" alt="poster" class="poster">
+                </div>
+            </section>
+
+            <section class="project" id="publication-cd">
+                <div class="poster_area">
+                    <!-- 포스터 이미지 경로 입력 -->
+                    <img loading="lazy" decoding="async" src="./img/w_cd/cd_poster.webp" alt="poster" class="poster">
+                </div>
+            </section>
+
+        </div>
+        <!-- .project_group 끝 -->
+
+        <!-- 워크숍: 카드 목록은 workshop.js의 WORKSHOPS 데이터로 생성 -->
+        <section class="project ws_section" id="workshop">
+
+            <div class="ws_head">
+                <p class="ws_head_small">공공 지원사업</p>
+                <div class="ws_head_row">
+                    <h2 class="ws_head_title">문화예술 프로그램 및 워크숍</h2>
+                    <p class="ws_head_sub">사진예술치료 & 책과 글쓰기</p>
+                </div>
+            </div>
+
+            <!-- 가는 가로선 2개 사이 = 무한 드래그 스와이퍼 -->
+            <div class="ws_band">
+                <div class="swiper ws_swiper">
+                    <div class="swiper-wrapper">
+                        <!-- .ws_card 슬라이드는 JS로 생성 -->
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </section>
+
+
+    <!-- ☆ Works e / CV s ★ -->
+    <section id="cv">
+
+        <!-- 프로필 사진 (캡션 텍스트가 이미지에 포함되어 있음) -->
+        <div class="cv_photo">
+            <img loading="lazy" decoding="async" src="./img/cv_profile.webp" alt="profile">
+        </div>
+
+        <p class="cv_logo">CV</p>
+
+        <!-- href에 CV 파일 경로 입력 -->
+        <a href="#" class="cv_download" download>DOWNLOAD</a>
+
+        <div class="cv_body">
+
+            <h2 class="cv_name">강민경 <span>姜旼炅</span></h2>
+
+            <dl class="cv_rows">
+
+                <div class="cv_row">
+                    <dt>Birth</dt>
+                    <dd>1995.05.09</dd>
+                </div>
+
+                <div class="cv_row">
+                    <dt>Email</dt>
+                    <dd>min.postfolio@gmail.com</dd>
+                </div>
+
+                <div class="cv_row">
+                    <dt>Channel</dt>
+                    <dd class="cv_channel">
+                        <a href="mailto:min.postfolio@gmail.com"><img loading="lazy" decoding="async" src="./img/gmail.webp" alt="gmail"></a>
+                        <a href="https://www.linkedin.com/in/min-kang-8746b7413/" target="_blank"><img loading="lazy" decoding="async" src="./img/linkedin.webp" alt="linkedin"></a>
+                        <a href="https://www.instagram.com/hyitalee/" target="_blank"><img loading="lazy" decoding="async" src="./img/instagram.webp" alt="instagram"></a>
+                    </dd>
+                </div>
+
+                <div class="cv_row cv_gap">
+                    <dt>Education</dt>
+                    <dd>
+                        <p><span class="cv_year">2026.06 - 2026.07</span>동그라미재단 바이브코딩 심화 교육 수료</p>
+                        <p><span class="cv_year">2026.03 - 2026.07</span>나래디자인학원 UI/UX디자인 교육 수료</p>
+                        <p><span class="cv_year">2021.05 - 2021.08</span>영화의전당 다큐멘터리제작워크숍 수료</p>
+                        <p><span class="cv_year">2016.03 - 2021.02</span>한신대학교 문예창작학과 입학 · 졸업</p>
+                        <p><span class="cv_year">2014.02</span>경남여자고등학교 졸업</p>
+                    </dd>
+                </div>
+
+                <div class="cv_row cv_gap">
+                    <dt>Works</dt>
+                    <dd>
+                        <p><span class="cv_year">2024.05 - 2024.11</span>부산문화재단 자율기획 선정 프로젝트 기획 · 총괄</p>
+                        <p><span class="cv_year">2022.10 - 2026.09</span>공공기관 지원사업 프로그램 기획 · 진행</p>
+                        <p><span class="cv_year">2022.05</span>독립출판 시절집 &lt;어린 밤을 지나고 있어&gt; 출간</p>
+                    </dd>
+                </div>
+
+                <div class="cv_row cv_gap">
+                    <dt>Skills</dt>
+                    <dd class="cv_skills">
+                        <!-- 스킬 아이콘 이미지로 교체 가능: <img src="./img/cv/skill_figma.png"> -->
+                        <span class="cv_skill"><img loading="lazy" decoding="async" src="./img/tool/icon_figma.webp" alt="tool"></span>
+                        <span class="cv_skill"><img loading="lazy" decoding="async" src="./img/tool/icon_vs.webp" alt="tool"></span>
+                        <span class="cv_skill"><img loading="lazy" decoding="async" src="./img/tool/icon_claude.webp" alt="tool"></span>
+                        <span class="cv_skill"><img loading="lazy" decoding="async" src="./img/tool/icon_gpt.webp" alt="tool"></span>
+                        <span class="cv_skill"><img loading="lazy" decoding="async" src="./img/tool/icon_ps.webp" alt="tool"></span>
+                        <span class="cv_skill"><img loading="lazy" decoding="async" src="./img/tool/icon_ai.webp" alt="tool"></span>
+                    </dd>
+                </div>
+
+                <div class="cv_row cv_gap">
+                    <dt>Language</dt>
+                    <dd>
+                        <p><span class="cv_year">2023.08</span>일본어 자격증 JLPT N5 취득</p>
+                        <p><span class="cv_year">2013.05</span>프랑스어 자격증 DELF A2 취득</p>
+                    </dd>
+                </div>
+
+            </dl>
+
+        </div>
+
+        <!-- 아래 테두리 박스 (Hobby + Backstory) -->
+        <div class="cv_box">
+
+            <dl class="cv_row">
+                <dt>Hobby</dt>
+                <dd>세일링, 서예, 배낭여행</dd>
+            </dl>
+
+            <div class="cv_story_row">
+
+                <!-- 무지개 그라데이션이 흐르는 텍스트 -->
+                <p class="cv_rainbow">
+                    Beyond The CV
+                    <br>: A Backstory
+                </p>
+
+                <p class="cv_story">
+                    어릴 적 어머니가 점쟁이에게 물으셨다. “이 아이는 커서 뭐가 되겠습니까?”
+                    <br>점쟁이가 말했다. “해외를 제 집 드나들 듯 돌아다닐 팔자입니다.”
+                    <br>어머니는 이 말을 듣고 내가 외교관이 될 줄 아셨다고 한다.
+                    <br>하지만 나는 성인이 되자마자 평생 모은 세뱃돈으로 나홀로 배낭여행을 떠났다.
+                    <br>대학생 때는 방학마다 여행을 떠나기 위해 도서관에 살다시피 하며 매 학기 장학금을 타 냈다.
+                    <br>서른 살에는 서른 기념으로 무기한 여행을 떠나겠다던 꿈도 이루었다.
+                    <br>잔소리가 통하지 않는다는 것을 일찍이 알아차리신 어머니는 그런 나를 남몰래 걱정하셨지만,
+                    <br>긴 여행을 다녀온 뒤 하고 싶은 일이 생겼다며 12년 만에 아침형 인간으로 환골탈태한 모습을 보고 마침내 안심하셨다.
+                    <br>그때 문득 떠오른 점쟁이의 한마디. “여행에서 얻어온 영감으로 큰 인물이 됩니다.” <span class="cv_story_small">(설마 다른 영감은
+                        아니겠지?)</span>
+                    <br>나는 이제 어머니에게 아픈 손가락이 아닌, 향후 성과가 기대되는 인재가 되어 뿌리 내릴 땅을 찾고 있다.
+                </p>
+
+            </div>
+
+            <a href="#" class="cv_subscribe">SUBSCRIBE MY JOURNEY →</a>
+
+        </div>
+
+    </section>
+    <!-- ☆ CV e / Info s ★ -->
+    <section id="info">
+
+        <p class="if_title if_t1">Ongoing</p>
+        <p class="if_title if_t2">Upcoming</p>
+
+        <!-- 밑줄 텍스트: 링크 아님(호버 효과 없음) -->
+        <p class="if_link if_l1">Personal Project</p>
+        <p class="if_link if_l2">Workshop</p>
+        <p class="if_link if_l4">Personal Project</p>
+
+        <!-- 카드 1 : Ongoing (이미지/타이틀 호버 시 테두리 나타남)
+             카드 링크(a)는 아직 연결할 곳이 없어 href 없이 호버만 동작 -->
+        <article class="if_card if_card_boxed if_c1">
+
+            <a href="javascript:return false;" class="if_thumb if_g_mint">
+                <!-- 이미지 교체: <img src="./img/info/ongoing.png" alt="">
+                     링크가 생기면 href를 실제 주소로 교체 -->
+            </a>
+
+            <h3 class="if_card_title"><a href="javascript:return false;">The Mission For You Is : ___</a></h3>
+
+            <div class="if_lines">
+                <p>2023.01 - 2023.02 @일본 홋카이도</p>
+                <p>2025.04 - 2025.12 @프랑스, 이탈리아, 그리스</p>
+                <p><strong>(New!)</strong> 2026.10 - @서울</p>
+            </div>
+
+            <p class="if_foot">100% Individual Project</p>
+
+        </article>
+
+        <!-- 카드 2 : Upcoming - Workshop -->
+        <article class="if_card if_card_boxed if_c2">
+
+            <a href="javascript:return false;" class="if_thumb if_g_yellow">
+                <!-- 이미지 교체: <img src="./img/info/upcoming1.png" alt="">
+                     링크가 생기면 href를 실제 주소로 교체 -->
+            </a>
+
+            <h3 class="if_card_title"><a href="javascript:return false;">사진 찍기, 둥근 마음 쓰기</a></h3>
+
+            <p class="if_tags">#사진워크숍 #마인드풀포토그래퍼 #연민의원을넓히기</p>
+
+            <div class="if_lines">
+                <p>2026.08.05 - 2026.09.09</p>
+                <p>@복합문화공간 무사이</p>
+            </div>
+
+            <p class="if_desc">부산도서관 지역서점 독서문화프로그램</p>
+
+        </article>
+
+        <!-- 카드 3 : Upcoming - Workshop -->
+        <article class="if_card if_card_boxed if_c3">
+
+            <a href="javascript:return false;" class="if_thumb if_g_orange">
+                <!-- 이미지 교체: <img src="./img/info/upcoming2.png" alt="">
+                     링크가 생기면 href를 실제 주소로 교체 -->
+            </a>
+
+            <h3 class="if_card_title"><a href="javascript:return false;">미지의 방명록</a></h3>
+
+            <p class="if_tags">#심야책방 #내책이방명록이되는밤 #느슨한연결</p>
+
+            <div class="if_lines">
+                <p>2026.08.12, 2026.09.09</p>
+                <p>@무인서점 미지의 세계</p>
+            </div>
+
+            <p class="if_desc"></p>
+
+        </article>
+
+        <!-- 카드 4 : Upcoming - Personal Project -->
+        <article class="if_card if_card_boxed if_c4">
+
+            <a href="javascript:return false;" class="if_thumb if_g_mint">
+                <!-- 이미지 교체: <img src="./img/info/upcoming3.png" alt="">
+                     링크가 생기면 href를 실제 주소로 교체 -->
+            </a>
+
+            <h3 class="if_card_title"><a href="javascript:return false;">배 타고 상경 프로젝트</a></h3>
+
+            <p class="if_route">부산 - 통영 - 목포 - 인천 - 서울</p>
+
+            <div class="if_lines">
+                <p>2026. ?</p>
+                <p>@대한민국</p>
+            </div>
+
+            <p class="if_foot">100% Individual Project</p>
+
+        </article>
+
+        <!-- 아래 버튼 줄 -->
+        <div class="if_bottom if_b1">
+            <h3>PDF Portfolio</h3>
+            <div class="if_btns">
+                <!-- href에 PDF 경로 입력 -->
+
+                <a href="#" class="if_btn">VIEW</a>
+            </div>
+        </div>
+
+        <div class="if_bottom if_b2">
+            <h3>Interview</h3>
+            <div class="if_btns">
+                <a href="https://brunch.co.kr/@62c2281c9fd748c/12" class="if_btn" target="_blank">LINK</a>
+            </div>
+        </div>
+
+        <div class="if_bottom if_b3">
+            <h3>P.S.</h3>
+            <div class="if_btns">
+                <a href="https://www.youtube.com/watch?v=4NDt8hDGZ1Q" class="if_btn" target="_blank">OPEN</a>
+            </div>
+        </div>
+
+    </section>
+    <!-- ☆ Info e / Popup s ★ -->
+
+    <!-- 컨택트 팝업 -->
+    <!-- data-lenis-prevent: 팝업 위에서 휠을 굴려도 뒤 페이지가 스크롤되지 않게 -->
+    <div class="pop_overlay pop_contact" data-lenis-prevent>
+        <div class="pp_con_bg">
+            <!-- 배경상자/1224*740 -->
+
+            <!-- 클로즈 버튼 -->
+            <div class="pp_con_close close_vertical">
+                <a href="#">
+                    <!-- 38*172/ffffaf -->
+                    <p><span class="btn_x">X</span></p>
+                    <p>C</p>
+                    <p>L</p>
+                    <p>O</p>
+                    <p>S</p>
+                    <p>E</p>
+                </a>
+            </div>
+
+            <!-- 가운데 내용 상자 -->
+            <div class="pp_con_box">
+                <!-- 가운데 내용상자/430*740 -->
+                <div class="pp_con_box_txt">
+                    <p class="heart">♥</p>
+                    <p class="pp_con_name">
+                        강민경
+                        <br>
+                        Min Kang
+                        <br><br>
+                        姜旼炅
+                    </p>
+                    <p class="pp_con_sentence">
+                        집안 어른들은 나를 복덩이라 불렀다.<br>내가 태어난 이후로 집안에 복이 데굴데굴 굴러들어왔기 때문이다.<br>
+                        내가 정말 복을 불러올 수 있다면, 더 많은 이들에게 복을 선물하고 싶다.<br>
+                        당신의 복을 합치면 눈덩이처럼 불어날 텐데.<br> 함께 굴려보지 않으실래요?<br>
+                        
+                    </p>
+                    <ul class="pp_con_link">
+                        <li><a href="#"><img loading="lazy" decoding="async" src="./img/gmail.webp" alt="social"></a></li>
+                        <li><a href="#"><img loading="lazy" decoding="async" src="./img/linkedin.webp" alt="social"></a></li>
+                        <li><a href="#"><img loading="lazy" decoding="async" src="./img/instagram.webp" alt="social"></a></li>
+                    </ul>
+
+                    <!-- 비디오 (자동재생/루프 없음 — 재생 버튼 클릭으로 시작, popup.js가 제어) -->
+                    <div class="pp_con_video">
+                        <video src="./video/contact_gray.mp4" preload="none" muted playsinline></video>
+
+                        <!-- 재생 버튼 (클릭 → 재생 시작) -->
+                        <a href="#" class="pp_con_play">
+                            <img loading="lazy" decoding="async" src="./img/video_btn.webp" alt="play">
+                        </a>
+
+                        <!-- 타임라인 버튼 (popup.js가 시점에 맞춰 보였다 숨김) -->
+                        <a href="#" class="pp_con_btn third">
+                            미..민경씨?
+                        </a>
+                        <a href="#" class="pp_con_btn second">
+                            저를 한번 불러보세요(click!)
+                        </a>
+                        <a href="javascript:return false;" class="pp_con_btn first">
+                            (편지를 쓰겠다는 뜻..)
+                        </a>
+                        <a href="javascript:return false;" class="pp_con_btn zero">
+                            (머리를 묶는 다는 것은..)
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- gsap 아이콘 -->
+            <div class="pp_con_gsap">
+                <img loading="lazy" decoding="async" src="./img/popup/gsap_icon1.webp" alt="icon" class="gsap_icon1">
+                <img loading="lazy" decoding="async" src="./img/popup/gsap_icon2.webp" alt="icon" class="gsap_icon2">
+                <img loading="lazy" decoding="async" src="./img/popup/gsap_icon3.webp" alt="icon" class="gsap_icon3">
+                <img loading="lazy" decoding="async" src="./img/popup/gsap_icon4.webp" alt="icon" class="gsap_icon4">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 구독 팝업 -->
+    <div class="pop_overlay pop_subscribe" data-lenis-prevent>
+        <div class="pp_subs_bg">
+            <!-- 배경상자/584*740 -->
+
+            <!-- 클로즈 버튼 -->
+            <div class="pp_subs_close close_vertical">
+                <a href="#">
+                    <!-- 38*172/ffffaf -->
+                    <p><span class="btn_x">X</span></p>
+                    <p>C</p>
+                    <p>L</p>
+                    <p>O</p>
+                    <p>S</p>
+                    <p>E</p>
+                </a>
+            </div>
+
+            <!-- 가운데 상자 -->
+            <div class="pp_subs_box">
+                <!-- 이미지 (312*422 상자 안에서 원본 크기 사진을 드래그로 이동) -->
+                <div class="pp_subs_img">
+                    <img loading="lazy" decoding="async" src="./img/popup/subs_img.webp" alt="subscribe" class="pp_subs_photo" draggable="false">
+                </div>
+                <!-- 구독 글상자 -->
+                <div class="pp_subs_txt">
+                    <!-- 여백 23 21 -->
+                    <p class="pp_subs_txt1">
+                        <!-- 왼쪽 정렬 -->
+                        저의 여정에 새로운 장이 시작될 때마다,
+                        <br>안부를 담아 편지를 보내드립니다.
+                    </p>
+                    <p class="pp_subs_txt2">
+                        <!-- 오른쪽 정렬 -->
+                        from
+                        <span>min.postfolio@gmail.com</span>
+                    </p>
+                </div>
+                <!-- 이메일 입력칸 -->
+                <div class="input_area">
+                    <div class="search_box">
+
+                        <input type="text" class="email_input" placeholder="youremail@wel.com">
+
+                    </div>
+
+                    <a class="enter_btn">
+                        →
+                    </a>
+                </div>
+                <p class="pp_subs_info">
+                    *입력해주신 이메일 주소는 메일 발송을 위해서만 사용됩니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 미션 팝업 -->
+    <div class="pop_overlay pop_mission" data-lenis-prevent>
+        <div class="pp_miss_bg">
+            <!-- 배경상자/286*362 -->
+
+            <!-- 클로즈 버튼 -->
+            <div class="pp_miss_close close_vertical">
+                <a href="#">
+                    <!-- 38*172/ffffaf -->
+                    <p><span class="btn_x">X</span></p>
+                    <p>C</p>
+                    <p>L</p>
+                    <p>O</p>
+                    <p>S</p>
+                    <p>E</p>
+                </a>
+            </div>
+
+            <!-- 인포 ? 버튼 : 클릭하면 실험 프로젝트 섹션으로 이동 (팝업도 닫힘 — popup.js) -->
+            <a href="#project-experiment" class="pp_miss_info">
+                <img loading="lazy" decoding="async" src="./img/popup/mission_info.webp" alt="">
+            </a>
+
+            <!-- 글 시작 -->
+            <p class="pp_miss_small">서사 개입 실험 프로젝트</p>
+            <p class="pp_miss_title">
+                The Mission For You is : ___
+            </p>
+            <p class="pp_miss_mid">프로젝트 참여 방법</p>
+            <p class="pp_miss_list">
+                1. 미션 수행자가 다음 목적지인
+                <br>　‘서울’에서 수행할 미션을 떠올린다.
+                <br>
+                2. 주변에 있는 사물 중 아무곳에나 미션을 작성한다.
+                <br>
+                3. 사진을 촬영한다.
+                <br>
+                4. 촬영한 사진을 아래 링크에 업로드한다.
+                <br>
+                5. 미션의 비하인드 스토리를 작성한다.
+                <br>
+                6. 후기 엽서를 받을 주소를 작성한다.
+                <br>
+                7. 설레는 마음을 안고 느긋하게 기다린다.
+            </p>
+
+            <p class="pp_miss_small">
+                　　*미션을 작성한 종이 등은 버리지 말고 꼭 보관해주세요.
+            </p>
+
+            <a href="#" class="pp_miss_link">
+                참여 폼 작성하러 가기
+            </a>
+
+        </div>
+    </div>
+    <!-- ☆ Popup e / 슬라이드 s ★ -->
+
+    <!-- 노트 슬라이드 (works 정보 카드 "Open the NOTE")
+         오른쪽→왼쪽으로 열리고, close/바깥 클릭/ESC로 닫힘
+         ★ 여기는 "틀"만 있음 — 탭/사진/글 수정은 아래
+           <div class="slide_data"> 안의 note_data 블록에서! (HTML) -->
+    <div class="noteOverlay">
+
+        <div class="note_panel">
+
+            <!-- 클로즈 버튼: 팝업(contact 등)과 동일한 세로형, 위치만 다름
+                 맨 위 글자는 닫히는 방향 화살표(오른쪽) -->
+            <div class="note_close close_vertical noteClose">
+                <a href="#">
+                    <p><span class="btn_arrow">▶</span></p>
+                    <p>C</p>
+                    <p>L</p>
+                    <p>O</p>
+                    <p>S</p>
+                    <p>E</p>
+                </a>
+            </div>
+
+            <!-- 왼쪽 : 탭 스와이퍼 갤러리 -->
+            <div class="note_left">
+
+                <nav class="note_tabs">
+                    <!-- 탭 버튼: 아래 slide_data의 note_data → src_tabs에서 자동 복사됨 -->
+                </nav>
+
+                <div class="swiper note_swiper">
+                    <div class="swiper-wrapper">
+                        <!-- 갤러리 사진: 아래 slide_data의 note_data → src_gallery에서 자동 복사됨 -->
+                    </div>
+                </div>
+
+                <!-- 좌우 넘김 버튼 (갤러리 바깥 양옆 — 위치는 works.css ★ 주석) -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+
+                <div class="note_pagination"></div>
+
+            </div>
+
+            <!-- 오른쪽 : 내용이 길어지면 스크롤되는 상자 -->
+            <div class="note_right" data-lenis-prevent>
+                <!-- 글 내용: 아래 slide_data의 note_data → src_body에서 자동 복사됨 -->
+            </div>
+
+            <!-- 스크롤 힌트 (오른쪽 상자 스크롤 시 사라짐) -->
+            <p class="note_hint">∨<br>∨<br>∨</p>
+
+        </div>
+
+    </div>
+
+    <!-- 워크숍 슬라이드 (VIEW DETAIL / 사진 / 타이틀 클릭)
+         아래→위로 열리고, close/바깥 클릭/ESC로 닫힘
+         ★ 여기는 "틀"만 있음 — 탭/사진/글/메타 수정은 아래
+           <div class="slide_data"> 안의 ws_data 블록에서! (HTML)
+         ※ 워크숍 "목록 카드"(#workshop 스와이퍼)는 기존대로
+           js/workshop.js의 WORKSHOPS에서 수정 -->
+    <div class="ws_overlay">
+
+        <div class="ws_panel">
+
+            <!-- 클로즈 버튼: 팝업(contact 등)과 동일한 세로형, 위치만 다름
+                 맨 위 글자는 닫히는 방향 화살표(아래) -->
+            <!-- 클로즈 버튼: 가로 버전 — 슬라이드 왼쪽 위에 붙음 -->
+            <div class="ws_close close_horizontal">
+                <a href="#">
+                    <p><span class="btn_arrow">▼</span></p>
+                    <p>C</p>
+                    <p>L</p>
+                    <p>O</p>
+                    <p>S</p>
+                    <p>E</p>
+                </a>
+            </div>
+
+            <!-- 왼쪽 : 탭 스와이퍼 갤러리 -->
+            <div class="ws_slide_left">
+
+                <nav class="ws_slide_tabs">
+                    <!-- 탭 버튼: 아래 slide_data의 ws_data → src_tabs에서 자동 복사됨 -->
+                </nav>
+
+                <div class="swiper ws_slide_swiper">
+                    <div class="swiper-wrapper">
+                        <!-- 갤러리 사진: 아래 slide_data의 ws_data → src_gallery에서 자동 복사됨 -->
+                    </div>
+                </div>
+
+                <!-- 좌우 넘김 버튼 (갤러리 바깥 양옆 — 위치는 workshop.css ★ 주석) -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+
+                <div class="ws_slide_pagination"></div>
+
+            </div>
+
+            <!-- 오른쪽 : 위 = 스크롤 상자 / 아래 = 고정(가는 선 + Location, Duration, Role) -->
+            <div class="ws_detail">
+
+                <div class="ws_detail_scroll" data-lenis-prevent>
+                    <!-- 글 내용: 아래 slide_data의 ws_data → src_body에서 자동 복사됨 -->
+                </div>
+
+                <!-- ★ "Role / Duration / Location" 라벨 글자는 아래 <dt>에서 수정
+                     (라벨 옆 값은 slide_data의 ws_data → src_meta에서 자동 복사됨) -->
+                <dl class="ws_detail_meta">
+                    <div class="ws_meta_row">
+                        <dt>Role</dt>
+                        <dd class="ws_meta_role"></dd>
+                    </div>
+                    <div class="ws_meta_row">
+                        <dt>Duration</dt>
+                        <dd class="ws_meta_duration"></dd>
+                    </div>
+                    <div class="ws_meta_row">
+                        <dt>Location</dt>
+                        <dd class="ws_meta_location"></dd>
+                    </div>
+                </dl>
+
+            </div>
+
+            <!-- 스크롤 힌트 (오른쪽 상자 스크롤 시 사라짐) -->
+            <p class="ws_hint">∨<br>∨<br>∨</p>
+
+        </div>
+
+    </div>
+    <!-- ================================================================
+         ★★★ 슬라이드 "내용"은 전부 여기서 수정합니다 (HTML) ★★★
+
+         이 안의 내용이 노트 슬라이드(.noteOverlay)와
+         워크숍 상세 슬라이드(.ws_overlay)에 그대로 복사되어 표시됩니다.
+         (화면에는 보이지 않는 데이터 보관함 — hidden)
+
+         ● 사진 추가   : 원하는 탭의 <div class="swiper-slide"> 한 줄을
+                         복사해서 src 경로만 바꾸면 끝.
+                         위→아래 순서가 슬라이드 넘김 순서입니다.
+         ● 사진 삭제   : 해당 줄을 지우면 끝.
+         ● 탭 추가     : ① src_tabs에 <a> 한 줄 추가 (data-tab은 다음 번호)
+                         ② 같은 data-tab 번호로 사진 줄 추가
+         ● 탭 이름 변경 : <a> 안의 글자만 바꾸면 됨 (사진 경로와 무관)
+         ● 글 수정     : 각 블록의 src_body 안 글자를 직접 수정
+
+         ★ 주의: GitHub Pages는 파일명 대소문자를 구분합니다!
+                 src의 확장자(.JPG vs .jpg)까지 실제 파일과 똑같이 쓸 것.
+    ================================================================= -->
+    <div class="slide_data" hidden>
+
+        <!-- ═══════════════════════════════════════════════════════
+             [A] 노트 슬라이드 6개 (Works 정보 카드의 "Open the NOTE")
+             data-note 값 = 카드 버튼의 data-note 값 (서로 짝)
+             ═══════════════════════════════════════════════════════ -->
+
+        <!-- ─────────────────────────────────────────────
+             노트 1/6 : Project - Exhibition (대화의 몸집 프로젝트)
+             ───────────────────────────────────────────── -->
+        <div class="note_data" data-note="project-exhibition">
+
+            <!-- [갤러리 탭 버튼] data-tab 번호(0부터)가 아래 사진의 data-tab과 짝 -->
+            <nav class="src_tabs">
+                <a href="#" class="note_tab" data-tab="0">Poster</a>
+                <a href="#" class="note_tab" data-tab="1">On-site</a>
+                <a href="#" class="note_tab" data-tab="2">Review</a>
+            </nav>
+
+            <!-- [갤러리 사진] 한 줄 = 사진 한 장 -->
+            <div class="src_gallery">
+
+                <!-- ▽ Poster 탭 (data-tab="0") -->
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/poster/1.webp" alt="Poster"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/poster/2.webp" alt="Poster"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/poster/3.webp" alt="Poster"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/poster/4.webp" alt="Poster"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/poster/5.webp" alt="Poster"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/poster/6.webp" alt="Poster"></div>
+
+                <!-- ▽ On-site 탭 (data-tab="1") -->
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/onsite/1.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/onsite/2.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/onsite/3.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/onsite/4.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/onsite/5.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/onsite/6.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/onsite/7.webp" alt="On-site"></div>
+
+                <!-- ▽ Review 탭 (data-tab="2") -->
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/review/1.webp" alt="Review"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/review/2.webp" alt="Review"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/review/3.webp" alt="Review"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/review/4.webp" alt="Review"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/review/5.webp" alt="Review"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/review/6.webp" alt="Review"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/review/7.webp" alt="Review"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-exhibition/review/8.webp" alt="Review"></div>
+            </div>
+
+            <!-- [오른쪽 글 내용]
+                 · 일반 블록: <div class="note_block"> — 소제목 + 본문
+                 · 회색 자리표시 블록: <div class="note_block muted"> — 소제목 옆 <span>이 회색 글씨
+                 · 블록 추가: <div class="note_block"> 통째로 복사 -->
+            <div class="src_body">
+
+                <p class="note_star">★</p>
+
+                <!-- 제목 위 작은 글자 -->
+                <p class="note_case">Case Study 01</p>
+
+                <!-- 노트 제목 -->
+                <h2 class="note_title">왜 창작자는 말을 걸기만 하고, 독자는 듣기만 할까?</h2>
+
+                <div class="note_block">
+                    <p class="note_label">Problem</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Insight</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Experiment</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Experience Flow</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block muted">
+                    <p class="note_label">Learning<span>.</span></p>
+                </div>
+
+                <div class="note_block muted">
+                    <p class="note_label">Next Question<span>.</span></p>
+                </div>
+
+                <!-- 맨 아래 링크 (필요 없으면 이 줄 삭제) -->
+                <a href="#" class="note_link">음악으로 대화하기 플레이리스트 링크</a>
+
+            </div>
+        </div>
+        <!-- 노트 1/6 끝 -->
+
+        <!-- ─────────────────────────────────────────────
+             노트 2/6 : Project - Brand (TOIL)
+             ───────────────────────────────────────────── -->
+        <div class="note_data" data-note="project-brand">
+
+            <!-- [갤러리 탭 버튼] -->
+            <nav class="src_tabs">
+                <a href="#" class="note_tab" data-tab="0">Mockup</a>
+                <a href="#" class="note_tab" data-tab="1">Website</a>
+                <a href="#" class="note_tab" data-tab="2">Carousel</a>
+            </nav>
+
+            <!-- [갤러리 사진] -->
+            <div class="src_gallery">
+
+                <!-- ▽ Mockup 탭 (data-tab="0") -->
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/1.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/2.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/3.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/4.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/5.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/6.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/7.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/8.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/9.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/10.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/11.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/12.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/13.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/14.webp" alt="Mockup"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/mockup/15.webp" alt="Mockup"></div>
+
+                <!-- ▽ Website 탭 (data-tab="1") -->
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/website/1.webp" alt="Website"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/website/2.webp" alt="Website"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/website/3.webp" alt="Website"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/website/4.webp" alt="Website"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/website/5.webp" alt="Website"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/website/6.webp" alt="Website"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/website/7.webp" alt="Website"></div>
+
+                <!-- ▽ Carousel 탭 (data-tab="2") -->
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/cardnews/1.webp" alt="Carousel"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/cardnews/2.webp" alt="Carousel"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/cardnews/3.webp" alt="Carousel"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-brand/cardnews/4.webp" alt="Carousel"></div>
+            </div>
+
+            <!-- [오른쪽 글 내용] -->
+            <div class="src_body">
+
+                <p class="note_star">★</p>
+
+                <p class="note_case">섬 여행 플랫폼</p>
+
+                <h2 class="note_title">TOIL</h2>
+
+                <div class="note_block">
+                    <p class="note_label">Problem</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Insight</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Experiment</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Experience Flow</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block muted">
+                    <p class="note_label">Learning<span>.</span></p>
+                </div>
+
+                <div class="note_block muted">
+                    <p class="note_label">Next Question<span>.</span></p>
+                </div>
+
+                <!-- 맨 아래 링크 -->
+                <a href="https://min-iht.github.io/toil/" target="_blank" class="note_link">TOIL Website</a>
+
+            </div>
+        </div>
+        <!-- 노트 2/6 끝 -->
+
+        <!-- ─────────────────────────────────────────────
+             노트 3/6 : Project - Web App (보따리 Bottari)
+             ───────────────────────────────────────────── -->
+        <div class="note_data" data-note="project-webapp">
+
+            <!-- [갤러리 탭 버튼] -->
+            <nav class="src_tabs">
+                <a href="#" class="note_tab" data-tab="0">Screens</a>
+            </nav>
+
+            <!-- [갤러리 사진] -->
+            <div class="src_gallery">
+
+                <!-- ▽ Screens 탭 (data-tab="0") -->
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-webapp/screens/1.webp" alt="Screens"></div>
+            </div>
+
+            <!-- [오른쪽 글 내용] -->
+            <div class="src_body">
+
+                <p class="note_star">★</p>
+
+                <p class="note_case">웹앱</p>
+
+                <h2 class="note_title">보따리(Bottari)</h2>
+
+                <div class="note_block">
+                    <p class="note_label">Problem</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Insight</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Experiment</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Experience Flow</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block muted">
+                    <p class="note_label">Learning<span>.</span></p>
+                </div>
+
+                <div class="note_block muted">
+                    <p class="note_label">Next Question<span>.</span></p>
+                </div>
+
+                <!-- 맨 아래 링크 — href에 실제 주소 입력 -->
+                <a href="#" class="note_link">보따리 싸러 가기</a>
+
+            </div>
+        </div>
+        <!-- 노트 3/6 끝 -->
+
+        <!-- ─────────────────────────────────────────────
+             노트 4/6 : Project - Experiment (The Mission For You Is)
+             ───────────────────────────────────────────── -->
+        <div class="note_data" data-note="project-experiment">
+
+            <!-- [갤러리 탭 버튼] -->
+            <nav class="src_tabs">
+                <a href="#" class="note_tab" data-tab="0">On-site</a>
+                <a href="#" class="note_tab" data-tab="1">Mission</a>
+                <a href="#" class="note_tab" data-tab="2">Postcard</a>
+            </nav>
+
+            <!-- [갤러리 사진] -->
+            <div class="src_gallery">
+
+                <!-- ▽ On-site 탭 (data-tab="0") -->
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/onsite/1.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/onsite/2.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/onsite/3.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/onsite/4.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/onsite/5.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/onsite/6.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/onsite/7.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/onsite/8.webp" alt="On-site"></div>
+
+                <!-- ▽ Mission 탭 (data-tab="1") -->
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/mission/1.webp" alt="Mission"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/mission/2.webp" alt="Mission"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/mission/3.webp" alt="Mission"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/mission/4.webp" alt="Mission"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/mission/5.webp" alt="Mission"></div>
+
+                <!-- ▽ Postcard 탭 (data-tab="2") -->
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/1.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/2.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/3.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/4.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/5.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/6.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/7.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/8.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/9.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/10.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/11.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/12.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/13.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/14.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/15.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/16.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/17.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/18.webp" alt="Postcard"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/project-experiment/postcard/19.webp" alt="Postcard"></div>
+            </div>
+
+            <!-- [오른쪽 글 내용] -->
+            <div class="src_body">
+
+                <p class="note_star">★</p>
+
+                <p class="note_case">미션 프로젝트</p>
+
+                <h2 class="note_title">The Mission For You is:___</h2>
+
+                <div class="note_block">
+                    <p class="note_label">Problem</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Insight</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Experiment</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Experience Flow</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block muted">
+                    <p class="note_label">Learning<span>.</span></p>
+                </div>
+
+                <div class="note_block muted">
+                    <p class="note_label">Next Question<span>.</span></p>
+                </div>
+
+                <!-- 맨 아래 링크 — href에 실제 주소 입력 -->
+                <a href="#" class="note_link">Min에게 미션 건네기!</a>
+
+            </div>
+        </div>
+        <!-- 노트 4/6 끝 -->
+
+        <!-- ─────────────────────────────────────────────
+             노트 5/6 : Publication - Book (어린 밤을 지나고 있어)
+             ───────────────────────────────────────────── -->
+        <div class="note_data" data-note="publication-book">
+
+            <!-- [갤러리 탭 버튼] -->
+            <nav class="src_tabs">
+                <a href="#" class="note_tab" data-tab="0">Sample Book</a>
+                <a href="#" class="note_tab" data-tab="1">Postcard form Reader</a>
+                <a href="#" class="note_tab" data-tab="2">Etc</a>
+            </nav>
+
+            <!-- [갤러리 사진] -->
+            <div class="src_gallery">
+
+                <!-- ▽ Sample Book 탭 (data-tab="0") -->
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/1.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/2.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/3.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/4.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/5.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/6.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/7.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/8.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/9.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/10.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/11.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/12.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/13.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/14.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/15.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/16.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/17.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/18.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/19.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/20.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/21.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/22.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/23.webp" alt="Sample Book"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/samplebook/24.webp" alt="Sample Book"></div>
+
+                <!-- ▽ Postcard form Reader 탭 (data-tab="1") — 아직 사진이 없어 임시 이미지. 사진이 생기면 아래 줄을 교체 -->
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/w_book/book_poster.webp" alt="Postcard form Reader"></div>
+
+                <!-- ▽ Etc 탭 (data-tab="2") -->
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/etc/1.webp" alt="Etc"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/publication-book/etc/2.webp" alt="Etc"></div>
+            </div>
+
+            <!-- [오른쪽 글 내용] -->
+            <div class="src_body">
+
+                <p class="note_star">★</p>
+
+                <p class="note_case">독립출판 시절집</p>
+
+                <h2 class="note_title">어린 밤을 지나고 있어</h2>
+
+                <div class="note_block">
+                    <p class="note_label">Problem</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Insight</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Experiment</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Experience Flow</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block muted">
+                    <p class="note_label">Learning<span>.</span></p>
+                </div>
+
+                <div class="note_block muted">
+                    <p class="note_label">Next Question<span>.</span></p>
+                </div>
+
+            </div>
+        </div>
+        <!-- 노트 5/6 끝 -->
+
+        <!-- ─────────────────────────────────────────────
+             노트 6/6 : Publication - CD (눈을 덮고 푸른 꿈을 꿔)
+             ───────────────────────────────────────────── -->
+        <div class="note_data" data-note="publication-cd">
+
+            <!-- [갤러리 탭 버튼] -->
+            <nav class="src_tabs">
+                <a href="#" class="note_tab" data-tab="0">Jacket</a>
+                <a href="#" class="note_tab" data-tab="1">Goods</a>
+                <a href="#" class="note_tab" data-tab="2">Etc</a>
+            </nav>
+
+            <!-- [갤러리 사진] -->
+            <div class="src_gallery">
+
+                <!-- ▽ Jacket 탭 (data-tab="0") -->
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/jacket/1.webp" alt="Jacket"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/jacket/2.webp" alt="Jacket"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/jacket/3.webp" alt="Jacket"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/jacket/4.webp" alt="Jacket"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/jacket/5.webp" alt="Jacket"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/jacket/6.webp" alt="Jacket"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/jacket/7.webp" alt="Jacket"></div>
+
+                <!-- ▽ Goods 탭 (data-tab="1") -->
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/goods/1.webp" alt="Goods"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/goods/2.webp" alt="Goods"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/goods/3.webp" alt="Goods"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/goods/4.webp" alt="Goods"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/goods/5.webp" alt="Goods"></div>
+
+                <!-- ▽ Etc 탭 (data-tab="2") -->
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/slide/note/publication-cd/etc/1.webp" alt="Etc"></div>
+            </div>
+
+            <!-- [오른쪽 글 내용] -->
+            <div class="src_body">
+
+                <p class="note_star">★</p>
+
+                <p class="note_case">여행 소리집</p>
+
+                <h2 class="note_title">눈을 덮고 푸른 꿈을 꿔 &amp; 필름 책갈피</h2>
+
+                <div class="note_block">
+                    <p class="note_label">Problem</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Insight</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Experiment</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block">
+                    <p class="note_label">Experience Flow</p>
+                    <p class="note_text">.</p>
+                </div>
+
+                <div class="note_block muted">
+                    <p class="note_label">Learning<span>.</span></p>
+                </div>
+
+                <div class="note_block muted">
+                    <p class="note_label">Next Question<span>.</span></p>
+                </div>
+
+            </div>
+        </div>
+        <!-- 노트 6/6 끝 -->
+
+        <!-- ═══════════════════════════════════════════════════════
+             [B] 워크숍 상세 슬라이드 6개 (VIEW DETAIL / 카드 클릭)
+             data-ws 번호 = 워크숍 목록 카드의 순서 (0 = 맨 앞 카드, 최신)
+             ※ 워크숍 "목록 카드"(제목/날짜/썸네일)는 여기가 아니라
+               js/workshop.js의 WORKSHOPS에서 수정합니다.
+             ═══════════════════════════════════════════════════════ -->
+
+        <!-- ─────────────────────────────────────────────
+             워크숍 0 : 끼리끼리 사진 놀이 (최신, 목록 첫 카드)
+             ───────────────────────────────────────────── -->
+        <div class="ws_data" data-ws="0">
+
+            <!-- [갤러리 탭 버튼] data-tab 번호(0부터)가 아래 사진의 data-tab과 짝 -->
+            <nav class="src_tabs">
+                <a href="#" class="ws_slide_tab" data-tab="0">Card News</a>
+                <a href="#" class="ws_slide_tab" data-tab="1">On-site</a>
+                <a href="#" class="ws_slide_tab" data-tab="2">Review</a>
+            </nav>
+
+            <!-- [갤러리 사진] 한 줄 = 사진 한 장 -->
+            <div class="src_gallery">
+
+                <!-- ▽ Card News 탭 (data-tab="0") -->
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/cardnews/1.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/cardnews/2.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/cardnews/3.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/cardnews/4.webp" alt="Card News"></div>
+
+                <!-- ▽ On-site 탭 (data-tab="1") -->
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/1.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/2.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/3.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/4.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/5.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/6.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/7.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/8.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/9.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/10.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/11.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/12.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/onsite/13.webp" alt="On-site"></div>
+
+                <!-- ▽ Review 탭 (data-tab="2") -->
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/review/1.webp" alt="Review"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/review/2.webp" alt="Review"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/workshop/gallery6/review/3.webp" alt="Review"></div>
+            </div>
+
+            <!-- [오른쪽 글 내용] Curriculum의 <li> 한 줄 = 한 회차 -->
+            <div class="src_body">
+
+                <p class="wsd_diamond">◆</p>
+
+                <!-- 제목 위 작은 글자 -->
+                <p class="wsd_small">걷고, 쓰고, 만드는</p>
+
+                <!-- 슬라이드 제목 -->
+                <h2 class="wsd_title">끼리끼리 사진 놀이</h2>
+
+                <!-- 제목 아래 한 줄 소개 (<br>로 줄바꿈) -->
+                <p class="wsd_desc">사진 &amp; 출사 &amp; 글쓰기 프로그램<br>* 사진 놀이 : 사진을 활용한 다양한 창작 활동</p>
+
+                <!-- "Curriculum" 라벨 글자 -->
+                <p class="wsd_label">Curriculum</p>
+
+                <ol class="wsd_curriculum">
+                    <li>마음이 향하는 곳 — 나는 무엇을 보고 있나?</li>
+                    <li>출사 후 사진 선별 &amp; 사진을 글감으로 글쓰기</li>
+                    <li>내가 몸담은 하루 — 나의 하루는 무엇으로 채워져 있을까?</li>
+                    <li>출사 후 사진 선별 &amp; 사진을 글감으로 글쓰기</li>
+                    <li>내가 만드는 나의 성장 앨범 — 나는 나를 어떤 사람으로 기억하고 싶을까?</li>
+                    <li>출사 후 사진 선별 &amp; 사진을 글감으로 글쓰기</li>
+                    <li>내면에도 눈이 있다면 — 나는 어떤 눈으로 세상을 바라보고 있나?</li>
+                    <li>출사 후 사진 선별 &amp; 사진을 글감으로 글쓰기</li>
+                </ol>
+
+                <!-- 해시태그 -->
+                <ul class="wsd_tags">
+                    <li class="tag">출사</li>
+                    <li class="tag">짝활동</li>
+                    <li class="tag">사진놀이</li>
+                </ul>
+
+            </div>
+
+            <!-- [오른쪽 아래 고정 메타] Role / Duration / Location 값 -->
+            <div class="src_meta">
+                <span class="src_role">글, 기획, 디자인, 출판</span>
+                <span class="src_duration">2024.09.04 - 2024.10.30</span>
+                <span class="src_location">부산, 청년아트스테이션 화명</span>
+            </div>
+        </div>
+        <!-- 워크숍 0 끝 -->
+
+        <!-- ─────────────────────────────────────────────
+             워크숍 1 : 책 정리 워크숍
+             ───────────────────────────────────────────── -->
+        <div class="ws_data" data-ws="1">
+
+            <!-- [갤러리 탭 버튼] -->
+            <nav class="src_tabs">
+                <a href="#" class="ws_slide_tab" data-tab="0">Card News</a>
+                <a href="#" class="ws_slide_tab" data-tab="1">On-site</a>
+            </nav>
+
+            <!-- [갤러리 사진] -->
+            <div class="src_gallery">
+
+                <!-- ▽ Card News 탭 (data-tab="0") -->
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery5/cardnews/1.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery5/cardnews/2.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery5/cardnews/3.webp" alt="Card News"></div>
+
+                <!-- ▽ On-site 탭 (data-tab="1") -->
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery5/onsite/1.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery5/onsite/2.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery5/onsite/3.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery5/onsite/4.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery5/onsite/5.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery5/onsite/6.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery5/onsite/7.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery5/onsite/8.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery5/onsite/9.webp" alt="On-site"></div>
+            </div>
+
+            <!-- [오른쪽 글 내용] -->
+            <div class="src_body">
+
+                <p class="wsd_diamond">◆</p>
+
+                <p class="wsd_small">겟 정리 위드 미</p>
+
+                <h2 class="wsd_title">책 정리 워크숍</h2>
+
+                <p class="wsd_desc">미루고 미루던 책 정리를 함께합니다.</p>
+
+                <p class="wsd_label">Curriculum</p>
+
+                <ol class="wsd_curriculum">
+                    <li>오리엔테이션 &amp; 최근에 구매한 책 소개하기</li>
+                    <li>책장에서 모든 책을 꺼내다 &amp; 책장 사진 함께 보며 이야기하기</li>
+                    <li>책을 깨우다 &amp; 절대 버릴 수 없는 책 소개하기</li>
+                    <li>나만의 카테고리를 만들다 &amp; 책 마니또</li>
+                    <li>책을 보내주다 &amp; 버리는 책으로 콜라주하기</li>
+                    <li>정리한 책장 소개 &amp; 마무리 파티</li>
+                </ol>
+
+                <ul class="wsd_tags">
+                    <li class="tag">책 정리</li>
+                    <li class="tag">수다스러운 방</li>
+                </ul>
+
+            </div>
+
+            <!-- [오른쪽 아래 고정 메타] -->
+            <div class="src_meta">
+                <span class="src_role">기획 · 진행</span>
+                <span class="src_duration">2024.09.03 - 2024.10.15</span>
+                <span class="src_location">부산, 복합문화공간 무사이</span>
+            </div>
+        </div>
+        <!-- 워크숍 1 끝 -->
+
+        <!-- ─────────────────────────────────────────────
+             워크숍 2 : 사진에 깃든 나
+             ───────────────────────────────────────────── -->
+        <div class="ws_data" data-ws="2">
+
+            <!-- [갤러리 탭 버튼] -->
+            <nav class="src_tabs">
+                <a href="#" class="ws_slide_tab" data-tab="0">Card News</a>
+                <a href="#" class="ws_slide_tab" data-tab="1">Review</a>
+                <a href="#" class="ws_slide_tab" data-tab="2">Etc</a>
+            </nav>
+
+            <!-- [갤러리 사진] -->
+            <div class="src_gallery">
+
+                <!-- ▽ Card News 탭 (data-tab="0") -->
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery4/cardnews/1.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery4/cardnews/2.webp" alt="Card News"></div>
+
+                <!-- ▽ Review 탭 (data-tab="1") -->
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery4/review/1.webp" alt="Review"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery4/review/2.webp" alt="Review"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery4/review/3.webp" alt="Review"></div>
+
+                <!-- ▽ Etc 탭 (data-tab="2") -->
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/workshop/gallery4/etc/1.webp" alt="Etc"></div>
+            </div>
+
+            <!-- [오른쪽 글 내용] -->
+            <div class="src_body">
+
+                <p class="wsd_diamond">◆</p>
+
+                <p class="wsd_small">마우스 클래스</p>
+
+                <h2 class="wsd_title">사진에 깃든 나</h2>
+
+                <p class="wsd_desc">나다움을 발견하는 사진 수업</p>
+
+                <p class="wsd_label">Curriculum</p>
+
+                <ol class="wsd_curriculum">
+                    <li>누구나 쉽게 사진을 찍을 수 있는 시대이지만 <br>사진을 깊게 들여다보는 시간은 드물다. <br>희타 작가가 사진을 담는 방식을 들은 후, <br>나의 사진첩을 돌아본다. <br>그리고 작가가 준비한 문항을 체크하며 <br>새로운 나에 대해 알아갈 수 있는 시간.</li>
+                </ol>
+
+                <ul class="wsd_tags">
+                    <li class="tag">사진</li>
+                    <li class="tag">발견</li>
+                    <li class="tag">영감</li>
+                </ul>
+
+            </div>
+
+            <!-- [오른쪽 아래 고정 메타] -->
+            <div class="src_meta">
+                <span class="src_role">기획 · 진행</span>
+                <span class="src_duration">2023.12.09</span>
+                <span class="src_location">부산, KT&amp;G 상상마당</span>
+            </div>
+        </div>
+        <!-- 워크숍 2 끝 -->
+
+        <!-- ─────────────────────────────────────────────
+             워크숍 3 : 희타, 미지의 여름 이야기
+             ───────────────────────────────────────────── -->
+        <div class="ws_data" data-ws="3">
+
+            <!-- [갤러리 탭 버튼] -->
+            <nav class="src_tabs">
+                <a href="#" class="ws_slide_tab" data-tab="0">Card News</a>
+                <a href="#" class="ws_slide_tab" data-tab="1">On-site</a>
+                <a href="#" class="ws_slide_tab" data-tab="2">Etc</a>
+            </nav>
+
+            <!-- [갤러리 사진] -->
+            <div class="src_gallery">
+
+                <!-- ▽ Card News 탭 (data-tab="0") -->
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery3/cardnews/1.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery3/cardnews/2.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery3/cardnews/3.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery3/cardnews/4.webp" alt="Card News"></div>
+
+                <!-- ▽ On-site 탭 (data-tab="1") -->
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery3/onsite/1.webp" alt="On-site"></div>
+
+                <!-- ▽ Etc 탭 (data-tab="2") -->
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/workshop/gallery3/etc/1.webp" alt="Etc"></div>
+            </div>
+
+            <!-- [오른쪽 글 내용] -->
+            <div class="src_body">
+
+                <p class="wsd_diamond">◆</p>
+
+                <p class="wsd_small">글쓰기 프로그램</p>
+
+                <h2 class="wsd_title">희타, 미지의 여름 이야기</h2>
+
+                <p class="wsd_desc">여름을 테마로 글쓰기</p>
+
+                <p class="wsd_label">Curriculum</p>
+
+                <ol class="wsd_curriculum">
+                    <li>왜 여름인가요?</li>
+                    <li>여름에 꺼내 보는 영화</li>
+                    <li>여름이 오면 어떤 노래를 들어?</li>
+                    <li>여름밤 사진 슬라이드 쇼</li>
+                </ol>
+
+                <ul class="wsd_tags">
+                    <li class="tag">글쓰기</li>
+                    <li class="tag">여름</li>
+                    <li class="tag">산책</li>
+                </ul>
+
+            </div>
+
+            <!-- [오른쪽 아래 고정 메타] -->
+            <div class="src_meta">
+                <span class="src_role">기획 · 진행</span>
+                <span class="src_duration">2023.07.08 - 2023.08.19</span>
+                <span class="src_location">부산, 책방 미지의 세계</span>
+            </div>
+        </div>
+        <!-- 워크숍 3 끝 -->
+
+        <!-- ─────────────────────────────────────────────
+             워크숍 4 : 이희타의 겨울 상상
+             ───────────────────────────────────────────── -->
+        <div class="ws_data" data-ws="4">
+
+            <!-- [갤러리 탭 버튼] -->
+            <nav class="src_tabs">
+                <a href="#" class="ws_slide_tab" data-tab="0">Poster</a>
+                <a href="#" class="ws_slide_tab" data-tab="1">On-site</a>
+            </nav>
+
+            <!-- [갤러리 사진] -->
+            <div class="src_gallery">
+
+                <!-- ▽ Poster 탭 (data-tab="0") -->
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery2/poster/1.webp" alt="Poster"></div>
+
+                <!-- ▽ On-site 탭 (data-tab="1") -->
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery2/on-site/1.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery2/on-site/2.webp" alt="On-site"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery2/on-site/3.webp" alt="On-site"></div>
+            </div>
+
+            <!-- [오른쪽 글 내용] -->
+            <div class="src_body">
+
+                <p class="wsd_diamond">◆</p>
+
+                <p class="wsd_small">글쓰기 프로그램</p>
+
+                <h2 class="wsd_title">이희타의 겨울 상상</h2>
+
+                <p class="wsd_desc">다가올 겨울을 상상하고 지금 나의 계절을 돌아보는 글쓰기 프로그램</p>
+
+                <p class="wsd_label">Curriculum</p>
+
+                <ol class="wsd_curriculum">
+                    <li>겨울을 앞둔 어느 토요일,<br>다가올 겨울을 상상하고 나의 계절을 가늠해보며 <br>글 쓰는 시간을 가진다. <br>편지지에 한 자 한 자 눌러 쓴 글을 <br>겨울이면 떠오르는 사람 또는 나에게 부친다.</li>
+                </ol>
+
+                <ul class="wsd_tags">
+                    <li class="tag">글쓰기</li>
+                    <li class="tag">겨울</li>
+                    <li class="tag">편지</li>
+                </ul>
+
+            </div>
+
+            <!-- [오른쪽 아래 고정 메타] -->
+            <div class="src_meta">
+                <span class="src_role">기획 · 진행</span>
+                <span class="src_duration">2022.11.14</span>
+                <span class="src_location">부산, 동주책방</span>
+            </div>
+        </div>
+        <!-- 워크숍 4 끝 -->
+
+        <!-- ─────────────────────────────────────────────
+             워크숍 5 : 영혼의 포토 부스 (가장 오래됨, 목록 마지막 카드)
+             ───────────────────────────────────────────── -->
+        <div class="ws_data" data-ws="5">
+
+            <!-- [갤러리 탭 버튼] -->
+            <nav class="src_tabs">
+                <a href="#" class="ws_slide_tab" data-tab="0">Card News</a>
+                <a href="#" class="ws_slide_tab" data-tab="1">Review</a>
+                <a href="#" class="ws_slide_tab" data-tab="2">Etc</a>
+            </nav>
+
+            <!-- [갤러리 사진] -->
+            <div class="src_gallery">
+
+                <!-- ▽ Card News 탭 (data-tab="0") -->
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/cardnews/1.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/cardnews/2.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/cardnews/3.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/cardnews/4.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/cardnews/5.webp" alt="Card News"></div>
+                <div class="swiper-slide" data-tab="0"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/cardnews/6.webp" alt="Card News"></div>
+
+                <!-- ▽ Review 탭 (data-tab="1") -->
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/review/1.PNG" alt="Review"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/review/2.PNG" alt="Review"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/review/3.PNG" alt="Review"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/review/4.PNG" alt="Review"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/review/5.PNG" alt="Review"></div>
+                <div class="swiper-slide" data-tab="1"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/review/6.PNG" alt="Review"></div>
+
+                <!-- ▽ Etc 탭 (data-tab="2") -->
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/etc/1.webp" alt="Etc"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/etc/2.webp" alt="Etc"></div>
+                <div class="swiper-slide" data-tab="2"><img loading="lazy" decoding="async" src="./img/workshop/gallery1/etc/3.webp" alt="Etc"></div>
+            </div>
+
+            <!-- [오른쪽 글 내용] -->
+            <div class="src_body">
+
+                <p class="wsd_diamond">◆</p>
+
+                <p class="wsd_small">사진 놀이</p>
+
+                <h2 class="wsd_title">영혼의 포토 부스</h2>
+
+                <p class="wsd_desc">나는 어떻게 생겼을까? 내 영혼은, 내 마음은?</p>
+
+                <p class="wsd_label">Curriculum</p>
+
+                <ol class="wsd_curriculum">
+                    <li>영혼의 사진첩: 내가 좋아하는 내 모습</li>
+                    <li>나를 이루는 것1 ─ 내 몸: 몸에 얽힌 이야기</li>
+                    <li>나를 이루는 것2 ─ 나만의 다섯 가지 물건</li>
+                    <li>내가 보는 세상 ─ 필터 만들기 &amp; 출사</li>
+                    <li>영혼의 포토 부스: 단 한 장의 사진</li>
+                </ol>
+
+                <ul class="wsd_tags">
+                    <li class="tag">사진놀이</li>
+                    <li class="tag">명상</li>
+                    <li class="tag">자기이해</li>
+                </ul>
+
+            </div>
+
+            <!-- [오른쪽 아래 고정 메타] -->
+            <div class="src_meta">
+                <span class="src_role">기획 · 진행</span>
+                <span class="src_duration">2022.10.20 - 2022.11.17</span>
+                <span class="src_location">부산, 청년작당소</span>
+            </div>
+        </div>
+        <!-- 워크숍 5 끝 -->
+
+    </div>
+    <!-- ★★★ 슬라이드 내용 데이터 끝 ★★★ -->
+
+    <!-- ☆ 슬라이드 e -->
+
+    <!-- 내꾸씨 시작 -->
+    <script defer src="./js/fade.js"></script>
+
+    <script defer src="./js/hero.js"></script>
+
+    <script defer src="./js/ui.js"></script>
+
+    <script defer src="./js/popup.js"></script>
+
+    <script defer src="./js/scroll.js"></script>
+
+    <!-- 섹션 JS (scroll.js 뒤에 로드 — 메뉴 스파이 중복 방지 가드가 changeSub를 확인함) -->
+    <script defer src="./js/works.js"></script>
+
+    <script defer src="./js/workshop.js"></script>
+
+    <!-- 반응형 (햄버거 메뉴 + 정보 카드 재배치) — 다른 JS 뒤에 로드 -->
+    <script defer src="./js/responsive.js"></script>
+    <!-- 내가 꾸민 JS 끝 -->
+</body>
+
+</html>

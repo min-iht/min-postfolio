@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>TOIL Brand Portfolio</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<style>
+		html {
+			scroll-behavior: smooth;
+			/* TOP 버튼 앵커 이동을 부드럽게 (jQuery 대체) */
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		a {
+			text-decoration: none;
+			color: #555;
+		}
+
+		img {
+			vertical-align: middle;
+		}
+
+		.fixed_box {
+			position: fixed;
+			bottom: 40px;
+			right: 30px;
+			width: 40px;
+		}
+
+		#top {
+			max-width: 1320px;
+			margin: 0 auto;
+		}
+
+		#top img {
+			width: 100%;
+			display: block;
+		}
+	</style>
+	<link rel="icon" type="image/png" sizes="32x32" href="./img/favicon.png">
+    <!-- 파비콘 -->
+</head>
+
+<body>
+	<!--완성된 pdf 이미지를 1320크기로 뽑아서, 죽 나열하시면 됩니다!-->
+	<div id="top">
+		<img src="img/pdf/pdf_brand/1.jpg" class="PDF">
+		<img loading="lazy" decoding="async" src="img/pdf/pdf_brand/2.jpg" class="PDF">
+		<img loading="lazy" decoding="async" src="img/pdf/pdf_brand/3.jpg" class="PDF">
+	</div>
+	<div class="fixed_box">
+		<a href="#top" class="top_btn">
+			<img src="./img/pdf/pdf_brand/top.jpg" alt="top">
+		</a>
+	</div>
+</body>
+
+</html>

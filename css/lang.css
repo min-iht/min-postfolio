@@ -1,0 +1,323 @@
+/* ===================================
+   언어 선택 페이지 (index.html) 전용
+   =================================== */
+
+/* 페이지 스크롤 없음 */
+html,
+body {
+    overflow: hidden;
+    height: 100%;
+}
+
+.hero_lang {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.tag_up:hover {
+
+    cursor: url("../img/cursor/cursor_question.png") 16 16, auto !important;
+
+}
+
+/* 레이아웃 텍스트 */
+/* 좌우 태그 */
+.lang {
+
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    font-family: 'dosis';
+    font-size: 13px;
+    /* 컨텐츠 넣어보고 결정 */
+    letter-spacing: 8%;
+
+}
+
+.lang_top {
+
+    padding: 21px 30px 0px;
+
+}
+
+.lang_bottom {
+
+    position: absolute;
+    bottom: 0;
+    padding: 0px 30px 22px;
+
+    font-family: 'share tech';
+    color: #777;
+
+}
+
+/* 가운데 태그 */
+.tag_center {
+
+    font-family: 'rift';
+    font-size: 13px;
+    /* 컨텐츠 넣어보고 결정 */
+    letter-spacing: 8%;
+
+}
+
+.tag_up {
+
+    display: block;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+
+    padding-bottom: 20px;
+
+}
+
+.tag_bottom {
+
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    font-weight: 300;
+    color: #777;
+    font-family: 'share tech';
+
+}
+
+/* 중앙부 시작 */
+
+.postbox_wrap {
+
+    width: 1330px;
+    margin: 0 auto;
+    height: 826px;
+    box-sizing: border-box;
+
+    padding-top: 186px;
+    /* 전체 우편함 위치 조정 */
+
+}
+
+.postboxes {
+
+    width: 1330px;
+    height: 328px;
+    box-sizing: border-box;
+
+}
+
+.postbox123 {
+
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.postbox123 li {
+
+    width: 430px;
+    height: 328px;
+    box-sizing: border-box;
+    padding-top: 151px;
+    background: white url(../img/hero/upper.webp) no-repeat left 0 top 83px;
+    /* 배경 고정 */
+
+    position: relative;
+    /* .bottom .envelope_lang .btn_lang의 기준 */
+}
+
+.bottom {
+
+    width: 430px;
+    height: 178px;
+    box-sizing: border-box;
+
+    position: absolute;
+    z-index: 888;
+
+}
+
+.envelope_lang {
+
+    position: absolute;
+    top: -37px;
+    /* env_en의 위치 */
+    z-index: 777;
+    transform-style: preserve-3d;
+}
+
+.env_ko {
+
+    top: -55px;
+    left: -7px;
+
+}
+
+.env_jp {
+
+    top: -4px;
+    left: 14%;
+
+}
+
+/* ===== 2. 흔들림 애니메이션 ===== */
+@keyframes envelopeWiggle {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(-1deg);
+    }
+
+    50% {
+        transform: rotate(1deg);
+    }
+
+    75% {
+        transform: rotate(-0.5deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* ===== 3. 기본 상태: 계속 흔들림 ===== */
+.postbox123 li .envelope_lang {
+
+    animation: envelopeWiggle 1.2s infinite ease-in-out;
+
+}
+
+/* ===== 4. hover 시: 흔들림 STOP + 위로 이동 ===== */
+.postbox123 li:hover .envelope_lang {
+
+    animation: none;
+
+}
+
+.envelope_lang img {
+
+    transition: transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+
+}
+
+.postbox123 li:hover .envelope_lang img {
+
+    transform: translateY(-50px);
+
+}
+
+.postbox123 li .envelope_lang img {
+
+    display: block;
+    will-change: transform;
+    transition: transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+
+}
+
+
+/* 언어 선택 버튼  */
+
+.btn_lang {
+
+    width: 100%;
+    margin: 0 auto;
+    height: 86px;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    text-align: center;
+    display: flex;
+    justify-content: center;
+
+    position: absolute;
+    z-index: 999;
+    bottom: 39px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    font-size: 20px;
+    font-family: 'pretendard';
+
+}
+
+.btn_en,
+.btn_ko {
+
+    padding: 20px;
+
+}
+
+.btn_en,
+.btn_jp {
+
+    font-weight: 400;
+
+}
+
+
+.btn_ko {
+
+    font-weight: 450;
+
+}
+
+.btn_jp {
+
+    font-family: "Share Tech", sans-serif;
+    padding: 12px 20px;
+
+}
+
+/* 버튼 호버 애니메이션 */
+.btn_lang_btn {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    height: 86px;
+    box-sizing: border-box;
+    /* 중요: 고정 높이 */
+}
+
+/* 두 줄을 세로로 쌓는 구조 */
+.text_wrap {
+    display: flex;
+    flex-direction: column;
+    transition: transform 500ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+/* 두 텍스트 */
+.text_main,
+.text_hover {
+    display: block;
+    height: 86px;
+    /* btn 높이와 동일 */
+    text-align: center;
+}
+
+.text_hover {
+
+    font-size: 24px;
+    font-weight: bolder;
+
+}
+
+/* hover 상태 */
+.btn_lang_btn:hover .text_wrap {
+
+    transform: translateY(-76px);
+
+}
+
+.btn_lang_btn:active .text_wrap {
+
+    transform: translateY(-100px) scale(0.98);
+
+}

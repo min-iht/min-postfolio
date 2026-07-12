@@ -1,0 +1,712 @@
+/* ===== 팝업 오버레이 (min.postfolio 페이지용) =====
+   화면 전체를 덮는 투명 레이어. 바깥 클릭 닫기의 클릭 판정 대상.
+   z-index 1030+ = 고정 UI(900) 위 — style.css 주석 참고 */
+.pop_overlay {
+
+    position: fixed;
+    inset: 0;
+    z-index: 1030;
+
+    background-color: transparent;
+    /* 딤(어두워짐) 없음 — 필요해지면 rgba(0,0,0,0.25) 등으로 */
+
+    overflow: auto;
+    overscroll-behavior: contain;
+    /* 팝업 위에서 휠을 굴려도 뒤 페이지가 스크롤되지 않게 */
+
+    /* 초기 숨김 — popup.js의 autoAlpha로 열고 닫는다 */
+    opacity: 0;
+    visibility: hidden;
+
+}
+
+/* ★★★ 팝업 3종 위치 조정은 여기 ★★★
+   각 박스의 top(위에서부터 거리) / margin-left(중앙 기준 좌우 이동)만
+   수정하면 된다. left:50% + 음수 margin-left(너비 절반) = 가로 중앙.
+   예) 미션 팝업을 왼쪽 미션 버튼 옆으로:
+       .pop_overlay .pp_miss_bg { top: 400px; left: 120px; margin: 0; } */
+
+/* 컨택트 팝업 위치 */
+.pop_overlay .pp_con_bg {
+
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    margin: 0 0 0 -612px;
+    /* -612 = 너비 1224의 절반 (가로 중앙) */
+
+}
+
+/* 구독 팝업 위치 */
+.pop_overlay .pp_subs_bg {
+
+    position: absolute;
+    top: 60px;
+    left: 70%;
+    margin: 0 0 0 -212px;
+    /* -212 = 너비 424의 절반 (가로 중앙) */
+
+}
+
+/* 미션 팝업 위치 */
+.pop_overlay .pp_miss_bg {
+
+    position: absolute;
+    top: 388px;
+    left: 14%;
+    margin: 0 0 0 -143px;
+    /* -143 = 너비 286의 절반 (가로 중앙) */
+
+}
+
+.wrap {
+
+    /* 전체너비상자 */
+    /* z-index하위 */
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    box-sizing: border-box;
+
+}
+
+
+.wrap section {
+    /* 스크롤되게 높이 설정함 */
+    height: 100vh;
+
+}
+
+/* 컨택트 팝업 */
+/* pp_con은 fixed */
+/* pp_con_close가 pp_contact를 포지션  */
+
+/* pp_contact z-index 1030~1090 */
+/* close = 1030 */
+/* pp_con_bg = 1040 */
+/* pp_con_box = 1060 */
+/* pp_con_video a = 1070 */
+/* pp_con_gsap = 1050 */
+
+.pp_con_bg {
+    position: fixed;
+
+    width: 1224px;
+    height: 740px;
+    box-sizing: border-box;
+    margin: 60px auto;
+    /* 위치->나중에 포지션값으로 */
+    z-index: 1040;
+
+
+    position: relative;
+    /* pp_con_close의 기준 */
+
+    background-color: white;
+    border: solid #ccc 0.1px;
+
+}
+
+
+
+/* close버튼 시작*/
+/* close버튼 시작*/
+.pp_con_close {
+    /* 컨택트 클로즈버튼 위치 */
+    position: absolute;
+    z-index: 1030;
+    top: -1px;
+    right: -38px;
+
+}
+
+/* close버튼 공통꾸미기*/
+.close_vertical {
+
+    width: 38px;
+    height: 172px;
+    box-sizing: border-box;
+
+}
+
+.close_vertical a {
+
+    display: inline-block;
+    width: 38px;
+    height: 166px;
+    box-sizing: border-box;
+
+    padding: 17px 0 16px;
+
+    background-color: #ffffaf;
+    border: solid #ccc 0.1px;
+
+    font-family: 'dosis';
+    font-size: 10px;
+    font-weight: 300;
+    text-align: center;
+
+}
+
+/* 글자 */
+.btn_x {
+
+    transform: scaleX(1.7);
+    display: inline-block;
+
+    margin-bottom: 46px;
+    font-weight: 100;
+
+}
+
+.close_vertical a p {
+    margin-bottom: 1.5px;
+}
+
+/* close버튼 가로 버전 (워크숍 슬라이드용) —
+   세로 버전(.close_vertical)과 가로세로 사이즈만 맞바꾸고
+   색/테두리/폰트/간격 등 모든 스타일은 동일 */
+.close_horizontal {
+
+    width: 172px;
+    height: 38px;
+    box-sizing: border-box;
+
+}
+
+.close_horizontal a {
+
+    display: flex;
+    align-items: center;
+
+    width: 166px;
+    height: 38px;
+    box-sizing: border-box;
+
+    padding: 0 16px 0 18px;
+    /* 세로 버전의 padding(17px 0 16px)을 가로로 돌린 값 */
+
+    background-color: #ffffaf;
+    border: solid #ccc 0.1px;
+
+    font-family: 'dosis';
+    font-size: 10px;
+    font-weight: 300;
+
+}
+
+/* 맨 앞 화살표(▼) — 세로 버전의 margin-bottom: 46px를 가로로 */
+.close_horizontal .btn_arrow {
+
+    display: inline-block;
+    margin-right: 60px;
+    font-size: 8px;
+
+}
+
+.close_horizontal a p {
+    margin-right: 6px;
+}
+
+/* close버튼 끝 */
+/* close버튼 끝 */
+
+
+/* pp_con_box 시작 */
+.pp_con_box {
+    /* 가운데 내용 상자 */
+
+    width: 430px;
+    height: 740px;
+    box-sizing: border-box;
+
+    padding-top: 50px;
+
+    text-align: center;
+    font-family: 'pretendard';
+
+    position: absolute;
+    top: 0;
+    left: 397px;
+    z-index: 1060;
+
+    /* background-color: aquamarine; */
+
+}
+
+/* 글자 */
+.heart {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.pp_con_name {
+
+    font-size: 13px;
+    font-weight: 600;
+
+    margin: 24px 0 34px;
+}
+
+.pp_con_sentence {
+
+    line-height: 20px;
+    font-size: 14px;
+    font-weight: 500;
+
+}
+
+/* 소셜링크 */
+.pp_con_link {
+    display: flex;
+    justify-content: center;
+
+    margin: 34px 0 36px;
+}
+
+.pp_con_link li {
+
+    width: 20px;
+    height: 20px;
+    box-sizing: border-box;
+
+}
+
+.pp_con_link img {
+    width: 100%;
+}
+
+.pp_con_link li:nth-child(2) {
+    margin: 0px 15px;
+}
+
+/* contact 비디오 */
+.pp_con_video {
+
+    width: 430px;
+    height: 323px;
+    box-sizing: border-box;
+    text-align: center;
+
+    position: relative;
+    /* pp_con_btn들의 기준 */
+}
+
+.pp_con_video video {
+
+    width: 100%;
+    height: 100%;
+    filter: grayscale(100%);
+
+}
+
+/* 비디오 재생 버튼 (img/video_btn.webp 64px) — 비디오 정중앙 */
+.pp_con_play {
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 64px;
+    height: 64px;
+
+    transition: opacity 0.25s;
+
+}
+
+.pp_con_play img {
+    width: 100%;
+    display: block;
+}
+
+.pp_con_play:hover {
+    opacity: 0.8;
+}
+
+/* 비디오 클릭 상자 */
+.pp_con_btn {
+    display: inline-block;
+    padding: 14px 20px 16px;
+
+    text-align: center;
+    font-family: 'orbit';
+    font-size: 13px;
+    letter-spacing: 8%;
+
+    border: solid #ccc 0.1px;
+
+    position: absolute;
+}
+
+.zero{
+    top: 18px;
+    left: -60px;
+}
+
+.first {
+    top: 20px;
+    right: -20px;
+}
+
+.second {
+    bottom: 83px;
+    right: -50px;
+}
+
+.third {
+    bottom: 46px;
+    right: 10px;
+}
+
+.zero,
+.first,
+.second {
+    background-color: #f3f3f3e0;
+}
+
+.third {
+    background-color: #a3ffa3e1;
+}
+
+/* 가운데 내용 상자 끝 */
+
+/* gsap 아이콘 시작 */
+.pp_con_gsap {
+
+    width: 1224px;
+    height: 738px;
+    box-sizing: border-box;
+
+    position: relative;
+    /* gsap_icon img들의 기준 */
+
+    pointer-events: none;
+    /* 장식 레이어가 내용/클로즈 버튼 클릭을 가로막지 않도록 */
+
+}
+
+.pp_con_gsap img {
+    position: absolute;
+}
+
+.gsap_icon1 {
+    top: 200px;
+    left: 140px;
+}
+
+.gsap_icon2 {
+    top: 560px;
+    left: 247px;
+}
+
+.gsap_icon3 {
+    top: 64px;
+    right: 200px;
+}
+
+.gsap_icon4 {
+    width: 90px;
+
+    top: 417px;
+    right: 128px;
+}
+
+.gsap_icon1,
+.gsap_icon2,
+.gsap_icon3 {
+    width: 70px;
+}
+
+/* contact팝업 끝!!!!!! */
+/* contact팝업 끝!!!!!! */
+
+
+/* subscribe 팝업 시작!!!!!! */
+/* subscribe 팝업 시작!!!!!! */
+/* 구독 팝업 */
+/* pp_subs은 fixed */
+/* pp_subs_close가 pp_subs를 포지션  */
+
+/* pp_subs z-index 1030~1090 */
+/* close = 1030(이미 설정됨) */
+/* pp_subs_bg = 1040 */
+
+.pp_subs_bg {
+
+    position: fixed;
+    z-index: 1040;
+
+    width: 520px;
+    height: 780px;
+    box-sizing: border-box;
+
+    text-align: center;
+    margin: 60px auto;
+    /* 위치->나중에 포지션값으로 */
+
+    padding-top: 70px;
+
+    position: relative;
+    /* pp_subs_close의 기준 */
+
+    background-color: white;
+    border: solid #ccc 0.1px;
+
+}
+
+/* 구독 클로즈 버튼 */
+.pp_subs_close {
+    position: absolute;
+    z-index: 1030;
+    top: -1px;
+    right: -38px;
+    /* 컨택트/미션과 동일 (-36이면 버튼이 상자 안으로 2px 겹침) */
+}
+
+/* 구독 가운데 내용 상자 */
+.pp_subs_box {
+    width: 312px;
+    height: 740px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+/* 구독 이미지
+   상자(312*422)는 그대로 두고, 안의 사진(원본 624*846)을
+   드래그로 옮겨가며 볼 수 있다 — 팬 로직은 popup.js */
+.pp_subs_img {
+
+    width: 312px;
+    height: 422px;
+    box-sizing: border-box;
+
+    position: relative;
+    overflow: hidden;
+
+    border: #ccc solid 0.1px;
+
+}
+
+/* 사진: 상자(312*422)에 꽉 차게 표시 (드래그 없음) */
+.pp_subs_photo {
+
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+
+    user-select: none;
+    -webkit-user-drag: none;
+
+}
+
+/* 구독 글상자 */
+.pp_subs_txt {
+
+    width: 312px;
+    height: 112px;
+    box-sizing: border-box;
+
+    padding: 23px 21px;
+    border: #ccc solid 0.1px;
+
+    margin-top: 22px;
+
+}
+
+.pp_subs_txt1 {
+    font-size: 14px;
+    font-weight: 300;
+    text-align: left;
+}
+
+.pp_subs_txt2 {
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: right;
+
+    margin-top: 20px;
+}
+
+.pp_subs_txt2 span {
+    font-weight: 300;
+    text-decoration: underline;
+}
+
+/* 이메일 입력칸 */
+/* input + button */
+/* hero의 .input_area/.search_box/.enter_btn과 클래스가 겹치므로
+   .pp_subs_box 안으로 스코프를 좁혀 서로 침범하지 않게 한다 */
+.pp_subs_box .input_area {
+
+    display: flex;
+    width: 312px;
+
+    margin-top: 16px;
+
+}
+
+.pp_subs_box .search_box {
+
+    border-radius: 2px;
+    width: 312px;
+    height: 48px;
+
+    border: none;
+    background-color: #eee;
+    padding: 0 12px;
+    font-size: 12px;
+    opacity: 0.5;
+
+}
+
+.pp_subs_box .search_box input {
+
+    width: 90%;
+    padding-top: 16px;
+    padding-bottom: 17px;
+
+    font-size: 13px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: #555;
+
+}
+
+.pp_subs_box .search_box input::placeholder {
+
+    color: #afafaf;
+
+}
+
+.pp_subs_box .enter_btn {
+
+    display: block;
+    border: none;
+    background-color: #eee;
+    color: #888;
+    font-family: 'pretendard';
+    font-weight: 300;
+    font-size: 12px;
+    margin-left: 10px;
+    opacity: 0.5;
+    padding: 16px;
+
+    border-radius: 2px;
+
+}
+
+.pp_subs_box .enter_btn:hover {
+
+    background-color: #ffff90;
+    color: #333;
+
+}
+
+.pp_subs_info {
+    font-size: 7px;
+    text-align: left;
+    margin: 10px 0 0 21px;
+    color: #a9a9a9;
+}
+
+/* subscribe 팝업 끝!!!!!! */
+/* subscribe 팝업 끝!!!!!! */
+
+
+/* mission 팝업 시작!!!!!! */
+/* mission 팝업 시작!!!!!! */
+/* 미션 팝업 */
+/* pp_miss은 fixed */
+/* pp_miss_close가 pp_subs를 포지션  */
+
+/* pp_miss z-index 1030~1090 */
+/* close = 1030(이미 설정됨) */
+/* pp_miss_bg = 1040 */
+/* pp_miss_info = 1050 */
+.pp_miss_bg {
+
+    position: fixed;
+    z-index: 1040;
+
+    top: 450px;
+    left: 100px;
+
+    width: 286px;
+    height: 386px;
+    box-sizing: border-box;
+    padding: 30px;
+
+    text-align: left;
+
+    position: relative;
+    /* pp_miss_close, pp_miss_info의 기준 */
+
+    background-color: white;
+    border: solid #ccc 0.1px;
+
+}
+
+/* 미션 클로즈 버튼 - 왜 뒤로 안 가지 */
+.pp_miss_close {
+
+    position: absolute;
+    z-index: 1030;
+    top: -1px;
+    right: -38px;
+
+}
+
+.pp_miss_small {
+    font-size: 7px;
+    font-weight: 300;
+}
+
+.pp_miss_title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 9px 0px;
+}
+
+.pp_miss_mid {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.pp_miss_list {
+    font-size: 11px;
+    line-height: 20px;
+    font-weight: 400;
+
+    margin: 32px 0px 6px;
+}
+
+.pp_miss_link {
+    display: block;
+    padding: 10px 0;
+    width: 110px;
+    font-size: 12px;
+    font-weight: 400;
+    text-decoration: underline;
+
+    margin-top: 14px;
+}
+
+/* question mark info button */
+.pp_miss_info {
+    display: inline-block;
+
+    width: 16px;
+    height: 24px;
+
+    position: absolute;
+    top: 73px;
+    right: 26px;
+}
+
+.pp_miss_info img {
+    width: 100%;
+}

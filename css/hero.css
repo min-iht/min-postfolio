@@ -1,0 +1,405 @@
+/* ===================================
+   Hero (min.postfolio-ko.html)
+   =================================== */
+
+/* ===== 스크롤 잠금 =====
+   body에 is_locked가 있는 동안 스크롤 불가.
+   hero 애니메이션이 끝나면 hero.js가 클래스를 제거해서 스크롤이 풀린다.
+   html에 직접 거는 이유: scrollbar-gutter(스크롤바 자리 확보)가
+   잠금 중에도 유지되어 해제 순간 화면이 왼쪽으로 밀리지 않게 하기 위함 */
+html:has(body.is_locked) {
+    overflow: hidden;
+}
+
+body.is_locked {
+    overflow: hidden;
+}
+
+/* ===== 고정 UI 숨기기 =====
+   visibility가 opacity와 달리 클릭까지 차단해준다.
+   hero.js의 autoAlpha: 1 이 opacity/visibility를 한 번에 되돌린다 */
+.leftUI,
+.rightUI {
+
+    opacity: 0;
+    visibility: hidden;
+
+}
+
+
+/* ==============★============= */
+/* =========히어로 시작========= */
+/* ==============★============ */
+
+/*
+z-index 정리 (전역 스케일은 style.css 주석 참고)
+
+  .intro_ui        700   hero 안 최상위 (이름 입력 UI)
+  .envelope_stage  10    스테이지 (pointer-events: none)
+
+  스테이지 내부 로컬 스택:
+  .env_over        40    봉투 앞판 — 엽서가 이 뒤에서 올라온다
+  .env_card        30    엽서
+  .hero_postcard   30    확대된 편지지 (DOM상 env_card보다 뒤 = 위에 그려짐)
+  .shadow          29    편지지 그림자 (편지지 바로 아래)
+  .env_closed      20    닫힌 봉투 — 꺼낸 엽서보다 아래
+  .env_bel         10    봉투 뒷판(뚜껑)
+*/
+
+.hero {
+    width: 100%;
+    height: 100vh;
+    margin: 0 auto;
+    overflow: hidden;
+    text-align: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-intro {
+
+    width: 100%;
+    height: 100vh;
+
+    position: relative;
+    /* .intro_ui / .envelope_stage의 기준 */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'pretendard';
+
+}
+
+/* ===== scene1 : 이름 입력 UI ===== */
+
+.intro_ui {
+
+    position: absolute;
+    inset: 0;
+    z-index: 700;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+/* 텍스트 */
+.intro_text {
+
+    text-align: center;
+    margin-bottom: 30px;
+
+}
+
+.hello {
+
+    margin-bottom: 185px;
+    /* 봉투 자리 */
+
+}
+
+/* input + button */
+.input_area {
+
+    display: flex;
+
+}
+
+.search_box {
+    border-radius: 2px;
+    width: 210px;
+    height: 48px;
+
+    border: none;
+    background-color: #eee;
+    padding: 0 12px;
+    font-size: 12px;
+    opacity: 0.7;
+
+}
+
+.search_box input {
+
+    width: 90%;
+    padding-top: 16px;
+    padding-bottom: 17px;
+
+    font-size: 13px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: #666;
+
+}
+
+.search_box input::placeholder {
+
+    color: #afafaf;
+
+}
+
+.enter_btn {
+
+    display: block;
+    border: none;
+    background-color: #eee;
+    color: #888;
+    font-family: 'pretendard';
+    margin-left: 10px;
+    opacity: 0.7;
+    padding: 14px;
+
+    border-radius: 2px;
+
+}
+
+.enter_btn:hover {
+
+    background-color: #ffff90;
+    color: #333;
+
+}
+
+/* skip */
+.skip_btn {
+
+    border: none;
+    background: transparent;
+    font-size: 12px;
+    color: #acacac;
+
+    display: block;
+    width: 60px;
+    padding: 10px;
+    margin: 36px auto;
+
+}
+
+.skip_btn:hover {
+
+    opacity: 0.6;
+
+}
+
+.skip_btn span {
+
+    text-decoration: underline;
+
+}
+
+
+/* ===== 봉투 스테이지 ===== */
+
+.envelope_stage {
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 720px;
+    height: 520px;
+
+    z-index: 10;
+    pointer-events: none;
+    /* 스테이지 안에는 클릭할 요소가 없다 */
+
+}
+
+/* 닫힌 봉투 (scene1에서 보이는 유일한 스테이지 요소) */
+.env_closed {
+
+    position: absolute;
+    top: 112px;
+    left: 258px;
+    z-index: 20;
+
+}
+
+/* 열린 봉투 (뒷판 + 앞판) */
+.env_open {
+
+    width: 196px;
+    height: 186.86px;
+
+    position: absolute;
+    top: 37px;
+    left: 258px;
+
+}
+
+.env_bel,
+.env_over {
+    position: absolute;
+    width: 100%;
+
+    opacity: 0;
+    visibility: hidden;
+}
+
+.env_bel {
+    top: -1px;
+    left: 0;
+    z-index: 10;
+}
+
+.env_over {
+    bottom: 0;
+    left: 0;
+    z-index: 40;
+}
+
+/* 엽서 (봉투에서 나오는 작은 카드 — envelope_stage 직속) */
+.env_card {
+
+    position: absolute;
+    top: 85px;
+    left: 226px;
+    z-index: 30;
+
+    transform: scale(0.66);
+    /* 봉투 속 크기. scene3에서 scale 2.769(=720/260)로 커지면
+       .hero_postcard와 같은 크기/위치가 된다 */
+
+    opacity: 0;
+    visibility: hidden;
+
+}
+
+
+/* ===== scene3 : 확대된 편지지 ===== */
+
+.hero_postcard {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 720px;
+    height: 463px;
+
+    background: url("../img/hero/hero-postcard-letter.webp") no-repeat center;
+    background-size: 100%;
+
+    z-index: 30;
+
+    opacity: 0;
+    visibility: hidden;
+
+}
+
+/* 그림자 (편지지와 같은 자리에서 시작, 반대 대각선으로 이동) */
+.shadow {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 720px;
+    height: 463px;
+
+    background-color: #555;
+    z-index: 29;
+
+    opacity: 0;
+    visibility: hidden;
+
+}
+
+/* 편지 텍스트 */
+.postcard_text {
+
+    position: absolute;
+    top: 67px;
+    left: 52px;
+    right: 52px;
+    z-index: 1;
+
+    text-align: left;
+
+    opacity: 0;
+    visibility: hidden;
+
+}
+
+.letter_arrow {
+
+    margin-top: 50px;
+    animation: arrowmotion 2.6s infinite;
+
+    width: 30px;
+    height: 30px;
+
+    background: url(../img/hero/letter_arrow.webp) no-repeat center;
+
+}
+
+@keyframes arrowmotion {
+
+    0% {
+        transform: translateY(0px);
+        transition: all 0.5s;
+    }
+
+    50% {
+        transform: translateY(10px);
+        transition: all 0.2s;
+    }
+
+    100% {
+        transform: translateY(0px);
+        transition: all 0.2s;
+    }
+
+}
+
+/* 편지 글자 꾸미기 */
+
+.dear {
+
+    font-size: 23px;
+    color: #555;
+    font-weight: 400;
+
+    margin-bottom: 52px;
+
+}
+
+.dear span {
+    font-weight: 600;
+}
+
+.contents {
+
+    font-size: 15px;
+    font-weight: 400;
+    color: #555;
+
+    margin-bottom: 26px;
+    line-height: 20px;
+
+}
+
+.send {
+
+    position: absolute;
+    right: 4px;
+    /* postcard_text가 좌우 52px 안쪽 박스가 되면서 기준이 바뀜.
+       편지지 왼쪽 끝에서 664px(원래 위치)에 오른쪽 끝이 오도록 보정한 값 */
+    bottom: -20px;
+
+    font-size: 14px;
+
+}
+
+.send span {
+
+    font-weight: 600;
+
+}

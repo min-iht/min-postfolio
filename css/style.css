@@ -1,0 +1,520 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 앵커 이동/휠 스크롤의 부드러움은 Lenis(js/scroll.js)가 담당.
+   CSS scroll-behavior:smooth는 Lenis와 충돌해서 쓰지 않는다 */
+
+html {
+    scrollbar-gutter: stable;
+    /* 스크롤바 자리를 항상 확보 — 히어로/팝업/슬라이드에서
+       스크롤 잠금이 풀리는 순간 스크롤바가 생기며
+       화면 전체가 왼쪽으로 밀리던 문제 방지 */
+
+    overflow-x: clip;
+    /* 가로 스크롤 원천 금지(hidden과 달리 scrollLeft 자체가 항상 0) —
+       섹션 내용이 화면보다 넓을 때 스크롤 복귀 과정에서
+       페이지 전체가 왼쪽으로 밀리며 leftUI와 겹치던 버그 해결 */
+}
+
+ul {
+    list-style: none;
+}
+
+/* 전역 z-index 스케일
+
+1030+  Popup (contact / subscribe / mission / 슬라이드 노트)
+       - 딤 오버레이 포함. "바깥 클릭 닫기"가 고정 UI까지
+         덮어야 하므로 반드시 Fixed UI(900)보다 위
+900    Fixed UI (.leftUI / .rightUI)
+700    Hero .intro_ui (이름 입력)
+10     Hero .envelope_stage (내부 로컬 스택은 hero.css 주석 참고)
+
+Works / CV 내부 요소는 각 섹션 안에서 1~99 사이로 로컬 관리 */
+
+/* ─────────────────────────────────────────────
+   ★ 스타일 수정 위치 가이드 (어디서 꾸미면 되는지)
+
+   [고정 UI]  css/style.css (이 파일)
+   - 로고/현재페이지 ......... .header .logo .currentPage
+   - 메뉴/서브메뉴 ........... .gnb  /  .sub
+   - 미션 버튼 ............... .mission a (호버 무지개 포함)
+   - CONTACT/SUBSCRIBE ....... .rightUI .contact .subscribe
+
+   [Hero 오프닝]  css/hero.css
+   - 이름 입력 UI ............ .intro_ui .search_box .enter_btn .skip_btn
+   - 봉투/엽서 ............... .envelope_stage .env_* .hero_postcard .shadow
+
+   [Works 프로젝트]  css/works.css
+   - 오른쪽 정보 카드 ........ .info .info_title .info_meta .info_outcome
+   - Open the NOTE 버튼 ...... .noteBtn
+   - 태그 알약 ............... .tag
+
+   [노트 슬라이드]  css/works.css (아래쪽)
+   - 패널/위치 ............... .note_panel (left 값 = 패널 시작점)
+   - 클로즈 버튼 ............. .note_close (+ popup.css의 .close_vertical)
+   - 탭/갤러리/내용 .......... .note_tabs .note_swiper .note_right
+
+   [Workshop]  css/workshop.css
+   - 카드 .................... .ws_card .ws_media .ws_title
+   - VIEW DETAIL 버튼 ........ .ws_view
+   - 워크숍 슬라이드 ......... .ws_panel .ws_close .ws_slide_* .ws_detail*
+
+   [팝업 3종]  css/popup.css
+   - 공통 오버레이 ........... .pop_overlay
+   - ★ 위치 조정 ............ .pop_overlay .pp_con_bg / .pp_subs_bg / .pp_miss_bg
+   - 컨택트 내용 ............. .pp_con_*   / 구독 .pp_subs_*  / 미션 .pp_miss_*
+   - 클로즈 버튼(세로) ....... .close_vertical
+
+   [CV]  css/cv.css ..... .cv_photo .cv_rows .cv_box .cv_rainbow
+   [Info]  css/info.css .. .if_card .if_thumb .if_btn .if_bottom
+   ───────────────────────────────────────────── */
+
+/* 커서 */
+/* 클릭 가능한 모든 요소 */
+a,
+button,
+.enter_btn,
+.skip_btn,
+.btn_lang,
+.btn_lang_btn {
+
+    /* hotspot(클릭 지점)은 손끝 위치 — 정중앙(16 16)으로 두면
+       보이는 커서와 실제 클릭 위치가 어긋나 작은 링크를 못 누른다 */
+    cursor: url("../img/cursor/cursor_pointer.png") 10 4, pointer !important;
+
+}
+
+/* a 안의 자식도 동일 */
+a *,
+button * {
+
+    cursor: inherit;
+
+}
+
+body {
+
+    background: white;
+    font-family: pretendard;
+    color: #555;
+
+    overflow-x: clip;
+    /* 가로 스크롤 원천 금지 — html 쪽 주석 참고 */
+
+    cursor: url("../img/cursor/cursor_default.png") 6 3, auto;
+    /* hotspot = 화살표 촉 위치 */
+
+    /* 화면전환 — 지속시간은 js/fade.js의 FADEOUT_MS와 맞출 것 */
+    opacity: 1;
+    transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+
+/* 나갈 때 */
+body.page_fadeout {
+
+    opacity: 0;
+
+}
+
+/* 들어올 때 초기 상태 */
+body.page_fadein {
+
+    opacity: 0;
+
+}
+
+/* DOM 준비 후 자연스럽게 나타남 (이미지 로드는 기다리지 않음) */
+body.page_fadein_loaded {
+
+    opacity: 1;
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+
+/* 폰트 */
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2') format('woff2');
+    font-weight: 200;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-display: swap;
+
+}
+
+/* 폰트 끝 */
+
+
+/* 좌측 메뉴 시작*/
+
+.leftUI {
+
+    position: fixed;
+
+    left: 30px;
+
+    top: 24px;
+
+    z-index: 900;
+
+    font-family: "Dosis", sans-serif;
+    color: #666;
+    font-size: 16px;
+    /* leftUI/rightUI 텍스트는 15px로 통일 */
+
+}
+
+/* 헤더 시작 */
+
+.header {
+
+    letter-spacing: 0.06em;
+
+}
+
+/* 클릭/호버 영역 확대: padding으로 넓히고
+   음수 margin으로 시각적 위치는 그대로 유지 */
+.header a {
+
+    display: inline-block;
+    padding: 8px 6px;
+    margin: -8px -6px;
+
+}
+
+.logo:hover,
+.currentPage:hover {
+
+    opacity: 0.8;
+
+}
+
+.header span {
+
+    margin: 0 20px;
+
+}
+
+/* 헤더 끝 */
+
+/* 아이콘 시작 */
+.icon {
+
+    max-width: 100%;
+    max-height: 100%;
+
+    display: block;
+    margin: 25px 0;
+
+
+}
+
+.iconBox {
+
+    width: 55px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    overflow: hidden;
+
+}
+
+.iconBox img{
+    width: 100%;
+}
+
+/* 아이콘 끝 */
+/* 타이틀 시작 */
+
+.title {
+
+    text-decoration: underline;
+    font-weight: 500;
+    color: #666;
+
+}
+
+/* 타이틀 끝 */
+/* gnb 시작 */
+
+.gnb {
+    margin: 56px 0;
+}
+
+.gnb>li {
+    transition: .3s;
+}
+
+/* gnb 링크: 색은 #777 고정, 연한 상태는 opacity로 표현.
+   호버/액티브 시 opacity만 1로 — 굵기 변화로 글자가 커져 보이는 것 방지 */
+.gnb>li.active>a {
+    opacity: 1;
+}
+
+.gnb>li>a:hover {
+    opacity: 1;
+}
+
+.gnb>li>a {
+    display: block;
+    font-weight: 400;
+    color: #555;
+    opacity: 0.2;
+    /* #777의 20% ≈ 기존 #e4e4e4와 같은 밝기 */
+    transition: .35s;
+
+    /* 클릭/호버 영역 확대 (시각 위치 유지) */
+    padding: 5px 0;
+    margin: -5px 0;
+}
+
+.gnb>li>a>span {
+    font-family: 'Rift', sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    margin-right: 9px;
+}
+
+.sub {
+    margin-left: 23px;
+
+    /* 메인 링크(a)의 음수 마진(-5px)을 접힌 sub가 삼켜서
+       Works→CV 간격만 5px 좁아지는 것 보정 — 메뉴 간격 통일 */
+    margin-top: 5px;
+
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .45s;
+}
+
+.sub li a {
+
+    font-size: 16px;
+
+    color: #555;
+    opacity: 0.2;
+    /* gnb와 동일: 연한 상태는 opacity로, 호버 시 opacity만 1 */
+
+    transition: .35s;
+
+    /* 클릭/호버 영역 확대 (시각 위치 유지) */
+    display: inline-block;
+    padding: 4px 8px 4px 0;
+    margin: -4px 0;
+
+}
+
+.sub li a:hover {
+    opacity: 1;
+}
+
+/* 마지막 서브메뉴와 다음 메뉴(CV) 사이 간격을
+   gnb>li끼리 간격(시각 5px)과 동일하게 보정.
+   (.sub의 padding이 아닌 li 마진이라 접힘 상태에는 영향 없음) */
+.sub li:last-child {
+    margin-bottom: 5px;
+}
+
+.sub li.active a {
+
+    color: #555;
+    opacity: 1;
+
+    font-weight: 400;
+
+}
+
+.gnb>li.active .sub {
+    max-height: 300px;
+}
+
+/* 미션 */
+.mission {
+    width: 66px;
+}
+
+.mission a {
+
+    /* 클릭/호버 영역 확대 (시각 위치 유지) */
+    display: block;
+    padding: 8px;
+    margin: -8px;
+    font-weight: 500;
+
+    /* 호버는 opacity만 1로 (gnb와 동일 방식 — 굵기 변화 없음) */
+    opacity: 0.65;
+    transition: .35s;
+
+}
+
+/* 미션 호버: cv_rainbow와 같은 무지개 그라데이션이 흐르는 글자 */
+.mission a:hover {
+    opacity: 0.55;
+    /* ★ 무지개 농도 조절 — 낮출수록 파스텔톤 (1 = 원색) */
+
+    background: linear-gradient(100deg,
+            #f5a623, #f8e71c, #7ed321,
+            #4a90d9, #9013fe, #e64980, #f5a623);
+    background-size: 300% 100%;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    animation: mission_rainbow_flow 7s linear infinite;
+}
+
+@keyframes mission_rainbow_flow {
+    to {
+        background-position: -300% 0;
+    }
+}
+
+/* 좌측 메뉴 끝 */
+
+/* 우측 메뉴 시작 */
+/* 연락처 버튼 */
+.rightUI {
+
+    position: fixed;
+
+    right: 30px;
+
+    top: 24px;
+
+    z-index: 900;
+
+    font-family: "Dosis", sans-serif;
+    font-weight: 300;
+    color: #666;
+    letter-spacing: 0.06em;
+    font-size: 15px;
+    /* leftUI/rightUI 텍스트는 15px로 통일 */
+
+    display: flex;
+    text-align: center;
+
+}
+
+/* 클릭/호버 영역 확대 (시각 위치 유지) */
+.rightUI a {
+
+    padding: 10px 0;
+    margin: -10px 0;
+
+    font-weight: 450;
+
+    /* 호버는 opacity만 1로 (gnb와 동일 방식 — 굵기/자간 변화 없음) */
+    opacity: 0.75;
+    transition: .35s;
+
+}
+
+.contact {
+
+    display: block;
+    margin-right: 46px;
+    width: 68px;
+    box-sizing: border-box;
+
+}
+
+/* 구독 버튼 */
+.subscribe {
+
+    display: block;
+    width: 217px;
+    box-sizing: border-box;
+
+}
+
+
+/* 호버 */
+.rightUI a:hover {
+
+    opacity: 1;
+
+}
+
+/* 우측 메뉴 끝 */
+
+
+/* 섹션 높이 */
+#hero,
+#cv,
+#info {
+
+    width: 100%;
+
+    margin: auto;
+
+    display: flex;
+
+    height: 100vh;
+
+}

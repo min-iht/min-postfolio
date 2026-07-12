@@ -1,0 +1,492 @@
+/* =====================================================
+   Workshop 시안 (designdraft/workshop.png
+                + workshop-slide.png)
+   기준 캔버스 1920*1080 — 여백/좌표는 시안 측정값
+
+   ★ 병합 시: works.css(카드 목록) + popup.css(슬라이드)
+
+   z-index
+   860   .ws_overlay — 노트 슬라이드와 같은 층 (동시에 열리지 않음)
+===================================================== */
+
+
+/* ---------- 워크숍 섹션 (#workshop) ---------- */
+
+/* .project 기본값(910px / padding-left) 재정의
+   (#works 스코프 = works.css의 #works .project보다 우선) */
+#works .project.ws_section {
+    height: 1080px;
+    padding-left: 0;
+
+    /* ★ workshop 섹션 위아래 여백 조절은 여기 ★
+       margin-top = 위(마지막 프로젝트와의 간격),
+       margin-bottom = 아래(CV 섹션과의 간격).
+       zoom 0.8이 걸려 있어 실제 여백은 값×0.8px (150px → 화면상 120px) */
+    margin-top: 150px;
+    margin-bottom: 150px;
+}
+
+/* 상단 텍스트 — 왼쪽 296 = works 포스터와 같은 시작선 */
+.ws_head {
+    padding: 134px 0 0 296px;
+}
+
+.ws_head_small {
+    font-size: 13px;
+    color: #888;
+}
+
+.ws_head_row {
+    margin-top: 8px;
+    display: flex;
+    align-items: baseline;
+    gap: 53px;
+}
+
+.ws_head_title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #222;
+}
+
+.ws_head_sub {
+    font-size: 15px;
+    color: #666;
+}
+
+/* 가는 가로선 2개 사이 = 스와이퍼 밴드 (시안: y204~918, 높이 714) */
+.ws_band {
+    margin-top: 22px;
+    margin-left: 286px;
+    /* works 포스터와 같은 시작선(296) */
+    height: 750px;
+    /* 워크숍 내용아래여백 */
+
+    /* ★ 스와이퍼가 보이는 영역(오른쪽 끝) 제한은 여기 ★
+       width = 오른쪽 끝지점 − 시작점(296)
+       현재 1556 = 1852(위 프로젝트 정보카드의 오른쪽 끝) − 296.
+       값을 줄이면 오른쪽이 더 일찍 가려지고, 키우면 더 넓게 보인다.
+       카드가 이 선 밖으로 나가면 잘려 보인다(overflow hidden) */
+    width: 1430px;
+    overflow: hidden;
+
+    border-top: solid #e4e4e4 1px;
+    border-bottom: solid #e4e4e4 1px;
+}
+
+.ws_swiper {
+    height: 100%;
+}
+
+/* 자동 흐름을 일정한 속도로 (기본 이징을 빼서 마퀴처럼 흐르게)
+   — workshop.js의 speed/autoplay 설정과 세트 */
+.ws_swiper .swiper-wrapper {
+    transition-timing-function: linear;
+}
+
+/* 카드 (이미지 밴드는 높이 392 고정 + 세로 중앙 정렬) */
+.ws_swiper .swiper-slide.ws_card {
+    width: 317px;
+    box-sizing: border-box;
+}
+
+/* 사진 전체가 클릭 영역 (클릭 → 슬라이드 열림) */
+.ws_media {
+    position: relative;
+    margin-top: 69px;
+    height: 392px;
+
+    display: flex;
+    align-items: center;
+
+    cursor: url("../img/cursor/cursor_pointer.png") 10 4, pointer;
+    /* 사이트 공통 포인터 커서 (style.css a/button과 동일) */
+}
+
+.ws_media img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+
+    transition: filter 0.3s;
+}
+
+/* 호버: 사진 자체 효과 없음 — VIEW DETAIL 버튼만 뜬다 */
+
+/* 호버 시 뜨는 VIEW DETAIL 버튼 (시안: 171*33, 노랑) */
+.ws_view {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    width: 171px;
+    height: 33px;
+    box-sizing: border-box;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    
+    background-color: #ffffaf;
+    border: solid #ccc 0.1px;
+    
+    font-family: 'Dosis', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: #333;
+    
+    opacity: 0;
+    transition: opacity 0.25s;
+}
+
+.ws_media:hover .ws_view {
+    opacity: 1;
+}
+
+.ws_view_glass {
+    font-size: 14px;
+    letter-spacing: 0;
+}
+
+/* 카드 텍스트 */
+.ws_title {
+    margin-top: 70px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* .ws_title a:hover {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+} */
+
+.ws_title small {
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+}
+
+.ws_date {
+    margin-top: 14px;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    color: #666;
+    line-height: 20px;
+}
+
+.ws_venue {
+    margin-top: 6px;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: #666;
+}
+
+.ws_desc {
+    margin-top: 17px;
+    font-size: 15px;
+    color: #555;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+
+}
+
+.ws_tags {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+
+}
+
+/* .tag(works.css 공유)의 작은 버전 */
+.ws_tags .tag {
+    padding: 15px 20px;
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   워크숍 슬라이드 (designdraft/workshop-slide.png)
+   아래→위로 열린다
+===================================================== */
+
+.ws_overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 860;
+
+    pointer-events: none;
+    visibility: hidden;
+}
+
+/* 열려 있는 동안은 오버레이가 클릭을 받아서
+   패널 바깥(왼쪽/위 여백) 클릭 → 닫기가 동작한다 */
+.ws_overlay.open {
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* 패널 (시안: left 260 / top 80, zoom 0.8 적용) */
+.ws_panel {
+    position: absolute;
+    left: 260px;
+    top: 80px;
+
+    /* ★ 슬라이드 가로 길이(오른쪽 끝) 조절은 여기 ★
+       right 값을 키우면 패널이 짧아진다.
+       현재 247 = rightUI의 SUBSCRIBE MY JOURNEY 왼쪽 시작 지점
+       (= rightUI right 30px + .subscribe 폭 217px — 스크롤바 폭과 무관) */
+    right: 150px;
+
+    bottom: 0;
+
+    background: #fff;
+    border: solid #ccc 0.1px;
+    border-bottom: none;
+
+    pointer-events: auto;
+}
+
+/* 클로즈 버튼 — 가로 버전(popup.css .close_horizontal 스타일 공유)
+   패널 왼쪽 위 모서리 "위"에 붙는다 (위치 조절: top/left) */
+.ws_close {
+    position: absolute;
+    top: -38px;
+    /* -38 = 버튼 높이만큼 패널 위 바깥으로 */
+    left: -1px;
+    /* 팝업들과 동일한 -1px 보정 — 테두리 두께 상쇄용 */
+}
+
+.ws_slide_left, .ws_detail{
+
+    zoom: 0.9;
+    /* 본문 섹션과 동일한 -20% 축소 */
+
+}
+/* ---------- 왼쪽 : 탭 스와이퍼 갤러리 ---------- */
+
+.ws_slide_left {
+    position: absolute;
+
+    /* ★ 워크숍 슬라이드 안 왼쪽 여백 조절은 여기 ★
+       값을 키우면 탭/갤러리/페이지네이션이 통째로 오른쪽으로 밀린다 */
+    left: 10px;
+
+    top: 0;
+    width: 750px;
+    height: 100%;
+}
+
+/* 탭 (시안: x322 y155 → 패널 기준 62/75) */
+.ws_slide_tabs {
+    position: absolute;
+    left: 62px;
+    top: 66px;
+    display: flex;
+    gap: 55px;
+}
+
+/* ★ 왼쪽편(갤러리) 너비/위치 조절은 여기 ★
+   left = 갤러리 시작(ws_slide_left의 left:100에 더해짐),
+   width = 갤러리 폭. 탭(.ws_slide_tabs)과 페이지네이션은 따로 아래에 */
+.ws_slide_swiper {
+    position: absolute;
+    left: 112px;
+    /* 왼쪽 버튼이 탭 시작선(62)에 오도록 140→112로 당김 */
+    top: 122px;
+    width: 475px;
+    height: 593px;
+}
+
+.ws_slide_swiper .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ws_slide_swiper .swiper-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+/* ★ 워크숍 슬라이드 좌우 버튼 위치 조절은 여기 ★
+   (.ws_slide_left 기준 좌표 — 갤러리는 left 112~587, 세로 중심 418)
+   prev: left를 줄이면 더 바깥(왼쪽)으로 — 62 = 탭 첫 타이틀 왼쪽 라인
+   next: left를 키우면 더 바깥(오른쪽)으로 */
+.ws_slide_left .swiper-button-prev {
+    left: 62px;
+    right: auto;
+    top: 418px;
+}
+
+.ws_slide_left .swiper-button-next {
+    left: 612px;
+    right: auto;
+    top: 418px;
+}
+
+/* 페이지네이션 점 (시안: y853 → 패널 기준 773)
+   Swiper 기본 CSS(bottom:8px)를 덮어쓰도록 top/bottom 모두 지정 */
+.ws_slide_left .ws_slide_pagination {
+    position: absolute;
+    left: 112px;
+    /* 갤러리(.ws_slide_swiper)와 같은 left */
+    width: 475px;
+    top: 767px;
+    bottom: auto;
+    text-align: center;
+}
+
+/* ---------- 오른쪽 : 스크롤 상자 + 고정 메타 ---------- */
+
+/* ★ 오른쪽편(텍스트 상자) 너비/비율 조절은 여기 ★
+   left = 텍스트 시작점(패널 기준 — 왼쪽 갤러리는 약 715에서 끝남),
+   right = 패널 오른쪽 끝에서의 여백.
+   left를 줄이면 텍스트가 넓어지고, right를 키우면 좁아진다 */
+.ws_detail {
+    position: absolute;
+    left: 780px;
+    right: 70px;
+    top: 0;
+    bottom: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    font-family: 'pretendard';
+}
+
+/* 위 : 내용이 넘치면 스크롤
+   아래 메타(185px)가 항상 패널 하단에 고정되고 나머지를 이 상자가 차지한다
+   (뷰포트 1080px 기준 가는 선 y895 = 시안과 일치.
+    브라우저 창이 낮아도 메타가 잘리지 않고 스크롤 영역만 줄어든다) */
+.ws_detail_scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+
+    padding: 118px 24px 48px 0;
+    box-sizing: border-box;
+}
+
+.wsd_diamond {
+    font-size: 18px;
+    color: #555;
+}
+
+.wsd_small {
+    margin-top: 52px;
+    font-size: 13px;
+    color: #555;
+}
+
+.wsd_title {
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #555;
+}
+
+.wsd_desc {
+    margin-top: 26px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #555;
+}
+
+.wsd_label {
+    margin-top: 54px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: #999;
+}
+
+/* 커리큘럼 회차 목록 — 번호는 ::before 카운터로 자동 */
+.wsd_curriculum {
+    margin-top: 24px;
+    list-style: none;
+    counter-reset: wsd_step;
+}
+
+.wsd_curriculum li {
+    counter-increment: wsd_step;
+
+    display: flex;
+    gap: 28px;
+
+    margin-top: 14px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #555;
+}
+
+.wsd_curriculum li:first-child {
+    margin-top: 0;
+}
+
+.wsd_curriculum li::before {
+    content: counter(wsd_step);
+    flex: none;
+    min-width: 12px;
+}
+
+.wsd_tags {
+    margin-top: 66px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* 스크롤 힌트 ∨∨∨ (노트 슬라이드 .note_hint와 동일 동작
+   — 내용이 넘칠 때만 표시, 스크롤 시작하면 사라지고 스크롤바 등장)
+   bob 애니메이션은 works.css의 note_hint_bob 공유 */
+.ws_hint {
+    position: absolute;
+    right: 60px;
+    bottom: 320px;
+
+    font-family: 'Dosis', sans-serif;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    color: #999;
+
+    transition: opacity 0.4s;
+    animation: note_hint_bob 1.6s ease-in-out infinite;
+}
+
+/* 아래 : 고정 영역 (가는 선 + Location / Duration / Role)
+   오른쪽 상자가 스크롤 되어도 그 자리에 있다 */
+.ws_detail_meta {
+    flex: none;
+    height: 185px;
+    box-sizing: border-box;
+    border-top: solid #ddd 1px;
+    padding-top: 42px;
+
+    /* ★ 고정 메타(Role/Duration/Location)와 패널 바닥 사이 여백 조절 ★
+       키우면 메타 블록이 위로 올라간다 */
+    margin-bottom: 38px;
+}
+
+.ws_meta_row {
+    display: flex;
+    margin-bottom: 24px;
+}
+
+.ws_meta_row dt {
+    width: 92px;
+    flex: none;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: #999;
+}
+
+.ws_meta_row dd {
+    font-size: 15px;
+    color: #333;
+}
