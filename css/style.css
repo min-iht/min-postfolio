@@ -45,6 +45,24 @@ html::-webkit-scrollbar-thumb {
     box-shadow: inset 0 0 0 1px #ccc;
 }
 
+/* 태블릿(1024px)·모바일에서는 페이지 스크롤바를 아예 숨긴다.
+   터치 기기는 원래 스크롤바를 자동으로 숨기지만,
+   ::-webkit-scrollbar로 커스텀한 순간 안드로이드에서는
+   "항상 보이는 막대"로 바뀌어 버려서 여기서 명시적으로 꺼 준다.
+   스크롤 동작 자체는 그대로 — 막대만 안 보인다.
+   (이 규칙이 사라지면 scrollbar-gutter가 7px 세로 띠를 남긴다) */
+@media (max-width: 1024px) {
+    html {
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    html::-webkit-scrollbar {
+        display: none;
+        /* Chrome / Edge / Safari */
+    }
+}
+
 ul {
     list-style: none;
 }

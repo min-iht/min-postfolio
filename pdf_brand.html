@@ -27,6 +27,21 @@
 			box-shadow: inset 0 0 0 1px #ccc;
 		}
 
+		/* 태블릿(1024px)·모바일에서는 페이지 스크롤바 숨김 —
+		   css/style.css의 같은 규칙과 쌍둥이 (안드로이드는 커스텀 스크롤바를
+		   자동 숨김하지 않아서 명시적으로 꺼 준다) */
+		@media (max-width: 1024px) {
+			html {
+				scrollbar-width: none;
+				/* Firefox */
+			}
+
+			html::-webkit-scrollbar {
+				display: none;
+				/* Chrome / Edge / Safari */
+			}
+		}
+
 		* {
 			margin: 0;
 			padding: 0;

@@ -7,6 +7,14 @@ html,
 body {
     overflow: hidden;
     height: 100%;
+
+    scrollbar-gutter: auto;
+    /* style.css의 scrollbar-gutter: stable 해제 (이 페이지 한정) —
+       stable은 스크롤바가 없어도 오른쪽에 7px 거터를 예약해서
+       body가 100vw보다 좁아진다. 그러면 100vw 기준인 우편함 배율(--u)과
+       어긋나 1025~1336px 구간에서 중앙 정렬이 무너진다.
+       이 페이지는 어떤 폭에서도 페이지 스크롤바가 안 보이므로
+       (데스크톱: overflow hidden / 1024px 이하: 스크롤바 숨김) 거터가 필요 없다 */
 }
 
 .hero_lang {
@@ -99,22 +107,35 @@ body {
 
 /* 중앙부 시작 */
 
+/* ★ 우편함 유동 배율(--u) — 이 블록 전체의 공통 단위
+   디자인 원본은 가로 1330px(우편함 430px × 3 + 간격)이다.
+   화면이 1330px보다 좁아지면 --u가 1px에서 그만큼 줄어들고,
+   아래에서 calc(N * var(--u))로 적은 모든 치수(크기·위치·글자·배경)가
+   같은 비율로 함께 축소된다 — 그림을 통째로 축소하듯 자연스럽게.
+   1330px 이상에서는 --u = 1px이라 예전 px 값과 완전히 동일.
+
+   (예전의 zoom 배율 방식은 배경 이미지와 자식 이미지를 각각 따로
+   반올림해서 우편함 위/아래 그래픽 이음새가 어긋났다 — 2026-07-15 교체.
+   ★ 크기를 손보고 싶으면 개별 숫자(430, 328…)는 그대로 두고
+   여기 --u의 기준 폭 1330이나 모바일 쪽 --u만 조절하는 게 안전하다) */
 .postbox_wrap {
 
-    width: 1330px;
+    --u: min(1px, calc(100vw / 1330));
+
+    width: calc(1330 * var(--u));
     margin: 0 auto;
     height: 826px;
     box-sizing: border-box;
 
     padding-top: 186px;
-    /* 전체 우편함 위치 조정 */
+    /* 전체 우편함 위치 조정 (세로 위치는 화면 폭과 무관하게 고정) */
 
 }
 
 .postboxes {
 
-    width: 1330px;
-    height: 328px;
+    width: calc(1330 * var(--u));
+    height: calc(328 * var(--u));
     box-sizing: border-box;
 
 }
@@ -128,12 +149,22 @@ body {
 
 .postbox123 li {
 
-    width: 430px;
-    height: 328px;
+    width: calc(430 * var(--u));
+    height: calc(328 * var(--u));
     box-sizing: border-box;
-    padding-top: 151px;
-    background: white url(../img/hero/upper.webp) no-repeat left 0 top 83px;
-    /* 배경 고정 */
+    padding-top: calc(151 * var(--u));
+    /* .bottom(정적 위치)의 시작 y = 상단 그래픽(upper.webp)의 끝 y151 */
+
+    background-color: white;
+    background-image: url(../img/hero/upper.webp), url(../img/hero/bottom.webp);
+    background-repeat: no-repeat;
+    background-position: 0 calc(83 * var(--u)), 0 calc(151 * var(--u));
+    background-size: calc(430 * var(--u)) calc(68 * var(--u)), calc(430 * var(--u)) calc(178 * var(--u));
+    /* 배경 2겹: upper(y83~151) + bottom(y151~329) — 원본 px 크기 × --u.
+       bottom.webp는 아래 .bottom img로 한 번 더 그려진다(봉투를 덮는 앞판).
+       배경에도 같은 자리에 깔아 두는 건 이음새 보험 —
+       소수 배율에서 img 가장자리가 1px쯤 밀려도
+       틈으로 흰 바탕 대신 같은 그림이 비쳐서 어긋남이 안 보인다 */
 
     position: relative;
     /* .bottom .envelope_lang .btn_lang의 기준 */
@@ -141,8 +172,8 @@ body {
 
 .bottom {
 
-    width: 430px;
-    height: 178px;
+    width: calc(430 * var(--u));
+    height: calc(178 * var(--u));
     box-sizing: border-box;
 
     position: absolute;
@@ -150,10 +181,19 @@ body {
 
 }
 
+/* 앞판 이미지 — li 배경의 bottom.webp 겹과 정확히 포개지도록 치수 명시 */
+.bottom img {
+
+    display: block;
+    width: calc(430 * var(--u));
+    height: calc(178 * var(--u));
+
+}
+
 .envelope_lang {
 
     position: absolute;
-    top: -37px;
+    top: calc(-37 * var(--u));
     /* env_en의 위치 */
     z-index: 777;
     transform-style: preserve-3d;
@@ -161,15 +201,35 @@ body {
 
 .env_ko {
 
-    top: -55px;
-    left: -7px;
+    top: calc(-55 * var(--u));
+    left: calc(-7 * var(--u));
 
 }
 
 .env_jp {
 
-    top: -4px;
+    top: calc(-4 * var(--u));
     left: 14%;
+
+}
+
+/* 봉투 이미지도 같은 배율로 — 숫자는 각 webp의 원본 px 폭.
+   (크기를 지정하지 않으면 배율 축소 시 원본 크기 그대로 남는다) */
+.env_en img {
+
+    width: calc(413 * var(--u));
+
+}
+
+.env_ko img {
+
+    width: calc(443 * var(--u));
+
+}
+
+.env_jp img {
+
+    width: calc(311 * var(--u));
 
 }
 
@@ -218,7 +278,7 @@ body {
 
 .postbox123 li:hover .envelope_lang img {
 
-    transform: translateY(-50px);
+    transform: translateY(calc(-50 * var(--u)));
 
 }
 
@@ -237,7 +297,7 @@ body {
 
     width: 100%;
     margin: 0 auto;
-    height: 86px;
+    height: calc(86 * var(--u));
     overflow: hidden;
     box-sizing: border-box;
 
@@ -247,11 +307,11 @@ body {
 
     position: absolute;
     z-index: 999;
-    bottom: 39px;
+    bottom: calc(39 * var(--u));
     left: 50%;
     transform: translateX(-50%);
 
-    font-size: 20px;
+    font-size: calc(20 * var(--u));
     font-family: 'pretendard';
 
 }
@@ -259,7 +319,7 @@ body {
 .btn_en,
 .btn_ko {
 
-    padding: 20px;
+    padding: calc(20 * var(--u));
 
 }
 
@@ -280,7 +340,7 @@ body {
 .btn_jp {
 
     font-family: "Share Tech", sans-serif;
-    padding: 12px 20px;
+    padding: calc(12 * var(--u)) calc(20 * var(--u));
 
 }
 
@@ -289,7 +349,7 @@ body {
     display: inline-block;
     position: relative;
     overflow: hidden;
-    height: 86px;
+    height: calc(86 * var(--u));
     box-sizing: border-box;
     /* 중요: 고정 높이 */
 }
@@ -305,14 +365,14 @@ body {
 .text_main,
 .text_hover {
     display: block;
-    height: 86px;
+    height: calc(86 * var(--u));
     /* btn 높이와 동일 */
     text-align: center;
 }
 
 .text_hover {
 
-    font-size: 24px;
+    font-size: calc(24 * var(--u));
     font-weight: bolder;
 
 }
@@ -320,13 +380,13 @@ body {
 /* hover 상태 */
 .btn_lang_btn:hover .text_wrap {
 
-    transform: translateY(-76px);
+    transform: translateY(calc(-76 * var(--u)));
 
 }
 
 .btn_lang_btn:active .text_wrap {
 
-    transform: translateY(-100px) scale(0.98);
+    transform: translateY(calc(-100 * var(--u))) scale(0.98);
 
 }
 
@@ -336,7 +396,8 @@ body {
    상단은 데스크톱처럼 한 줄: EN(좌) / 한국어 제목(중앙) / JP(우).
    긴 인사말 대신 짧은 제목(lang_short)을 쓰고,
    연도(2022 - 2026)는 문서 맨 아래 중앙으로 내린다.
-   우편함 3개는 세로 스택 — 크기는 키우고(0.78 → 0.94) 간격은 좁힌다
+   우편함 3개는 세로 스택 — 배율은 --u 수식이 화면 폭에 맞춰
+   연속으로 계산한다 (최대 0.94, 예전 zoom 3단계를 대체)
 ===================================================== */
 @media (max-width: 767px) {
 
@@ -387,6 +448,11 @@ body {
 
     /* 우편함 3개: 세로 스택 */
     .postbox_wrap {
+        --u: min(0.94px, calc(100vw / 430));
+        /* ★ 세로 스택 배율 — 430px 원본이 화면 폭에 꼭 차는 값.
+           단 화면이 넓어도 0.94(우편함 폭 404px)를 넘지 않는다.
+           375px → 0.87, 360px → 0.84처럼 어떤 폭에서든 연속으로 맞는다 */
+
         width: 100%;
         height: auto;
         box-sizing: border-box;
@@ -406,15 +472,9 @@ body {
         flex-direction: column;
         align-items: center;
 
-        gap: 56px;
-        /* ★ 우편함 사이 간격 — 봉투가 우편함 위로 솟는 높이
-           (약 52px = 55px × 배율)보다 크게 유지해야 위 우편함에 안 닿는다 */
-    }
-
-    .postbox123 li {
-        zoom: 0.94;
-        /* ★ 우편함 크기 — 430px짜리 원본 구성을 통째로 조절하는 배율
-           (0.78 → 0.94, 약 1.2배 확대) */
+        gap: calc(56 * var(--u));
+        /* ★ 우편함 사이 간격 — 봉투가 우편함 위로 솟는 높이(55 × --u)와
+           같은 배율로 줄어서 어떤 폭에서도 위 우편함에 닿지 않는다 (1 × --u 여유) */
     }
 
     /* ★ 우편함 순서: 한국어 → 영어 → 일본어
@@ -446,14 +506,9 @@ body {
     }
 }
 
-/* 좁은 화면 보정: 430px 원본이 가로로 넘치지 않는 최대 배율 */
+/* 좁은 화면 보정 — 우편함 크기는 --u 수식이 자동으로 맞추므로
+   여기서는 상단 텍스트 크기만 줄인다 */
 @media (max-width: 429px) {
-
-    .postbox123 li {
-        zoom: 0.87;
-        /* ★ 375px 화면 기준 (430 × 0.87 ≈ 374px) — 0.94를 쓰면
-           우편함 폭이 404px이 되어 좌우가 잘린다 */
-    }
 
     /* 좌/중앙/우 텍스트 3개가 한 줄이라 13px이면 서로 겹친다
        (375px에서 세 텍스트 합 387px > 가용 344px,
@@ -461,14 +516,5 @@ body {
     .lang,
     .tag_center {
         font-size: 10px;
-    }
-}
-
-/* 더 좁은 화면(갤럭시 360px 등) 보정 */
-@media (max-width: 374px) {
-
-    .postbox123 li {
-        zoom: 0.83;
-        /* ★ 360px 화면 기준 (430 × 0.83 ≈ 357px) */
     }
 }
