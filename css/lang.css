@@ -159,8 +159,12 @@ body {
     background-image: url(../img/hero/upper.webp);
     background-repeat: no-repeat;
     background-position: 0 calc(83 * var(--u));
-    background-size: calc(430 * var(--u)) calc(68 * var(--u));
+    background-size: calc(430 * var(--u)) calc(68 * var(--u) + 1px);
     /* 상단 그래픽 upper(y83~151) — 원본 px 크기 × --u.
+       세로 +1px은 이음새 블리드 — --u가 분수가 되는 노트북 폭(<1330px)이나
+       125%/150% 배율에서 background 페인트 반올림과 .bottom 레이아웃 반올림이
+       달라 흰 줄이 비치는 것을 배경을 1px 아래로 삐져나가게 해 메운다
+       (삐져나간 부분은 .bottom img가 덮는다 — 2026-07-16).
        ⚠ bottom.webp를 여기 배경 겹으로 한 번 더 깔지 마라(이음새 보험 금지) —
        .bottom img와 서브픽셀 어긋난 같은 그림이 img의 투명 영역으로 비쳐서
        앞판 상반부 선이 이중으로(번져) 보인다. 이음새 정합은 --u 공통 단위가 보장한다 */
