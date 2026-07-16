@@ -47,7 +47,7 @@ body.slide_locked .leftUI a {
 }
 
 /* ★ 노트북 폭 보정 (1025~1919px) ★
-   works는 1920 시안 좌표를 그대로 쓴다 (info 카드 오른쪽 끝 ≈ 1821px).
+   works는 1920 시안 좌표를 그대로 쓴다 (info 카드 오른쪽 끝 ≈ 1848px).
    1920보다 좁은 노트북에서는 오른쪽이 잘리므로, 화면 폭에 비례해
    섹션 전체를 연속 축소한다 — zoom = 100vw ÷ 1920 (최대 1).
    tan(atan2(a, b))는 "a÷b를 숫자로" 만드는 표준 CSS 수식이다.
@@ -117,12 +117,15 @@ body.slide_locked .leftUI a {
     pointer-events: auto;
 }
 
-/* 카드 한 장 (시안: x1123 y148, 폭 1123→1852) */
+/* 카드 한 장 (시안: x1123 y148, 폭 1123→1852)
+   ★ width 743 = 오른쪽 컬럼(메타·링크·태그, right:0 기준 250폭)의
+     시작선을 rightUI CONTACT의 시작점(x1598)에 맞춘 값
+     (1105 + 743 = 1848 = 1598 + 250) — 2026-07-16 */
 .info {
     position: absolute;
     left: 1100px;
     top: 80px;
-    width: 716px;
+    width: 743px;
 
     font-family: 'pretendard';
 
@@ -379,15 +382,16 @@ body.slide_locked .leftUI a {
 /* 카드 위치: 다른 카드(.info)와 같은 left/폭 사용
    ★ left  = 사진과의 간격 조절 — 1100은 다른 섹션 카드와 같은 값
              (포스터 끝 1020 + 간격 80). 키우면 사진과 멀어진다
-   ★ width = 716 — 기본 .info와 동일. 오른쪽 끝(right:0) 기준인
+   ★ width = 743 — 기본 .info와 동일. 오른쪽 끝(right:0) 기준인
              info_meta·태그 시작선이 카드 2~6과 일치한다
+             (743 = 오른쪽 컬럼 시작선을 rightUI CONTACT에 맞춘 값)
    ★ top 24 = rightUI(CONTACT/SUBSCRIBE)의 시작 높이(top:24)와
               카드 시작점(◆)을 맞춤. 내려간 만큼 카드 안 간격
               3곳(상쇄분 ①②③)에서 10px씩 회수해서
               Outcome 하단이 화면 밖으로 잘리지 않게 유지 */
 .info[data-index="0"] {
     left: 1100px;
-    width: 716px;
+    width: 743px;
     top: 24px;
 }
 
