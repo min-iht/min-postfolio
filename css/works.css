@@ -46,6 +46,19 @@ body.slide_locked .leftUI a {
     margin-left: 5px;
 }
 
+/* ★ 노트북 폭 보정 (1025~1919px) ★
+   works는 1920 시안 좌표를 그대로 쓴다 (info 카드 오른쪽 끝 ≈ 1821px).
+   1920보다 좁은 노트북에서는 오른쪽이 잘리므로, 화면 폭에 비례해
+   섹션 전체를 연속 축소한다 — zoom = 100vw ÷ 1920 (최대 1).
+   tan(atan2(a, b))는 "a÷b를 숫자로" 만드는 표준 CSS 수식이다.
+   1920 이상에서는 min()이 1로 잘라 데스크톱 모습 그대로,
+   1024 이하는 responsive.css가 레이아웃을 재구성하므로 범위 밖 */
+@media (min-width: 1025px) and (max-width: 1919px) {
+    #works {
+        zoom: min(1, tan(atan2(100vw, 1920px)));
+    }
+}
+
 
 /* ---------- 왼쪽 포스터 ---------- */
 
