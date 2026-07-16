@@ -156,15 +156,14 @@ body {
     /* .bottom(정적 위치)의 시작 y = 상단 그래픽(upper.webp)의 끝 y151 */
 
     background-color: white;
-    background-image: url(../img/hero/upper.webp), url(../img/hero/bottom.webp);
+    background-image: url(../img/hero/upper.webp);
     background-repeat: no-repeat;
-    background-position: 0 calc(83 * var(--u)), 0 calc(151 * var(--u));
-    background-size: calc(430 * var(--u)) calc(68 * var(--u)), calc(430 * var(--u)) calc(178 * var(--u));
-    /* 배경 2겹: upper(y83~151) + bottom(y151~329) — 원본 px 크기 × --u.
-       bottom.webp는 아래 .bottom img로 한 번 더 그려진다(봉투를 덮는 앞판).
-       배경에도 같은 자리에 깔아 두는 건 이음새 보험 —
-       소수 배율에서 img 가장자리가 1px쯤 밀려도
-       틈으로 흰 바탕 대신 같은 그림이 비쳐서 어긋남이 안 보인다 */
+    background-position: 0 calc(83 * var(--u));
+    background-size: calc(430 * var(--u)) calc(68 * var(--u));
+    /* 상단 그래픽 upper(y83~151) — 원본 px 크기 × --u.
+       ⚠ bottom.webp를 여기 배경 겹으로 한 번 더 깔지 마라(이음새 보험 금지) —
+       .bottom img와 서브픽셀 어긋난 같은 그림이 img의 투명 영역으로 비쳐서
+       앞판 상반부 선이 이중으로(번져) 보인다. 이음새 정합은 --u 공통 단위가 보장한다 */
 
     position: relative;
     /* .bottom .envelope_lang .btn_lang의 기준 */
