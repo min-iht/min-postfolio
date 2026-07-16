@@ -52,6 +52,7 @@ Swiper CSS는 섹션 CSS보다 먼저(페이지네이션을 섹션 CSS가 덮어
 9. 데스크톱용 CSS에 `!important` 금지. responsive.css가 나중에 덮어써야 하기 때문이다 (`!important`는 responsive.css 안에서만 허용).
 10. `.leftUI`와 fixed 요소의 조상에 `filter` / `backdrop-filter` / `transform` 금지 — fixed 자손의 위치 기준이 되어 레이아웃이 깨진다 (responsive.css 주석 참고).
 11. **다국어 동기화** (2026-07-12): ko HTML의 텍스트·구조를 고쳤으면 같은 세션에서 en/jp에 동일 변경(텍스트는 번역)을 반영한다. 공유 JS에 사용자 가시 문구를 넣을 때는 하드코딩 금지 — `workshop.js`의 `WS_LANG`/`popup.js`의 `SUBS_MSG`처럼 `{ ko, en, jp }` 객체 + `<html lang>` 감지 패턴을 따른다. placeholder(`.`)는 세 파일 모두 `.` 그대로. 예외 2건: ① 조판용 `<br>`은 언어별로 자유 (동기화·검사 대상 아님), ② 언어별 여백·자간 차이는 HTML이 아니라 `css/lang_tune.css`에서. en/jp의 번역 문구·`<br>`·lang_tune.css는 **사용자가 직접 편집하는 구역**이다 — 다른 작업 중 발견해도 ko와 다르다고 "고치지" 마라.
+12. **토큰 절약 모드** (2026-07-16): 사용자가 사용량 부족을 알리면 — 최소 도구 호출로 원인을 바로 겨냥하고(전 폭 재검증·멀티에이전트 리뷰 생략), 검증은 핵심 1~2개 실측으로 줄이고, 생략한 검증은 보고에 명시해 사용자 확인으로 대체한다.
 
 ## 3. 실수 도감 — 이름 붙인 함정과 막는 규칙
 
