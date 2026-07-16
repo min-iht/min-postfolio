@@ -52,17 +52,17 @@ body.slide_locked .leftUI a {
 
    축소 비율의 기준: 카드 오른쪽 컬럼(메타·태그·링크)의 시작선.
    - 시작선의 축소 전 좌표 = 1598px (margin 5 + left 1100 + width 743 − 컬럼 250)
-   - rightUI CONTACT의 시작점 = 항상 "화면폭 − 320px" (고정 UI라 축소 안 됨)
-     (실측은 322였지만 화면에서 1~2px 왼쪽으로 보여 320으로 미세 보정)
-   → zoom = (100vw − 320px) ÷ 1598px 로 두면 어떤 폭에서든
+   - rightUI CONTACT의 시작점 = 항상 "화면폭 − 319px" (고정 UI라 축소 안 됨)
+     (실측은 322였지만 화면에서 1~2px 왼쪽으로 보여 319로 미세 보정)
+   → zoom = (100vw − 319px) ÷ 1598px 로 두면 어떤 폭에서든
      시작선(1598×zoom)이 정확히 CONTACT 시작점 위에 온다.
      1920에서 정확히 1이 되어 데스크톱과 이음새 없이 이어진다.
    tan(atan2(a, b))는 "a÷b를 숫자로" 만드는 표준 CSS 수식이다.
    1024 이하는 responsive.css가 레이아웃을 재구성하므로 범위 밖.
-   ※ 카드 폭(743)이나 CONTACT 위치를 바꾸면 여기 1598/320도 갱신할 것 */
+   ※ 카드 폭(743)이나 CONTACT 위치를 바꾸면 여기 1598/319도 갱신할 것 */
 @media (min-width: 1025px) and (max-width: 1919px) {
     #works {
-        zoom: min(1, tan(atan2(100vw - 320px, 1598px)));
+        zoom: min(1, tan(atan2(100vw - 319px, 1598px)));
     }
 }
 
